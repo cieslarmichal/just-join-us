@@ -1,0 +1,48 @@
+{
+  "name": "@apps/backend",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch-path=./src --watch-path=./config src/index.ts",
+    "build": "tsc --build tsconfig.prod.json",
+    "build:dev": "tsc --build tsconfig.json",
+    "test:unit": "vitest --config vitest.unit.config.js",
+    "test:unit:run": "npm run test:unit -- --run",
+    "test:integration": "NODE_ENV=test vitest --config vitest.integration.config.js",
+    "test:integration:run": "npm run test:integration -- --run",
+    "lint": "eslint . -c ../../eslint.config.mjs",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "3.758.0",
+    "@aws-sdk/lib-storage": "3.758.0",
+    "@aws-sdk/s3-request-presigner": "3.758.0",
+    "@fastify/cors": "11.0.0",
+    "@fastify/helmet": "13.0.1",
+    "@fastify/multipart": "9.0.3",
+    "@fastify/swagger": "9.4.2",
+    "@fastify/swagger-ui": "5.2.2",
+    "@fastify/type-provider-typebox": "5.1.0",
+    "@sinclair/typebox": "0.34.29",
+    "bcrypt": "5.1.1",
+    "cockatiel": "3.2.1",
+    "config": "3.3.12",
+    "data-uri-to-buffer": "6.0.2",
+    "fastify": "5.2.1",
+    "formdata-polyfill": "4.0.10",
+    "inversify": "7.1.0",
+    "jsonwebtoken": "9.0.2",
+    "knex": "3.1.0",
+    "node-fetch": "3.3.2",
+    "pg": "8.13.3",
+    "pino": "9.6.0",
+    "uuid": "11.1.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "9.6.0",
+    "@types/bcrypt": "5.0.2",
+    "@types/config": "3.3.5",
+    "@types/jsonwebtoken": "9.0.9",
+    "vitest": "3.0.8"
+  }
+}

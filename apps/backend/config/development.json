@@ -1,0 +1,14 @@
+{
+  "admin": {
+    "email": "admin@justjoinus.com",
+    "password": "AdminPassword123"
+  },
+  "database": {
+    "host": "localhost",
+    "username": "postgres",
+    "password": "postgres"
+  },
+  "token": {
+    "secret": "12321313423565365654546654121890008"
+  }
+}
