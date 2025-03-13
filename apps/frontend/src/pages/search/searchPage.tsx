@@ -2,23 +2,22 @@ import { useEffect, useState } from 'react';
 import { VscSearch } from 'react-icons/vsc';
 import { useSearchParams } from 'react-router-dom';
 import { searchLocations } from '../../api/queries/searchLocations';
-import { searchTrainingEvents } from '../../api/queries/searchTrainingEvents';
+import { searchJobOffers } from '../../api/queries/searchJobOffers';
 import { type Location } from '../../api/types/location';
-import { type TrainingEvent } from '../../api/types/trainingEvent';
-import TrainingEventItem from '../../components/TrainingEventItem';
+import { type JobOffer } from '../../api/types/jobOffer';
+import JobOfferItem from '../../components/JobOfferItem';
 import { useDebounce } from '../../hooks/useDebounce';
 import { Input } from '../../components/ui/input';
-import { AiOutlineMedicineBox } from 'react-icons/ai';
-import { GiBoxingGlove, GiDeliveryDrone, GiPistolGun } from 'react-icons/gi';
-import { IoIosArrowDown, IoMdBonfire } from 'react-icons/io';
+import { IoIosArrowDown } from 'react-icons/io';
 import { MdComputer } from 'react-icons/md';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { CiLocationOn } from 'react-icons/ci';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import MapPicker from '../../components/MapPicker';
 
 export default function SearchPage() {
-  const [trainingsEvents, setTrainingEvents] = useState<TrainingEvent[]>([]);
+  const [jobOffers, setJobOffers] = useState<JobOffer[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
   const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('name') || '');
@@ -32,16 +31,12 @@ export default function SearchPage() {
 
   const debouncedLocation = useDebounce(filters.location, 500);
 
-  const areFiltersModified = () => {
-    return filters.company !== '' || filters.category !== '' || filters.location !== '' || filters.radius !== '';
-  };
-
   const fetchTrainings = async () => {
     try {
-      const results = await searchTrainingEvents(searchQuery || '');
-      setTrainingEvents(results);
+      const results = await searchJobOffers(searchQuery || '');
+      setJobOffers(results);
     } catch (error) {
-      console.error('Failed to fetch training events', error);
+      console.error('Failed to fetch job offers', error);
     }
   };
 
@@ -75,30 +70,14 @@ export default function SearchPage() {
     });
   };
 
-  const renderedResults = trainingsEvents.map((trainingEvent) => {
+  const renderedResults = jobOffers.map((jobOffer) => {
     return (
-      <TrainingEventItem
-        key={trainingEvent.id}
-        trainingEvent={trainingEvent}
+      <JobOfferItem
+        key={jobOffer.id}
+        jobOffer={jobOffer}
       />
     );
   });
-
-  const [showFilters, setShowFilters] = useState(false);
-
-  const toggleFilters = () => {
-    setShowFilters(!showFilters);
-  };
-
-  const clearFilters = () => {
-    setFilters({
-      company: '',
-      category: '',
-      location: '',
-      radius: '',
-      page: 1,
-    });
-  };
 
   return (
     <div className="sm:px-4 md:px-6 lg:px-8">
@@ -110,7 +89,7 @@ export default function SearchPage() {
             </div>
             <Input
               type="text"
-              placeholder="Wyszukaj szkolenie..."
+              placeholder="Search job offer..."
               value={searchQuery}
               onChange={(event) => {
                 setSearchQuery(event.target.value);
@@ -122,7 +101,7 @@ export default function SearchPage() {
             <PopoverTrigger>
               <div className="h-12 flex items-center gap-2 border border-gray-300 hover:border-gray-400 rounded-3xl px-4 py-2">
                 <CiLocationOn className="w-5 h-5" />
-                Lokalizacja
+                Location
                 <IoIosArrowDown className="w-5 h-5" />
               </div>
             </PopoverTrigger>
@@ -133,7 +112,7 @@ export default function SearchPage() {
                     htmlFor="location"
                     className="text-sm font-medium text-gray-700 pb-1"
                   >
-                    Lokalizacja
+                    Location
                   </label>
                   <input
                     type="text"
@@ -142,7 +121,7 @@ export default function SearchPage() {
                     value={filters.location}
                     onChange={handleFilterChange}
                     className="border border-gray-300 rounded-md p-2"
-                    placeholder="Lokalizacja"
+                    placeholder="Location"
                   />
                   {locations.length > 0 && (
                     <div className="absolute z-10 top-[calc(100%-0.5rem)] bg-white border border-gray-300 rounded-md mt-1 w-full max-h-40 overflow-y-auto">
@@ -164,39 +143,6 @@ export default function SearchPage() {
                     </div>
                   )}
                 </div>
-
-                <div className="flex flex-col">
-                  <label
-                    htmlFor="radius"
-                    className="text-sm font-medium text-gray-700 pb-1"
-                  >
-                    Promień od lokalizacji
-                  </label>
-                  <select
-                    id="radius"
-                    name="radius"
-                    value={filters.radius}
-                    onChange={handleFilterChange}
-                    className="border border-gray-300 rounded-md p-2 bg-white text-gray-700"
-                    disabled={filters.location === ''}
-                  >
-                    <option
-                      value=""
-                      disabled
-                      selected
-                      hidden
-                    >
-                      Wybierz promień
-                    </option>
-                    <option value="50">50 km</option>
-                    <option value="100">100 km</option>
-                    <option value="200">200 km</option>
-                    <option value="300">300 km</option>
-                    <option value="400">400 km</option>
-                    <option value="500">500 km</option>
-                    <option value="600">600 km</option>
-                  </select>
-                </div>
               </div>
             </PopoverContent>
           </Popover>
@@ -204,33 +150,33 @@ export default function SearchPage() {
         <div className="flex items-center justify-center gap-4 ml-4">
           <div className="flex flex-wrap gap-2">
             <div className="flex items-center justify-center gap-2 px-3 py-1 rounded-full border border-gray-300 bg-white shadow-md hover:bg-gray-100 cursor-pointer">
-              <AiOutlineMedicineBox className="w-6 h-6 text-blue-500" />
-              <div className="text-sm">Medycyna</div>
+              <MdComputer className="w-6 h-6 text-blue-500" />
+              <div className="text-sm">JS</div>
             </div>
 
             <div className="flex items-center justify-center gap-2 px-3 py-1 rounded-full border border-gray-300 bg-white shadow-md hover:bg-gray-100 cursor-pointer">
-              <GiPistolGun className="w-6 h-6 text-red-500" />
-              <div className="text-sm">Strzelectwo</div>
+              <MdComputer className="w-6 h-6 text-red-500" />
+              <div className="text-sm">Python</div>
             </div>
 
             <div className="flex items-center justify-center gap-2 px-3 py-1 rounded-full border border-gray-300 bg-white shadow-md hover:bg-gray-100 cursor-pointer">
-              <IoMdBonfire className="w-6 h-6 text-orange-500" />
-              <div className="text-sm">Przetrwanie</div>
+              <MdComputer className="w-6 h-6 text-orange-500" />
+              <div className="text-sm">Java</div>
             </div>
 
             <div className="flex items-center justify-center gap-2 px-3 py-1 rounded-full border border-gray-300 bg-white shadow-md hover:bg-gray-100 cursor-pointer">
-              <GiBoxingGlove className="w-6 h-6 text-green-500" />
-              <div className="text-sm">Samoobrona</div>
+              <MdComputer className="w-6 h-6 text-green-500" />
+              <div className="text-sm">AI/ML</div>
             </div>
 
             <div className="flex items-center justify-center gap-2 px-3 py-1 rounded-full border border-gray-300 bg-white shadow-md hover:bg-gray-100 cursor-pointer">
-              <GiDeliveryDrone className="w-6 h-6 text-purple-500" />
-              <div className="text-sm">Drony</div>
+              <MdComputer className="w-6 h-6 text-purple-500" />
+              <div className="text-sm">Data</div>
             </div>
 
             <div className="flex items-center justify-center gap-2 px-3 py-1 rounded-full border border-gray-300 bg-white shadow-md hover:bg-gray-100 cursor-pointer">
               <MdComputer className="w-6 h-6 text-teal-500" />
-              <div className="text-sm">Cyberbezpieczeństwo</div>
+              <div className="text-sm">Game</div>
             </div>
           </div>
         </div>
@@ -238,7 +184,7 @@ export default function SearchPage() {
           <Popover>
             <PopoverTrigger>
               <div className="flex items-center gap-2 border border-gray-300 hover:border-gray-400 rounded-3xl px-4 py-2">
-                <span>Sortuj</span>
+                <span>Sort</span>
                 <IoIosArrowDown className="w-5 h-5" />
               </div>
             </PopoverTrigger>
@@ -264,9 +210,19 @@ export default function SearchPage() {
         </div>
       </div>
 
-      <h2>Szkolenia: 233 ofert</h2>
-      <div className="space-y-1 md:space-y-1.5 mt-1 md:mt-2">
-        {renderedResults.length === 0 ? 'Brak szkoleń' : renderedResults}
+      <h2>Jobs: 133 offers</h2>
+      <div className="flex items-center justify-between mt-3">
+        <div className="space-y-1 md:space-y-1.5 mt-1 md:mt-2 flex-1/2">
+          {renderedResults.length === 0 ? 'No offers' : renderedResults}
+        </div>
+        <div className="flex-1/2">
+          <MapPicker
+            latitude={52.231641}
+            longitude={21.00618}
+            readOnly
+            zoom={10}
+          />
+        </div>
       </div>
     </div>
   );

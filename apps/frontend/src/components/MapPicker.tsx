@@ -1,5 +1,3 @@
-// import styles from './mapPicker.module.css';
-
 import 'leaflet/dist/leaflet.css';
 import { type LatLngLiteral } from 'leaflet';
 import { useEffect, useState } from 'react';
@@ -12,15 +10,22 @@ interface Props {
   longitude: number;
   readOnly: boolean;
   className?: string;
+  zoom: number;
 }
 
-export default function MapPicker({ setLatitude, setLongitude, latitude, longitude, readOnly, className }: Props) {
+export default function MapPicker({
+  setLatitude,
+  setLongitude,
+  latitude,
+  longitude,
+  readOnly,
+  className,
+  zoom,
+}: Props) {
   const [position, setPosition] = useState<LatLngLiteral>({
     lat: 52.231641,
     lng: 21.00618,
   });
-
-  const zoom = 13;
 
   useEffect(() => {
     if (latitude && longitude) {

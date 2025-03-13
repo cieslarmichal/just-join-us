@@ -13,7 +13,7 @@ export default function RegisterPage() {
       </div>
       <div className="hidden md:block md:w-1/2 h-full">
         <img
-          src="https://lavora.site/produkcja/ccdskills/wp-content/uploads/2025/02/img_3.jpg"
+          src="https://static.independent.co.uk/s3fs-public/thumbnails/image/2019/04/23/11/gettyimages-1068413764.jpg?quality=75&width=1250&crop=3%3A2%2Csmart&auto=webp"
           alt="Encouraging"
           className="object-cover w-full h-full"
         />

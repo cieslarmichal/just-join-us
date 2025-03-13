@@ -13,19 +13,19 @@ export default function Footer() {
             to="/about"
             className="hover:underline"
           >
-            O nas
+            About us
           </Link>
           <Link
             to="/contact"
             className="hover:underline"
           >
-            Kontakt
+            Contact
           </Link>
           <Link
             to="/privacy"
             className="hover:underline"
           >
-            Polityka prywatności
+            Privacy
           </Link>
         </div>
       </div>

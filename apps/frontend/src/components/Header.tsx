@@ -2,9 +2,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 
 const navItems = [
-  { name: 'Szkolenia', href: '/' },
-  { name: 'O nas', href: '/about' },
-  { name: 'Kontakt', href: '/contact' },
+  { name: 'Job Offers', href: '/' },
+  { name: 'About us', href: '/about' },
+  { name: 'Contact', href: '/contact' },
 ];
 
 export default function Header() {
@@ -18,11 +18,7 @@ export default function Header() {
             to="/"
             className="font-bold text-xl"
           >
-            <img
-              src="http://ccdskills.pl/wp-content/uploads/2023/10/CCD-Skills-logo-blk__rgb.png"
-              alt="CCD"
-              className="h-12 w-auto"
-            />
+            <a>justjoin.us</a>
           </Link>
 
           <nav className="hidden md:flex items-center space-x-4">
@@ -42,13 +38,13 @@ export default function Header() {
               className="px-3 sm:px-6 rounded-lg whitespace-nowrap font-medium bg-white text-black hover:bg-gray-100"
               onClick={() => navigate('/login')}
             >
-              Zaloguj się
+              Sign in
             </Button>
             <Button
               className="px-3 sm:px-6 rounded-lg whitespace-nowrap bg-orange-700 font-medium"
               onClick={() => navigate('/register')}
             >
-              Zarejestruj się
+              Sing up
             </Button>
           </div>
         </div>

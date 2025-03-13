@@ -25,7 +25,7 @@ describe('UploadImageActionImpl', () => {
 
   const sampleFileName = 'sample_image.jpg';
 
-  const bucketName = 'ccd-images-dev';
+  const bucketName = 'justjoinus-images-dev';
 
   const filePath = path.join(resourcesDirectory, sampleFileName);
 

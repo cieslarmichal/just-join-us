@@ -10,7 +10,7 @@ const Breadcrumbs: React.FC = () => {
       >
         <div className="inline-flex items-center gap-1">
           <IoIosArrowBack />
-          Wróć do wyszukiwarki szkoleń
+          Back to job offers
         </div>
       </Link>
     </nav>

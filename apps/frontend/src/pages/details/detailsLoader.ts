@@ -1,22 +1,22 @@
 import { type Params } from 'react-router-dom';
 
-import { getTrainingEvent } from '../../api/queries/getTrainingEvent';
-import { type TrainingEvent } from '../../api/types/trainingEvent';
+import { getJobOffer } from '../../api/queries/getJobOffer';
+import { type JobOffer } from '../../api/types/jobOffer';
 
 export interface DetailsLoaderResult {
-  readonly trainingEvent: TrainingEvent;
+  readonly jobOffer: JobOffer;
 }
 
 export async function detailsLoader({ params }: { params: Params }): Promise<DetailsLoaderResult> {
   const { id } = params;
 
   if (!id) {
-    throw new Error('Missing training event id');
+    throw new Error('Missing job offer id');
   }
 
-  const trainingEvent = await getTrainingEvent(id);
+  const jobOffer = await getJobOffer(id);
 
   return {
-    trainingEvent,
+    jobOffer,
   };
 }

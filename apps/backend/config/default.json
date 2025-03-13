@@ -7,7 +7,7 @@
     "accessKeyId": null,
     "secretAccessKey": null,
     "region": "eu-central-1",
-    "bucketName": "ccd-images-dev",
+    "bucketName": "justjoinus-images-dev",
     "cloudfrontUrl": "https://d3v9lq8x5hzvan.cloudfront.net"
   },
   "database": {
@@ -17,12 +17,12 @@
     "password": null,
     "name": "postgres"
   },
-  "frontendUrl": "https://ccd-frontend.fly.dev",
+  "frontendUrl": "https://justjoinus-frontend.fly.dev",
   "hashSaltRounds": 10,
   "logLevel": "debug",
   "sendGrid": {
     "apiKey": null,
-    "senderEmail": "contact@ccd.com"
+    "senderEmail": "contact@justjoinus.com"
   },
   "server": {
     "host": "0.0.0.0",

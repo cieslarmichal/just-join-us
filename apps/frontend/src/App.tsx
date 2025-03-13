@@ -19,7 +19,7 @@ const router = createBrowserRouter([
         element: <SearchPage />,
       },
       {
-        path: '/trainings/:id',
+        path: '/job-offers/:id',
         element: <DetailsPage />,
         loader: detailsLoader,
       },
