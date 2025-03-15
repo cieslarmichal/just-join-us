@@ -1,19 +1,11 @@
 import { ExponentialBackoff, type IDisposable, handleAll, retry } from 'cockatiel';
 
+import type { EmailService } from '../../../../../common/emailService/emailService.ts';
 import { type LoggerService } from '../../../../../common/logger/loggerService.ts';
-import { type SendGridService } from '../../../../../common/sendGrid/sendGridService.ts';
 import { type QueueChannel, type QueueMessagePayload } from '../../../../../common/types/queueChannel.ts';
 import { type QueueController } from '../../../../../common/types/queueController.ts';
 import { type QueueHandler } from '../../../../../common/types/queueHandler.ts';
 import { QueuePath } from '../../../../../common/types/queuePath.ts';
-import {
-  ResetPasswordEmail,
-  type ResetPasswordEmailTemplateData,
-} from '../../../application/emails/resetPasswordEmail.ts';
-import {
-  VerificationEmail,
-  type VerificationEmailTemplateData,
-} from '../../../application/emails/verificationEmail.ts';
 import { type EmailEvent } from '../../../domain/entities/emailEvent/emailEvent.ts';
 import { emailEventStatuses } from '../../../domain/entities/emailEvent/types/emailEventStatus.ts';
 import { emailEventTypes } from '../../../domain/entities/emailEvent/types/emailEventType.ts';
@@ -26,16 +18,16 @@ interface ProcessEmailEventPayload {
 
 export class EmailQueueController implements QueueController {
   private readonly emailEventRepository: EmailEventRepository;
-  private readonly sendGridService: SendGridService;
+  private readonly emailService: EmailService;
   private readonly loggerService: LoggerService;
 
   public constructor(
     emailEventRepository: EmailEventRepository,
-    sendGridService: SendGridService,
+    emailService: EmailService,
     loggerService: LoggerService,
   ) {
     this.emailEventRepository = emailEventRepository;
-    this.sendGridService = sendGridService;
+    this.emailService = emailService;
     this.loggerService = loggerService;
   }
 
@@ -80,11 +72,6 @@ export class EmailQueueController implements QueueController {
 
     switch (emailEvent.getEmailEventName()) {
       case emailEventTypes.verifyEmail: {
-        const verificationEmail = new VerificationEmail({
-          recipient: emailEvent.getRecipientEmail(),
-          templateData: emailEvent.getPayload() as unknown as VerificationEmailTemplateData,
-        });
-
         await this.emailEventRepository.updateStatus({
           id: emailEvent.getId(),
           status: emailEventStatuses.processing,
@@ -100,12 +87,14 @@ export class EmailQueueController implements QueueController {
 
         try {
           await this.retryPolicy.execute(async () => {
-            await this.sendGridService.sendEmail({
-              toEmail: verificationEmail.getRecipient(),
-              subject: verificationEmail.getSubject(),
-              body: verificationEmail.getBody(),
+            await this.emailService.sendEmail({
+              toEmail: emailEvent.getRecipientEmail(),
+              template: {
+                name: 'verifyEmail',
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                data: emailEvent.getPayload() as any,
+              },
             });
-
             this.loggerService.debug({
               message: 'Sent verification email.',
               emailEventId: emailEvent.getId(),
@@ -134,11 +123,6 @@ export class EmailQueueController implements QueueController {
       }
 
       case emailEventTypes.resetPassword: {
-        const resetPasswordEmail = new ResetPasswordEmail({
-          recipient: emailEvent.getRecipientEmail(),
-          templateData: emailEvent.getPayload() as unknown as ResetPasswordEmailTemplateData,
-        });
-
         retryListener = this.retryPolicy.onFailure((reason) => {
           this.loggerService.error({
             message: 'Failed to send reset password email.',
@@ -154,10 +138,13 @@ export class EmailQueueController implements QueueController {
 
         try {
           await this.retryPolicy.execute(async () => {
-            await this.sendGridService.sendEmail({
-              toEmail: resetPasswordEmail.getRecipient(),
-              subject: resetPasswordEmail.getSubject(),
-              body: resetPasswordEmail.getBody(),
+            await this.emailService.sendEmail({
+              toEmail: emailEvent.getRecipientEmail(),
+              template: {
+                name: 'resetPassword',
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                data: emailEvent.getPayload() as any,
+              },
             });
 
             this.loggerService.debug({

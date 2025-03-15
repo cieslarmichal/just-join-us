@@ -1,7 +1,7 @@
 import { type DependencyInjectionContainer } from '../../common/dependencyInjection/dependencyInjectionContainer.ts';
 import { type DependencyInjectionModule } from '../../common/dependencyInjection/dependencyInjectionModule.ts';
+import type { EmailService } from '../../common/emailService/emailService.ts';
 import { type LoggerService } from '../../common/logger/loggerService.ts';
-import { type SendGridService } from '../../common/sendGrid/sendGridService.ts';
 import { type UuidService } from '../../common/uuid/uuidService.ts';
 import { type Config } from '../../core/config.ts';
 import { applicationSymbols } from '../applicationModule/symbols.ts';
@@ -296,7 +296,7 @@ export class UserModule implements DependencyInjectionModule {
       () =>
         new EmailQueueController(
           container.get<EmailEventRepository>(symbols.emailEventRepository),
-          container.get<SendGridService>(applicationSymbols.sendGridService),
+          container.get<EmailService>(applicationSymbols.emailService),
           container.get<LoggerService>(applicationSymbols.loggerService),
         ),
     );

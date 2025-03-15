@@ -27,13 +27,10 @@
     "bcrypt": "5.1.1",
     "cockatiel": "3.2.1",
     "config": "3.3.12",
-    "data-uri-to-buffer": "6.0.2",
     "fastify": "5.2.1",
-    "formdata-polyfill": "4.0.10",
     "inversify": "7.1.0",
     "jsonwebtoken": "9.0.2",
     "knex": "3.1.0",
-    "node-fetch": "3.3.2",
     "pg": "8.13.3",
     "pino": "9.6.0",
     "uuid": "11.1.0"

@@ -2,14 +2,14 @@ import type { S3Client } from '@aws-sdk/client-s3';
 
 import type { DependencyInjectionContainer } from '../../common/dependencyInjection/dependencyInjectionContainer.ts';
 import { type DependencyInjectionModule } from '../../common/dependencyInjection/dependencyInjectionModule.ts';
+import type { EmailService } from '../../common/emailService/emailService.ts';
+import { EmailServiceImpl } from '../../common/emailService/emailServiceImpl.ts';
 import type { HttpService } from '../../common/httpService/httpService.ts';
 import { HttpServiceImpl } from '../../common/httpService/httpServiceImpl.ts';
 import type { LoggerService } from '../../common/logger/loggerService.ts';
 import { LoggerServiceFactory } from '../../common/logger/loggerServiceFactory.ts';
 import { type S3Config, S3ClientFactory } from '../../common/s3/s3ClientFactory.ts';
 import { S3Service } from '../../common/s3/s3Service.ts';
-import type { SendGridService } from '../../common/sendGrid/sendGridService.ts';
-import { SendGridServiceImpl } from '../../common/sendGrid/sendGridServiceImpl.ts';
 import { UuidService } from '../../common/uuid/uuidService.ts';
 import { createConfig, type Config } from '../../core/config.ts';
 import type { AccessControlService } from '../authModule/application/services/accessControlService/accessControlService.ts';
@@ -30,22 +30,16 @@ export class ApplicationModule implements DependencyInjectionModule {
       LoggerServiceFactory.create({ logLevel: config.logLevel }),
     );
 
-    container.bind<HttpService>(
-      symbols.httpService,
-      () => new HttpServiceImpl(container.get<LoggerService>(symbols.loggerService)),
-    );
+    container.bind<HttpService>(symbols.httpService, () => new HttpServiceImpl());
 
     container.bind<UuidService>(symbols.uuidService, () => new UuidService());
 
     container.bind<Config>(symbols.config, () => config);
 
-    container.bind<SendGridService>(
-      symbols.sendGridService,
+    container.bind<EmailService>(
+      symbols.emailService,
       () =>
-        new SendGridServiceImpl(container.get<HttpService>(symbols.httpService), {
-          apiKey: config.sendGrid.apiKey,
-          senderEmail: config.sendGrid.senderEmail,
-        }),
+        new EmailServiceImpl(container.get<HttpService>(symbols.httpService), container.get<Config>(symbols.config)),
     );
 
     const s3Config: S3Config = {

@@ -5,7 +5,7 @@ export const symbols = {
   s3Client: Symbol('s3Client'),
   s3Service: Symbol('s3Service'),
   httpService: Symbol('httpService'),
-  sendGridService: Symbol('sendGridService'),
+  emailService: Symbol('emailService'),
   applicationHttpController: Symbol('applicationHttpController'),
   uploadImageAction: Symbol('uploadImageAction'),
 };
@@ -17,6 +17,6 @@ export const applicationSymbols = {
   s3Client: symbols.s3Client,
   s3Service: symbols.s3Service,
   httpService: symbols.httpService,
-  sendGridService: symbols.sendGridService,
+  emailService: symbols.emailService,
   applicationHttpController: symbols.applicationHttpController,
 };
