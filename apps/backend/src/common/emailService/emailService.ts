@@ -5,7 +5,7 @@ export const emailTemplateName = {
 
 export type EmailTemplateName = (typeof emailTemplateName)[keyof typeof emailTemplateName];
 
-export type UserCreatedEmailTemplate = {
+export type VerifyEmailEmailTemplate = {
   data: {
     name: string;
     emailVerificationLink: string;
@@ -20,7 +20,7 @@ export type ResetPasswordEmailTemplate = {
   name: typeof emailTemplateName.resetPassword;
 };
 
-export type EmailTemplate = ResetPasswordEmailTemplate | UserCreatedEmailTemplate;
+export type EmailTemplate = ResetPasswordEmailTemplate | VerifyEmailEmailTemplate;
 
 export interface SendEmailPayload {
   readonly toEmail: string;
