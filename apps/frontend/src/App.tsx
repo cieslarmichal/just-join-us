@@ -1,13 +1,13 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { detailsLoader } from './pages/details/detailsLoader';
-import DetailsPage from './pages/details/detailsPage';
+import DetailsPage from './pages/details/DetailsPage';
 import Root from './pages/Root';
-import SearchPage from './pages/search/searchPage';
-import RegisterPage from './pages/register/registerPage';
-import LoginPage from './pages/login/loginPage';
+import SearchPage from './pages/search/SearchPage';
+import RegisterPage from './pages/register/RegisterPage';
+import LoginPage from './pages/login/LoginPage';
 import PrivateRoute from './auth/privateRoute';
-import LogoutPage from './pages/logout/logoutPage';
+import LogoutPage from './pages/logout/LogoutPage';
 
 const router = createBrowserRouter([
   {

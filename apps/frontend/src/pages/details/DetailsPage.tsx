@@ -5,12 +5,12 @@ import { useLoaderData } from 'react-router-dom';
 import type { DetailsLoaderResult } from './detailsLoader';
 import Breadcrumbs from '../../components/Breadcrumbs';
 import MapPicker from '../../components/MapPicker';
-import { Button } from '../../components/ui/button';
+import { Button } from '../../components/ui/Button';
 import { HiOutlineBuildingOffice2 } from 'react-icons/hi2';
 import { CiLocationOn } from 'react-icons/ci';
 
 export default function DetailsPage() {
-  const { jobOffer: trainingEvent } = useLoaderData<DetailsLoaderResult>();
+  const { jobOffer } = useLoaderData<DetailsLoaderResult>();
 
   const [isSignupOpen, setIsSignupOpen] = useState(false);
 
@@ -25,7 +25,7 @@ export default function DetailsPage() {
     companyLogoUrl,
     salaryMin,
     salaryMax,
-  } = trainingEvent;
+  } = jobOffer;
 
   const description = useMemo(() => DOMPurify.sanitize(rawDescription), [rawDescription]);
 

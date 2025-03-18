@@ -1,4 +1,4 @@
-import LoginForm from './loginForm';
+import LoginForm from '../../components/LoginForm';
 
 export default function LoginPage() {
   return (
@@ -13,7 +13,7 @@ export default function LoginPage() {
       </div>
       <div className="hidden md:block md:w-1/2 h-full">
         <img
-          src="https://static.independent.co.uk/s3fs-public/thumbnails/image/2019/04/23/11/gettyimages-1068413764.jpg?quality=75&width=1250&crop=3%3A2%2Csmart&auto=webp"
+          src="https://static.independent.co.uk/s3fs-public/thumbnails/image/2019/04/23/11/gettyimages-1068413764.jpg"
           alt="Encouraging"
           className="object-cover w-full h-full"
         />

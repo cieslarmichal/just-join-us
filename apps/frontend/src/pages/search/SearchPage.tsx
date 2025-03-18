@@ -7,13 +7,13 @@ import { type Location } from '../../api/types/location';
 import { type JobOffer } from '../../api/types/jobOffer';
 import JobOfferItem from '../../components/JobOfferItem';
 import { useDebounce } from '../../hooks/useDebounce';
-import { Input } from '../../components/ui/input';
+import { Input } from '../../components/ui/Input';
 import { IoIosArrowDown } from 'react-icons/io';
 import { MdComputer } from 'react-icons/md';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover';
 import { CiLocationOn } from 'react-icons/ci';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/Label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/RadioGroup';
 import MapPicker from '../../components/MapPicker';
 
 export default function SearchPage() {
@@ -31,7 +31,7 @@ export default function SearchPage() {
 
   const debouncedLocation = useDebounce(filters.location, 500);
 
-  const fetchTrainings = async () => {
+  const fetchJobOffers = async () => {
     try {
       const results = await searchJobOffers(searchQuery || '');
       setJobOffers(results);
@@ -59,7 +59,7 @@ export default function SearchPage() {
   }, [debouncedLocation]);
 
   useEffect(() => {
-    fetchTrainings();
+    fetchJobOffers();
   }, [filters]);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
