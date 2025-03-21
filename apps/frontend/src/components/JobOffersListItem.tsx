@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 
 import { JobOffer } from '../api/types/jobOffer';
 
-interface JobOfferItemProps {
+interface Props {
   readonly jobOffer: JobOffer;
 }
 
-export default function JobOfferItem({ jobOffer }: JobOfferItemProps) {
+export default function JobOffersListItem({ jobOffer }: Props) {
   return (
     <Link
       to={`/job-offers/${jobOffer.id}`}
@@ -23,7 +23,7 @@ export default function JobOfferItem({ jobOffer }: JobOfferItemProps) {
         <div className="flex flex-col gap-2 ml-6 flex-grow">
           <div className="flex items-center gap-2">
             <div className="text-sm font-semibold sm:text-lg whitespace-nowrap">{jobOffer.name}</div>
-            <div className="text-sm sm:text-lg font-semibold whitespace-nowrap ml-auto">
+            <div className="text-sm sm:text-lg font-semibold whitespace-nowrap ml-auto pr-4">
               {jobOffer.salaryMin} - {jobOffer.salaryMax} PLN
             </div>
           </div>

@@ -4,9 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/Button';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
+import { Input } from '@/components/ui/Input';
 
 const formSchema = z.object({
   email: z.string().email().max(50),
@@ -15,7 +15,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -73,7 +73,7 @@ export default function LoginForm() {
             type="submit"
             className="px-3 sm:px-6 rounded-lg whitespace-nowrap bg-orange-700 font-medium"
           >
-            Sign in
+            Sign up
           </Button>
         </div>
       </form>
