@@ -6,6 +6,7 @@ import { CiLocationOn } from 'react-icons/ci';
 import { JobOffer } from '../api/types/jobOffer';
 import MapPicker from './MapPicker';
 import { Button } from './ui/Button';
+import JobOfferDetailsSection from './JobOfferDetailsSection';
 
 interface Props {
   readonly jobOffer: JobOffer;
@@ -48,29 +49,11 @@ export default function JobOfferDetails({ jobOffer }: Props) {
       <div className="flex flex-col md:flex-row items-start gap-8 mt-8">
         <div className="flex-1 space-y-4 w-full">
           <div className="flex gap-12 mb-10">
-            <div className="flex items-center">
-              <HiOutlineBuildingOffice2 className="mr-2.5 text-4xl" />
-              <div className="flex-col gap-2">
-                <div className="whitespace-nowrap text-gray-500 text-sm">Company</div>
-                <div className="whitespace-nowrap text-base">{companyName}</div>
-              </div>
-            </div>
-            <div className="flex items-center">
-              <CiLocationOn className="mr-2.5 text-4xl" />
-              <div className="flex-col gap-2">
-                <div className="whitespace-nowrap text-gray-500 text-sm">Location</div>
-                <div className="whitespace-nowrap text-base">{location}</div>
-              </div>
-            </div>
-            <div className="flex items-center">
-              <CiLocationOn className="mr-2.5 text-4xl" />
-              <div className="flex-col gap-2">
-                <div className="whitespace-nowrap text-gray-500 text-sm">Category</div>
-                <div className="whitespace-nowrap text-base">{category}</div>
-              </div>
-            </div>
+            <JobOfferDetailsSection sectionName='Company' sectionValue={companyName} Icon={HiOutlineBuildingOffice2}/>
+            <JobOfferDetailsSection sectionName="Location" sectionValue={location} Icon={CiLocationOn} />
+            <JobOfferDetailsSection sectionName="Category" sectionValue={category} Icon={HiOutlineBuildingOffice2} />
           </div>
-          <div className="text-2xl font-medium">Job description</div>
+          <h2 className="text-2xl font-medium">Job description</h2>
           <div
             className="text-base"
             dangerouslySetInnerHTML={{ __html: description }}

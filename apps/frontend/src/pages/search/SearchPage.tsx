@@ -80,8 +80,8 @@ export default function SearchPage() {
         </div>
       </div>
 
-      <h2 className="text-gray-600">Work: All offers - 133 offers</h2>
-      <div className="grid grid-cols-2 mt-1 gap-4 h-full">
+      <div className="text-gray-600">Work: All offers - 133 offers</div>
+      <div className="flex mt-1 gap-4 h-full">
         <JobOffersList jobOffers={jobOffers} />
         <JobOffersMap />
       </div>
