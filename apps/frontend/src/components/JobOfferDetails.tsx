@@ -69,7 +69,7 @@ export default function JobOfferDetails({ jobOffer }: Props) {
           />
           <div className="flex justify-end items-center mt-4">
             <Button
-              className="hidden md:flex px-3 sm:px-6 rounded-lg whitespace-nowrap bg-orange-700 font-medium"
+              className="hidden md:flex px-3 sm:px-6 rounded-lg whitespace-nowrap bg-pink-600 font-medium"
               // onClick={() => setIsSignupOpen(true)}
             >
               Apply

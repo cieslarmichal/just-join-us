@@ -16,7 +16,7 @@ export class StudentTestFactory {
       firstName: Generator.firstName(),
       lastName: Generator.lastName(),
       birthDate: Generator.birthDate(),
-      phoneNumber: Generator.phoneNumber(),
+      phone: Generator.phone(),
       ...input,
     });
   }
@@ -27,7 +27,7 @@ export class StudentTestFactory {
       first_name: Generator.firstName(),
       last_name: Generator.lastName(),
       birth_date: Generator.birthDate(),
-      phone_number: Generator.phoneNumber(),
+      phone: Generator.phone(),
       ...input,
     };
   }

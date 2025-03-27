@@ -51,7 +51,7 @@ describe('StudentRepositoryImpl', () => {
           firstName: createdStudent.getFirstName(),
           lastName: createdStudent.getLastName(),
           birthDate: createdStudent.getBirthDate(),
-          phoneNumber: createdStudent.getPhoneNumber(),
+          phone: createdStudent.getPhone(),
         },
       });
 
@@ -78,7 +78,7 @@ describe('StudentRepositoryImpl', () => {
             firstName: createdStudent.getFirstName(),
             lastName: createdStudent.getLastName(),
             birthDate: createdStudent.getBirthDate(),
-            phoneNumber: createdStudent.getPhoneNumber(),
+            phone: createdStudent.getPhone(),
           },
         });
       } catch (error) {
@@ -102,7 +102,7 @@ describe('StudentRepositoryImpl', () => {
         isDeleted: studentRawEntity.is_deleted,
         firstName: studentRawEntity.first_name,
         lastName: studentRawEntity.last_name,
-        phoneNumber: studentRawEntity.phone_number,
+        phone: studentRawEntity.phone,
         birthDate: studentRawEntity.birth_date,
       });
 
@@ -114,7 +114,7 @@ describe('StudentRepositoryImpl', () => {
 
       const birthDate = Generator.birthDate();
 
-      const phoneNumber = Generator.phoneNumber();
+      const phone = Generator.phone();
 
       const isEmailVerified = Generator.boolean();
 
@@ -132,7 +132,7 @@ describe('StudentRepositoryImpl', () => {
 
       student.setBirthDate({ birthDate });
 
-      student.setPhoneNumber({ phoneNumber });
+      student.setPhone({ phone });
 
       const updatedStudent = await studentRepository.updateStudent({ student });
 
@@ -144,7 +144,7 @@ describe('StudentRepositoryImpl', () => {
         firstName,
         lastName,
         birthDate,
-        phoneNumber,
+        phone,
         isEmailVerified,
         isDeleted,
         role: studentRawEntity.role,
@@ -158,7 +158,7 @@ describe('StudentRepositoryImpl', () => {
         first_name: firstName,
         last_name: lastName,
         birth_date: birthDate,
-        phone_number: phoneNumber,
+        phone: phone,
         is_email_verified: isEmailVerified,
         is_deleted: isDeleted,
         role: studentRawEntity.role,
@@ -179,7 +179,7 @@ describe('StudentRepositoryImpl', () => {
         firstName: student.first_name,
         lastName: student.last_name,
         birthDate: student.birth_date,
-        phoneNumber: student.phone_number,
+        phone: student.phone,
         isEmailVerified: student.is_email_verified,
         isDeleted: student.is_deleted,
         role: student.role,
@@ -198,7 +198,7 @@ describe('StudentRepositoryImpl', () => {
         firstName: student.first_name,
         lastName: student.last_name,
         birthDate: student.birth_date,
-        phoneNumber: student.phone_number,
+        phone: student.phone,
         isEmailVerified: student.is_email_verified,
         isDeleted: student.is_deleted,
         role: student.role,
@@ -234,7 +234,7 @@ describe('StudentRepositoryImpl', () => {
         firstName: student2.first_name,
         lastName: student2.last_name,
         birthDate: student2.birth_date,
-        phoneNumber: student2.phone_number,
+        phone: student2.phone,
         isEmailVerified: student2.is_email_verified,
         isDeleted: student2.is_deleted,
         role: student2.role,
@@ -247,7 +247,7 @@ describe('StudentRepositoryImpl', () => {
         firstName: student1.first_name,
         lastName: student1.last_name,
         birthDate: student1.birth_date,
-        phoneNumber: student1.phone_number,
+        phone: student1.phone,
         isEmailVerified: student1.is_email_verified,
         isDeleted: student1.is_deleted,
         role: student1.role,

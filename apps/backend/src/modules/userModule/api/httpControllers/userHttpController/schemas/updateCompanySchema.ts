@@ -3,7 +3,7 @@ import { type Static, Type } from '@sinclair/typebox';
 import { type HttpRouteSchema } from '../../../../../../common/http/httpRoute.ts';
 import { httpStatusCodes } from '../../../../../../common/http/httpStatusCode.ts';
 
-import { companySchema, companyPhoneNumberSchema, logoUrlSchema } from './companySchema.ts';
+import { companySchema, companyPhoneSchema, logoUrlSchema } from './companySchema.ts';
 
 const updateCompanyPathParamsSchema = Type.Object({
   companyId: Type.String({ format: 'uuid' }),
@@ -12,7 +12,7 @@ const updateCompanyPathParamsSchema = Type.Object({
 export type UpdateCompanyPathParams = Static<typeof updateCompanyPathParamsSchema>;
 
 const updateCompanyRequestBodySchema = Type.Object({
-  phoneNumber: Type.Optional(companyPhoneNumberSchema),
+  phone: Type.Optional(companyPhoneSchema),
   logoUrl: Type.Optional(logoUrlSchema),
   isDeleted: Type.Optional(Type.Boolean()),
 });

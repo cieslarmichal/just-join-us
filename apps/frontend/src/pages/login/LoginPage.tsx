@@ -3,10 +3,10 @@ import LoginForm from '../../components/LoginForm';
 export default function LoginPage() {
   return (
     <div className="flex items-center justify-between min-h-screen bg-gray-100">
-      <div className="flex flex-col items-center justify-center w-full md:w-1/2">
+      <div className="flex flex-col items-center justify-center w-full md:w-1/2 mt-[-50px] md:mt-[-100px]">
         <div className="w-full max-w-md">
-          <h2 className="text-2xl font-bold mb-4 text-center">Sign in</h2>
-          <div className="rounded-xl border p-6 bg-white shadow-lg">
+          <h2 className="text-3xl font-medium mt-18 mb-8 text-center">Sign in</h2>
+          <div className="rounded-xl border py-9 px-16 bg-white shadow-lg">
             <LoginForm />
           </div>
         </div>

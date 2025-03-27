@@ -1,23 +1,23 @@
 import { User, type UserState, type UserDraft } from '../user/user.ts';
 
 export interface CompanyDraft extends UserDraft {
-  readonly taxIdNumber: string;
+  readonly taxId: string;
   readonly name: string;
-  readonly phoneNumber: string;
+  readonly phone: string;
   readonly isVerified: boolean;
   readonly logoUrl: string;
 }
 
 export interface CompanyState {
-  readonly taxIdNumber: string;
+  readonly taxId: string;
   readonly name: string;
-  phoneNumber: string;
+  phone: string;
   isVerified: boolean;
   logoUrl: string;
 }
 
-interface SetPhoneNumberPayload {
-  readonly phoneNumber: string;
+interface SetPhonePayload {
+  readonly phone: string;
 }
 
 interface SetIsVerifiedPayload {
@@ -42,9 +42,9 @@ export class Company extends User {
       createdAt,
       isVerified,
       name,
-      taxIdNumber,
+      taxId,
       logoUrl,
-      phoneNumber,
+      phone,
     } = draft;
 
     super({
@@ -58,18 +58,18 @@ export class Company extends User {
     });
 
     this.companyState = {
-      taxIdNumber,
+      taxId,
       name,
       isVerified,
-      phoneNumber,
+      phone,
       logoUrl,
     };
   }
 
-  public setPhoneNumber(payload: SetPhoneNumberPayload): void {
-    const { phoneNumber } = payload;
+  public setPhone(payload: SetPhonePayload): void {
+    const { phone } = payload;
 
-    this.companyState.phoneNumber = phoneNumber;
+    this.companyState.phone = phone;
   }
 
   public setIsVerified(payload: SetIsVerifiedPayload): void {
@@ -84,8 +84,8 @@ export class Company extends User {
     this.companyState.logoUrl = logoUrl;
   }
 
-  public getPhoneNumber(): string {
-    return this.companyState.phoneNumber;
+  public getPhone(): string {
+    return this.companyState.phone;
   }
 
   public getIsVerified(): boolean {
@@ -96,8 +96,8 @@ export class Company extends User {
     return this.companyState.logoUrl;
   }
 
-  public getTaxIdNumber(): string {
-    return this.companyState.taxIdNumber;
+  public getTaxId(): string {
+    return this.companyState.taxId;
   }
 
   public getName(): string {

@@ -60,8 +60,8 @@ export class CompanyTestUtils extends TestUtils {
       .select([
         usersTable.allColumns,
         companiesTable.columns.name,
-        companiesTable.columns.phone_number,
-        companiesTable.columns.tax_id_number,
+        companiesTable.columns.phone,
+        companiesTable.columns.tax_id,
         companiesTable.columns.logo_url,
         companiesTable.columns.is_verified,
       ])
@@ -83,8 +83,8 @@ export class CompanyTestUtils extends TestUtils {
       .select([
         usersTable.allColumns,
         companiesTable.columns.name,
-        companiesTable.columns.phone_number,
-        companiesTable.columns.tax_id_number,
+        companiesTable.columns.phone,
+        companiesTable.columns.tax_id,
         companiesTable.columns.logo_url,
         companiesTable.columns.is_verified,
       ])

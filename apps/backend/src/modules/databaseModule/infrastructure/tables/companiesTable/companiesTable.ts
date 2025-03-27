@@ -10,8 +10,8 @@ export const companiesTable: DatabaseTable<CompanyRawEntity, typeof companiesTab
   columns: {
     id: `${companiesTableName}.id`,
     name: `${companiesTableName}.name`,
-    tax_id_number: `${companiesTableName}.tax_id_number`,
-    phone_number: `${companiesTableName}.phone_number`,
+    tax_id: `${companiesTableName}.tax_id`,
+    phone: `${companiesTableName}.phone`,
     is_verified: `${companiesTableName}.is_verified`,
     logo_url: `${companiesTableName}.logo_url`,
   },

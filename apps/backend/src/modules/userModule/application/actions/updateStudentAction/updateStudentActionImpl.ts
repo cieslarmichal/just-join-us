@@ -18,7 +18,7 @@ export class UpdateStudentActionImpl implements UpdateStudentAction {
   }
 
   public async execute(payload: UpdateStudentActionPayload): Promise<UpdateStudentActionResult> {
-    const { id, firstName, lastName, birthDate, phoneNumber, isDeleted } = payload;
+    const { id, firstName, lastName, birthDate, phone, isDeleted } = payload;
 
     this.loggerService.debug({
       message: 'Updating student...',
@@ -26,7 +26,7 @@ export class UpdateStudentActionImpl implements UpdateStudentAction {
       firstName,
       lastName,
       birthDate,
-      phoneNumber,
+      phone,
       isDeleted,
     });
 
@@ -51,8 +51,8 @@ export class UpdateStudentActionImpl implements UpdateStudentAction {
       student.setBirthDate({ birthDate });
     }
 
-    if (phoneNumber !== undefined) {
-      student.setPhoneNumber({ phoneNumber });
+    if (phone !== undefined) {
+      student.setPhone({ phone });
     }
 
     if (isDeleted !== undefined) {

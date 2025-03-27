@@ -101,7 +101,7 @@ describe('FindUserAction', () => {
         firstName: student.first_name,
         lastName: student.last_name,
         birthDate: student.birth_date,
-        phoneNumber: student.phone_number,
+        phone: student.phone,
       });
     });
 
@@ -119,8 +119,8 @@ describe('FindUserAction', () => {
         createdAt: company.created_at,
         name: company.name,
         logoUrl: company.logo_url,
-        phoneNumber: company.phone_number,
-        taxIdNumber: company.tax_id_number,
+        phone: company.phone,
+        taxId: company.tax_id,
         isVerified: company.is_verified,
       });
     });
@@ -173,7 +173,7 @@ describe('FindUserAction', () => {
         firstName: student.first_name,
         lastName: student.last_name,
         birthDate: student.birth_date,
-        phoneNumber: student.phone_number,
+        phone: student.phone,
       });
     });
 
@@ -191,8 +191,8 @@ describe('FindUserAction', () => {
         createdAt: company.created_at,
         name: company.name,
         logoUrl: company.logo_url,
-        phoneNumber: company.phone_number,
-        taxIdNumber: company.tax_id_number,
+        phone: company.phone,
+        taxId: company.tax_id,
         isVerified: company.is_verified,
       });
     });

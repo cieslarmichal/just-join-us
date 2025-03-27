@@ -3,21 +3,15 @@ import { type Static, Type } from '@sinclair/typebox';
 import { type HttpRouteSchema } from '../../../../../../common/http/httpRoute.ts';
 import { httpStatusCodes } from '../../../../../../common/http/httpStatusCode.ts';
 
-import {
-  companySchema,
-  companyNameSchema,
-  companyPhoneNumberSchema,
-  logoUrlSchema,
-  taxIdNumberSchema,
-} from './companySchema.ts';
+import { companySchema, companyNameSchema, companyPhoneSchema, logoUrlSchema, taxIdSchema } from './companySchema.ts';
 import { emailSchema, passwordSchema } from './userSchema.ts';
 
 const registerCompanyRequestBodySchema = Type.Object({
   email: emailSchema,
   password: passwordSchema,
   name: companyNameSchema,
-  taxIdNumber: taxIdNumberSchema,
-  phoneNumber: companyPhoneNumberSchema,
+  taxId: taxIdSchema,
+  phone: companyPhoneSchema,
   logoUrl: logoUrlSchema,
 });
 

@@ -219,7 +219,7 @@ export class UserHttpController implements HttpController {
   private async registerStudent(
     request: HttpRequest<RegisterStudentRequestBody>,
   ): Promise<HttpCreatedResponse<RegisterStudentResponseBody>> {
-    const { email, password, firstName, lastName, birthDate, phoneNumber } = request.body;
+    const { email, password, firstName, lastName, birthDate, phone } = request.body;
 
     const { student } = await this.registerStudentAction.execute({
       email,
@@ -227,7 +227,7 @@ export class UserHttpController implements HttpController {
       firstName,
       lastName,
       birthDate: new Date(birthDate),
-      phoneNumber,
+      phone,
     });
 
     return {
@@ -239,14 +239,14 @@ export class UserHttpController implements HttpController {
   private async registerCompany(
     request: HttpRequest<RegisterCompanyRequestBody>,
   ): Promise<HttpCreatedResponse<RegisterCompanyResponseBody>> {
-    const { email, password, name, taxIdNumber, phoneNumber, logoUrl } = request.body;
+    const { email, password, name, taxId, phone, logoUrl } = request.body;
 
     const { company } = await this.registerCompanyAction.execute({
       email,
       password,
       name,
-      taxIdNumber,
-      phoneNumber,
+      taxId,
+      phone,
       logoUrl,
     });
 
@@ -347,7 +347,7 @@ export class UserHttpController implements HttpController {
   ): Promise<HttpOkResponse<UpdateStudentResponseBody>> {
     const { studentId } = request.pathParams;
 
-    const { firstName, lastName, birthDate, phoneNumber, isDeleted } = request.body;
+    const { firstName, lastName, birthDate, phone, isDeleted } = request.body;
 
     await this.accessControlService.verifyBearerToken({
       requestHeaders: request.headers,
@@ -359,7 +359,7 @@ export class UserHttpController implements HttpController {
       firstName,
       lastName,
       birthDate: birthDate ? new Date(birthDate) : undefined,
-      phoneNumber,
+      phone,
       isDeleted,
     });
 
@@ -374,7 +374,7 @@ export class UserHttpController implements HttpController {
   ): Promise<HttpOkResponse<UpdateCompanyResponseBody>> {
     const { companyId } = request.pathParams;
 
-    const { phoneNumber, isDeleted, logoUrl } = request.body;
+    const { phone, isDeleted, logoUrl } = request.body;
 
     await this.accessControlService.verifyBearerToken({
       requestHeaders: request.headers,
@@ -383,7 +383,7 @@ export class UserHttpController implements HttpController {
 
     const { company } = await this.updateCompanyAction.execute({
       id: companyId,
-      phoneNumber,
+      phone,
       isDeleted,
       logoUrl,
     });
@@ -492,7 +492,7 @@ export class UserHttpController implements HttpController {
       firstName: student.getFirstName(),
       lastName: student.getLastName(),
       birthDate: student.getBirthDate().toISOString(),
-      phoneNumber: student.getPhoneNumber(),
+      phone: student.getPhone(),
     };
   }
 
@@ -505,8 +505,8 @@ export class UserHttpController implements HttpController {
       role: company.getRole(),
       createdAt: company.getCreatedAt().toISOString(),
       name: company.getName(),
-      taxIdNumber: company.getTaxIdNumber(),
-      phoneNumber: company.getPhoneNumber(),
+      taxId: company.getTaxId(),
+      phone: company.getPhone(),
       isVerified: company.getIsVerified(),
       logoUrl: company.getLogoUrl(),
     };
