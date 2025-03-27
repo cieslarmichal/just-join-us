@@ -87,11 +87,11 @@ export class Generator {
     return uniqueCategoryName;
   }
 
-  public static taxIdNumber(): string {
+  public static taxId(): string {
     return faker.string.numeric(10);
   }
 
-  public static phoneNumber(): string {
+  public static phone(): string {
     return faker.phone.number({ style: 'international' });
   }
 

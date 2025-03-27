@@ -14,7 +14,7 @@ export default function JobOffersListItem({ jobOffer }: Props) {
       to={`/job-offers/${jobOffer.id}`}
       className="block"
     >
-      <div className="bg-white border p-1 md:p-2 md:py-4 flex items-center rounded-3xl hover:shadow-lg transition-shadow duration-200 ease-in-out">
+      <div className="bg-white border p-1 md:p-2 md:py-4 flex items-center rounded-2xl hover:shadow-lg transition-shadow duration-200 ease-in-out">
         <img
           src={jobOffer.companyLogoUrl}
           alt={jobOffer.name}
@@ -23,8 +23,8 @@ export default function JobOffersListItem({ jobOffer }: Props) {
         <div className="flex flex-col gap-2 ml-6 flex-grow">
           <div className="flex items-center gap-2">
             <div className="text-sm font-semibold sm:text-lg whitespace-nowrap">{jobOffer.name}</div>
-            <div className="text-sm sm:text-lg font-semibold whitespace-nowrap ml-auto pr-4">
-              {jobOffer.salaryMin} - {jobOffer.salaryMax} PLN
+            <div className="text-sm sm:text-base font-semibold whitespace-nowrap ml-auto pr-4 text-green-600">
+              {jobOffer.salaryMin} - {jobOffer.salaryMax} PLN/month
             </div>
           </div>
           <div className="flex gap-4">

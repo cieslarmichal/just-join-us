@@ -41,7 +41,7 @@ describe('UpdateCompanyActionImpl', () => {
 
     const isVerified = Generator.boolean();
 
-    const phoneNumber = Generator.phoneNumber();
+    const phone = Generator.phone();
 
     const isDeleted = Generator.boolean();
 
@@ -50,7 +50,7 @@ describe('UpdateCompanyActionImpl', () => {
     await action.execute({
       id: company.id,
       isVerified,
-      phoneNumber,
+      phone,
       isDeleted,
       logoUrl,
     });
@@ -59,7 +59,7 @@ describe('UpdateCompanyActionImpl', () => {
 
     expect(updatedCompany?.is_verified).toBe(isVerified);
 
-    expect(updatedCompany?.phone_number).toBe(phoneNumber);
+    expect(updatedCompany?.phone).toBe(phone);
 
     expect(updatedCompany?.is_deleted).toBe(isDeleted);
 
@@ -71,13 +71,13 @@ describe('UpdateCompanyActionImpl', () => {
 
     const isVerified = Generator.boolean();
 
-    const phoneNumber = Generator.phoneNumber();
+    const phone = Generator.phone();
 
     try {
       await action.execute({
         id: companyId,
         isVerified,
-        phoneNumber,
+        phone,
       });
     } catch (error) {
       expect(error).toBeInstanceOf(OperationNotValidError);

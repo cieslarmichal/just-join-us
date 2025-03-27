@@ -6,7 +6,7 @@ export interface UpdateStudentActionPayload {
   readonly firstName?: string | undefined;
   readonly lastName?: string | undefined;
   readonly birthDate?: Date | undefined;
-  readonly phoneNumber?: string | undefined;
+  readonly phone?: string | undefined;
   readonly isDeleted?: boolean | undefined;
 }
 

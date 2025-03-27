@@ -36,9 +36,9 @@ describe('CompanyMapper', () => {
       role: userRawEntity.role,
       createdAt: userRawEntity.created_at,
       name: companyRawEntity.name,
-      taxIdNumber: companyRawEntity.tax_id_number,
+      taxId: companyRawEntity.tax_id,
       isVerified: companyRawEntity.is_verified,
-      phoneNumber: companyRawEntity.phone_number,
+      phone: companyRawEntity.phone,
       logoUrl: companyRawEntity.logo_url,
     });
   });

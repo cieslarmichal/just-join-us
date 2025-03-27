@@ -33,7 +33,7 @@ export class CompanyRepositoryImpl implements CompanyRepository {
 
   public async createCompany(payload: CreateCompanyPayload): Promise<Company> {
     const {
-      data: { email, password, isEmailVerified, isDeleted, role, isVerified, name, phoneNumber, taxIdNumber, logoUrl },
+      data: { email, password, isEmailVerified, isDeleted, role, isVerified, name, phone, taxId, logoUrl },
     } = payload;
 
     const id = this.uuidService.generateUuid();
@@ -52,8 +52,8 @@ export class CompanyRepositoryImpl implements CompanyRepository {
         await transaction<CompanyRawEntity>(companiesTable.name).insert({
           id,
           name,
-          tax_id_number: taxIdNumber,
-          phone_number: phoneNumber,
+          tax_id: taxId,
+          phone: phone,
           is_verified: isVerified,
           logo_url: logoUrl,
         });
@@ -76,7 +76,7 @@ export class CompanyRepositoryImpl implements CompanyRepository {
 
     const { password, isDeleted, isEmailVerified } = company.getUserState();
 
-    const { phoneNumber, isVerified, logoUrl } = company.getCompanyState();
+    const { phone, isVerified, logoUrl } = company.getCompanyState();
 
     try {
       await this.databaseClient.transaction(async (transaction) => {
@@ -90,7 +90,7 @@ export class CompanyRepositoryImpl implements CompanyRepository {
 
         await transaction<CompanyRawEntity>(companiesTable.name)
           .update({
-            phone_number: phoneNumber,
+            phone: phone,
             is_verified: isVerified,
             logo_url: logoUrl,
           })
@@ -119,8 +119,8 @@ export class CompanyRepositoryImpl implements CompanyRepository {
         .select([
           usersTable.allColumns,
           companiesTable.columns.name,
-          companiesTable.columns.tax_id_number,
-          companiesTable.columns.phone_number,
+          companiesTable.columns.tax_id,
+          companiesTable.columns.phone,
           companiesTable.columns.is_verified,
           companiesTable.columns.logo_url,
         ])
@@ -160,8 +160,8 @@ export class CompanyRepositoryImpl implements CompanyRepository {
         .select([
           usersTable.allColumns,
           companiesTable.columns.name,
-          companiesTable.columns.tax_id_number,
-          companiesTable.columns.phone_number,
+          companiesTable.columns.tax_id,
+          companiesTable.columns.phone,
           companiesTable.columns.is_verified,
           companiesTable.columns.logo_url,
         ])

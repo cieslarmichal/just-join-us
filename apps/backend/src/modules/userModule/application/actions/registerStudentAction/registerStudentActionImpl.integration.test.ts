@@ -49,7 +49,7 @@ describe('RegisterStudentAction', () => {
       firstName: student.getFirstName(),
       lastName: student.getLastName(),
       birthDate: student.getBirthDate(),
-      phoneNumber: student.getPhoneNumber(),
+      phone: student.getPhone(),
     });
 
     const foundStudent = await studentTestUtils.findByEmail({ email: student.getEmail() });
@@ -63,7 +63,7 @@ describe('RegisterStudentAction', () => {
       firstName: student.getFirstName(),
       lastName: student.getLastName(),
       birthDate: student.getBirthDate(),
-      phoneNumber: student.getPhoneNumber(),
+      phone: student.getPhone(),
       createdAt: expect.any(Date),
     });
 
@@ -77,7 +77,7 @@ describe('RegisterStudentAction', () => {
       first_name: student.getFirstName(),
       last_name: student.getLastName(),
       birth_date: student.getBirthDate(),
-      phone_number: student.getPhoneNumber(),
+      phone: student.getPhone(),
       created_at: expect.any(Date),
     });
   });
@@ -94,7 +94,7 @@ describe('RegisterStudentAction', () => {
         firstName: student.getFirstName(),
         lastName: student.getLastName(),
         birthDate: student.getBirthDate(),
-        phoneNumber: student.getPhoneNumber(),
+        phone: student.getPhone(),
       });
     } catch (error) {
       expect(error).toBeInstanceOf(ResourceAlreadyExistsError);
@@ -120,7 +120,7 @@ describe('RegisterStudentAction', () => {
         firstName: student.getFirstName(),
         lastName: student.getLastName(),
         birthDate: student.getBirthDate(),
-        phoneNumber: student.getPhoneNumber(),
+        phone: student.getPhone(),
       });
     } catch (error) {
       expect(error).toBeInstanceOf(OperationNotValidError);

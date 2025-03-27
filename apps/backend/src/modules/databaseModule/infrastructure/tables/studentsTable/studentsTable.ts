@@ -12,6 +12,6 @@ export const studentsTable: DatabaseTable<StudentRawEntity, typeof studentsTable
     first_name: `${studentsTableName}.first_name`,
     last_name: `${studentsTableName}.last_name`,
     birth_date: `${studentsTableName}.birth_date`,
-    phone_number: `${studentsTableName}.phone_number`,
+    phone: `${studentsTableName}.phone`,
   },
 };

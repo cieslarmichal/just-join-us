@@ -50,8 +50,8 @@ describe('CompanyRepositoryImpl', () => {
           role: createdCompany.getRole(),
           isVerified: createdCompany.getIsVerified(),
           name: createdCompany.getName(),
-          phoneNumber: createdCompany.getPhoneNumber(),
-          taxIdNumber: createdCompany.getTaxIdNumber(),
+          phone: createdCompany.getPhone(),
+          taxId: createdCompany.getTaxId(),
           logoUrl: createdCompany.getLogoUrl(),
         },
       });
@@ -78,8 +78,8 @@ describe('CompanyRepositoryImpl', () => {
             role: createdCompany.getRole(),
             isVerified: createdCompany.getIsVerified(),
             name: createdCompany.getName(),
-            phoneNumber: createdCompany.getPhoneNumber(),
-            taxIdNumber: createdCompany.getTaxIdNumber(),
+            phone: createdCompany.getPhone(),
+            taxId: createdCompany.getTaxId(),
             logoUrl: createdCompany.getLogoUrl(),
           },
         });
@@ -100,9 +100,9 @@ describe('CompanyRepositoryImpl', () => {
         email: companyRawEntity.email,
         password: companyRawEntity.password,
         name: companyRawEntity.name,
-        taxIdNumber: companyRawEntity.tax_id_number,
+        taxId: companyRawEntity.tax_id,
         logoUrl: companyRawEntity.logo_url,
-        phoneNumber: companyRawEntity.phone_number,
+        phone: companyRawEntity.phone,
         isVerified: companyRawEntity.is_verified,
         isEmailVerified: companyRawEntity.is_email_verified,
         isDeleted: companyRawEntity.is_deleted,
@@ -118,7 +118,7 @@ describe('CompanyRepositoryImpl', () => {
 
       const logoUrl = Generator.imageUrl();
 
-      const phoneNumber = Generator.phoneNumber();
+      const phone = Generator.phone();
 
       company.setPassword({ password });
 
@@ -128,7 +128,7 @@ describe('CompanyRepositoryImpl', () => {
 
       company.setLogoUrl({ logoUrl });
 
-      company.setPhoneNumber({ phoneNumber });
+      company.setPhone({ phone });
 
       const updatedCompany = await companyRepository.updateCompany({
         company,
@@ -140,9 +140,9 @@ describe('CompanyRepositoryImpl', () => {
         email: company.getEmail(),
         password,
         name: company.getName(),
-        taxIdNumber: company.getTaxIdNumber(),
+        taxId: company.getTaxId(),
         logoUrl,
-        phoneNumber,
+        phone,
         isVerified: company.getIsVerified(),
         isEmailVerified,
         isDeleted,
@@ -155,9 +155,9 @@ describe('CompanyRepositoryImpl', () => {
         email: company.getEmail(),
         password,
         name: company.getName(),
-        tax_id_number: company.getTaxIdNumber(),
+        tax_id: company.getTaxId(),
         logo_url: logoUrl,
-        phone_number: phoneNumber,
+        phone: phone,
         is_verified: company.getIsVerified(),
         is_email_verified: isEmailVerified,
         is_deleted: isDeleted,
@@ -177,9 +177,9 @@ describe('CompanyRepositoryImpl', () => {
         email: company.email,
         password: company.password,
         name: company.name,
-        taxIdNumber: company.tax_id_number,
+        taxId: company.tax_id,
         logoUrl: company.logo_url,
-        phoneNumber: company.phone_number,
+        phone: company.phone,
         isVerified: company.is_verified,
         isEmailVerified: company.is_email_verified,
         isDeleted: company.is_deleted,
@@ -232,9 +232,9 @@ describe('CompanyRepositoryImpl', () => {
         email: company.email,
         password: company.password,
         name: company.name,
-        taxIdNumber: company.tax_id_number,
+        taxId: company.tax_id,
         logoUrl: company.logo_url,
-        phoneNumber: company.phone_number,
+        phone: company.phone,
         isVerified: company.is_verified,
         isEmailVerified: company.is_email_verified,
         isDeleted: company.is_deleted,

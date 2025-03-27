@@ -6,7 +6,7 @@ export interface RegisterStudentActionPayload {
   readonly password: string;
   readonly firstName: string;
   readonly lastName: string;
-  readonly phoneNumber: string;
+  readonly phone: string;
   readonly birthDate: Date;
 }
 

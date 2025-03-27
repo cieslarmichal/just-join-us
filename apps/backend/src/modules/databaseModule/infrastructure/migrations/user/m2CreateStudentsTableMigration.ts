@@ -18,7 +18,7 @@ export class M2CreateStudentsTableMigration implements Migration {
 
       table.dateTime('birth_date').notNullable();
 
-      table.string('phone_number', 20).notNullable().checkRegex('^[0-9+][0-9]*$');
+      table.string('phone', 20).notNullable().checkRegex('^[0-9+][0-9]*$');
     });
   }
 

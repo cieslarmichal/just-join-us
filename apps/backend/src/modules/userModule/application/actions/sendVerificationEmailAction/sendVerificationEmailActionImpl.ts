@@ -32,6 +32,7 @@ export class SendVerificationEmailActionImpl implements SendVerificationEmailAct
   }
 
   public async execute(payload: ExecutePayload): Promise<void> {
+    return;
     const { email: emailInput } = payload;
 
     const email = emailInput.toLowerCase();

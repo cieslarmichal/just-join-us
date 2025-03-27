@@ -40,7 +40,7 @@ describe('StudentMapper', () => {
       firstName: studentRawEntity.first_name,
       lastName: studentRawEntity.last_name,
       birthDate: studentRawEntity.birth_date,
-      phoneNumber: studentRawEntity.phone_number,
+      phone: studentRawEntity.phone,
     });
   });
 });

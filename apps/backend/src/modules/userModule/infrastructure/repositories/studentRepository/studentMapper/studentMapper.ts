@@ -13,7 +13,7 @@ export class StudentMapper {
       created_at: createdAt,
       first_name: firstName,
       last_name: lastName,
-      phone_number: phoneNumber,
+      phone: phone,
       birth_date: birthDate,
     } = entity;
 
@@ -27,7 +27,7 @@ export class StudentMapper {
       createdAt,
       firstName,
       lastName,
-      phoneNumber,
+      phone,
       birthDate,
     });
   }

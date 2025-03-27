@@ -4,14 +4,14 @@ export interface StudentDraft extends UserDraft {
   readonly firstName: string;
   readonly lastName: string;
   readonly birthDate: Date;
-  readonly phoneNumber: string;
+  readonly phone: string;
 }
 
 export interface StudentState {
   firstName: string;
   lastName: string;
   birthDate: Date;
-  phoneNumber: string;
+  phone: string;
 }
 
 interface SetFirstNamePayload {
@@ -26,27 +26,16 @@ interface SetBirthDatePayload {
   readonly birthDate: Date;
 }
 
-interface SetPhoneNumberPayload {
-  readonly phoneNumber: string;
+interface SetPhonePayload {
+  readonly phone: string;
 }
 
 export class Student extends User {
   private studentState: StudentState;
 
   public constructor(draft: StudentDraft) {
-    const {
-      id,
-      email,
-      password,
-      isEmailVerified,
-      isDeleted,
-      role,
-      createdAt,
-      birthDate,
-      firstName,
-      lastName,
-      phoneNumber,
-    } = draft;
+    const { id, email, password, isEmailVerified, isDeleted, role, createdAt, birthDate, firstName, lastName, phone } =
+      draft;
 
     super({
       id,
@@ -62,7 +51,7 @@ export class Student extends User {
       birthDate,
       firstName,
       lastName,
-      phoneNumber,
+      phone,
     };
   }
 
@@ -78,8 +67,8 @@ export class Student extends User {
     return this.studentState.birthDate;
   }
 
-  public getPhoneNumber(): string {
-    return this.studentState.phoneNumber;
+  public getPhone(): string {
+    return this.studentState.phone;
   }
 
   public setFirstName(payload: SetFirstNamePayload): void {
@@ -94,8 +83,8 @@ export class Student extends User {
     this.studentState.birthDate = payload.birthDate;
   }
 
-  public setPhoneNumber(payload: SetPhoneNumberPayload): void {
-    this.studentState.phoneNumber = payload.phoneNumber;
+  public setPhone(payload: SetPhonePayload): void {
+    this.studentState.phone = payload.phone;
   }
 
   public getStudentState(): StudentState {

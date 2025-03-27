@@ -5,7 +5,7 @@ export interface StudentRawEntity {
   readonly first_name: string;
   readonly last_name: string;
   readonly birth_date: Date;
-  readonly phone_number: string;
+  readonly phone: string;
 }
 
 export interface StudentRawEntityExtended {
@@ -19,5 +19,5 @@ export interface StudentRawEntityExtended {
   readonly first_name: string;
   readonly last_name: string;
   readonly birth_date: Date;
-  readonly phone_number: string;
+  readonly phone: string;
 }

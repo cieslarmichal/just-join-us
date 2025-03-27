@@ -32,7 +32,7 @@ export class StudentRepositoryImpl implements StudentRepository {
 
   public async createStudent(payload: CreateStudentPayload): Promise<Student> {
     const {
-      data: { email, password, isEmailVerified, isDeleted, role, firstName, lastName, birthDate, phoneNumber },
+      data: { email, password, isEmailVerified, isDeleted, role, firstName, lastName, birthDate, phone },
     } = payload;
 
     const id = this.uuidService.generateUuid();
@@ -53,7 +53,7 @@ export class StudentRepositoryImpl implements StudentRepository {
           first_name: firstName,
           last_name: lastName,
           birth_date: birthDate,
-          phone_number: phoneNumber,
+          phone: phone,
         });
       });
     } catch (error) {
@@ -74,7 +74,7 @@ export class StudentRepositoryImpl implements StudentRepository {
 
     const { password, isDeleted, isEmailVerified } = student.getUserState();
 
-    const { phoneNumber, birthDate, firstName, lastName } = student.getStudentState();
+    const { phone, birthDate, firstName, lastName } = student.getStudentState();
 
     try {
       await this.databaseClient.transaction(async (transaction) => {
@@ -88,7 +88,7 @@ export class StudentRepositoryImpl implements StudentRepository {
 
         await transaction<StudentRawEntity>(studentsTable.name)
           .update({
-            phone_number: phoneNumber,
+            phone: phone,
             birth_date: birthDate,
             first_name: firstName,
             last_name: lastName,
@@ -120,7 +120,7 @@ export class StudentRepositoryImpl implements StudentRepository {
           studentsTable.columns.first_name,
           studentsTable.columns.last_name,
           studentsTable.columns.birth_date,
-          studentsTable.columns.phone_number,
+          studentsTable.columns.phone,
         ])
         .join(usersTable.name, studentsTable.columns.id, '=', usersTable.columns.id);
 
@@ -160,7 +160,7 @@ export class StudentRepositoryImpl implements StudentRepository {
           studentsTable.columns.first_name,
           studentsTable.columns.last_name,
           studentsTable.columns.birth_date,
-          studentsTable.columns.phone_number,
+          studentsTable.columns.phone,
         ])
         .join(usersTable.name, studentsTable.columns.id, '=', usersTable.columns.id)
         .orderBy(studentsTable.columns.id, 'desc');

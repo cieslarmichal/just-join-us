@@ -45,7 +45,7 @@ describe('UpdateStudentActionImpl', () => {
 
     const birthDate = Generator.birthDate();
 
-    const phoneNumber = Generator.phoneNumber();
+    const phone = Generator.phone();
 
     const isDeleted = Generator.boolean();
 
@@ -54,7 +54,7 @@ describe('UpdateStudentActionImpl', () => {
       firstName,
       lastName,
       birthDate,
-      phoneNumber,
+      phone,
       isDeleted,
     });
 
@@ -66,7 +66,7 @@ describe('UpdateStudentActionImpl', () => {
 
     expect(updatedStudent?.birth_date).toStrictEqual(birthDate);
 
-    expect(updatedStudent?.phone_number).toBe(phoneNumber);
+    expect(updatedStudent?.phone).toBe(phone);
 
     expect(updatedStudent?.is_deleted).toBe(isDeleted);
   });
