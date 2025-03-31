@@ -2,6 +2,7 @@ import 'leaflet/dist/leaflet.css';
 import { type LatLngLiteral } from 'leaflet';
 import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
+import { config } from '../config';
 
 interface Props {
   setLatitude?: (latitude: number) => void;
@@ -86,7 +87,10 @@ export default function MapPicker({
       scrollWheelZoom
       className={className}
     >
-      <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}}.png" />
+      <TileLayer
+        url={`https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${config.mapTiler.apiKey}`}
+        attribution='&copy; <a href="https://www.maptiler.com/">MapTiler</a> contributors'
+      />
       <Marker position={position} />
       <MapEvents />
     </MapContainer>
