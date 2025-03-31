@@ -14,12 +14,12 @@ export default function SearchInput({ searchQuery, setSearchQuery }: Props) {
       </div>
       <Input
         type="text"
-        placeholder="Search job offer..."
+        placeholder="Search"
         value={searchQuery}
         onChange={(event) => {
           setSearchQuery(event.target.value);
         }}
-        className="pl-12 h-12 w-120 border border-gray-300 hover:border-gray-500 rounded-3xl"
+        className="pl-12 h-10 w-50 border border-gray-300 hover:border-gray-500 rounded-3xl"
       />
     </div>
   );

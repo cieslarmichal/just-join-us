@@ -23,7 +23,7 @@ export default function JobOffersListItem({ jobOffer }: Props) {
         <div className="flex flex-col gap-2 ml-6 flex-grow">
           <div className="flex items-center gap-2">
             <div className="text-sm font-semibold sm:text-lg whitespace-nowrap">{jobOffer.name}</div>
-            <div className="text-sm sm:text-base font-semibold whitespace-nowrap ml-auto pr-4 text-green-600">
+            <div className="text-sm sm:text-base whitespace-nowrap ml-auto pr-4 text-green-600">
               {jobOffer.salaryMin} - {jobOffer.salaryMax} PLN/month
             </div>
           </div>

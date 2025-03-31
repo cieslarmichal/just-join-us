@@ -35,7 +35,7 @@ export default function SearchPage() {
   }, [filters]);
 
   return (
-    <div className="sm:px-4 md:px-6 lg:px-8">
+    <div className="sm:px-4 md:px-6">
       <div className="flex items-center my-3 md:my-5">
         <div className="flex items-center justify-center gap-4">
           <SearchInput
@@ -75,14 +75,17 @@ export default function SearchPage() {
             />
           </div>
         </div>
-        <div className="ml-auto">
-          <SortButton />
-        </div>
+        <div className="ml-auto"></div>
       </div>
 
-      <h2 className="text-gray-600 font-medium">Work: All offers - 133 offers</h2>
       <div className="grid grid-cols-2 mt-1 gap-4 h-full">
-        <JobOffersList jobOffers={jobOffers} />
+        <div className="flex flex-col">
+          <div className="flex justify-between items-center">
+            <h2 className="text-gray-600 font-medium text-base">Work: All offers - 133 offers</h2>
+            <SortButton />
+          </div>
+          <JobOffersList jobOffers={jobOffers} />
+        </div>
         <JobOffersMap />
       </div>
     </div>

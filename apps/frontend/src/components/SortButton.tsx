@@ -1,35 +1,62 @@
-import { IoIosArrowDown } from 'react-icons/io';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/Popover';
-import { RadioGroup, RadioGroupItem } from './ui/RadioGroup';
-import { Label } from './ui/Label';
+import { useEffect, useRef, useState } from 'react';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
 export default function SortButton() {
+  const [selectedOption, setSelectedOption] = useState<number>(0);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const options = [
+    { value: 'default', label: 'Default' },
+    { value: 'latest', label: 'Latest' },
+    { value: 'highestSalary', label: 'Highest salary' },
+    { value: 'lowestSalary', label: 'Lowest salary' },
+  ];
+
+  const handleOptionClick = (optionNumber: number) => {
+    setSelectedOption(optionNumber);
+    setIsDropdownOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <Popover>
-      <PopoverTrigger>
-        <div className="flex items-center gap-2 border border-gray-300 hover:border-gray-400 rounded-3xl px-4 py-2">
-          <span>Sort</span>
-          <IoIosArrowDown className="w-5 h-5" />
-        </div>
-      </PopoverTrigger>
-      <PopoverContent>
-        <RadioGroup defaultValue="option-one">
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem
-              value="option-one"
-              id="option-one"
-            />
-            <Label htmlFor="option-one">Option One</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem
-              value="option-two"
-              id="option-two"
-            />
-            <Label htmlFor="option-two">Option Two</Label>
-          </div>
-        </RadioGroup>
-      </PopoverContent>
-    </Popover>
+    <div
+      className="relative"
+      ref={dropdownRef}
+    >
+      <div
+        className="flex select-none items-center gap-2 px-4 py-2 cursor-pointer rounded-md hover:bg-gray-100"
+        onClick={() => setIsDropdownOpen((prev) => !prev)}
+      >
+        <span className="text-sm">{options[selectedOption].label}</span>
+        {isDropdownOpen ? <IoIosArrowUp className="w-4 h-4" /> : <IoIosArrowDown className="w-4 h-4" />}
+      </div>
+
+      {isDropdownOpen && (
+        <ul className="absolute z-10 mt-1 w-full bg-white shadow-md rounded-md border border-gray-300">
+          {options.map((option, index) => (
+            <li
+              key={option.value}
+              className="flex items-center justify-between select-none px-4 py-2 cursor-pointer hover:bg-gray-100"
+              onClick={() => handleOptionClick(index)}
+            >
+              <span className={`${selectedOption === index ? 'text-pink-600' : ''}`}>{option.label}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }

@@ -86,7 +86,7 @@ export default function MapPicker({
       scrollWheelZoom
       className={className}
     >
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}}.png" />
       <Marker position={position} />
       <MapEvents />
     </MapContainer>

@@ -7,7 +7,7 @@ export default function JobOffersMap() {
       <MapPicker
         latitude={52.231641}
         longitude={21.00618}
-        className="w-full h-full"
+        className="w-full h-100"
         readOnly
         zoom={6}
       />
