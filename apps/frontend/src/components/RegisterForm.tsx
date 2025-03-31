@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/Button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
 import { Input } from '@/components/ui/Input';
-import { registerUser } from '../api/actions/registerUser';
+import { registerUser } from '../api/queries/registerUser';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

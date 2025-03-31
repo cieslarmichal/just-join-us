@@ -26,7 +26,6 @@
     "@sinclair/typebox": "0.34.29",
     "bcrypt": "5.1.1",
     "cockatiel": "3.2.1",
-    "config": "3.3.12",
     "fastify": "5.2.1",
     "inversify": "7.1.0",
     "jsonwebtoken": "9.0.2",
@@ -38,7 +37,6 @@
   "devDependencies": {
     "@faker-js/faker": "9.6.0",
     "@types/bcrypt": "5.0.2",
-    "@types/config": "3.3.5",
     "@types/jsonwebtoken": "9.0.9",
     "vitest": "3.0.8"
   }

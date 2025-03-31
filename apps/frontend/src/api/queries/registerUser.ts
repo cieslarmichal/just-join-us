@@ -10,7 +10,7 @@ type RegisterUserRequest = {
 };
 
 export const registerUser = async (input: RegisterUserRequest): Promise<User> => {
-  const response = await fetch(`${config.api.baseUrl}/students/register`, {
+  const response = await fetch(`${config.backendUrl}/students/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

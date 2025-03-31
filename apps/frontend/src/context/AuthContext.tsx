@@ -1,12 +1,9 @@
 import { createContext } from 'react';
+import { User } from '../api/types/user';
 
 export type AuthContextType = {
-  userData: {
-    id: string;
-    email: string;
-    role: string;
-  } | null;
-  updateUserData: (data: unknown) => void;
+  userData: User | null;
+  updateUserData: (data: User | null) => void;
   accessToken: string | null;
   refreshToken: string | null;
   updateAccessToken: (newAccessToken: string | null) => void;

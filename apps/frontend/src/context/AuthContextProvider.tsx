@@ -1,16 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { ReactNode } from 'react';
 import { AuthContext } from './AuthContext';
+import { User } from '../api/types/user';
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['accessToken', 'refreshToken']);
 
-  const existingUser = sessionStorage.getItem('user');
+  const [userData, setUserData] = useState<User | null>(null);
 
-  const [userData, setUserData] = useState(existingUser ? JSON.parse(existingUser) : null);
-
-  const updateUserData = (data: unknown) => {
+  const updateUserData = (data: User | null) => {
     setUserData(data);
   };
 
@@ -49,10 +48,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
       removeCookie('refreshToken');
     }
   };
-
-  useEffect(() => {
-    sessionStorage.setItem('user', JSON.stringify(userData));
-  }, [userData]);
 
   return (
     <AuthContext.Provider
