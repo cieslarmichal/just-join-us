@@ -8,12 +8,8 @@
     "lint": "turbo run lint --concurrency 5",
     "lint:fix": "turbo run lint:fix"
   },
-  "dependencies": {
-    "config": "3.3.12"
-  },
   "devDependencies": {
     "@stylistic/eslint-plugin": "4.2.0",
-    "@types/config": "3.3.5",
     "@types/node": "22.13.10",
     "eslint": "9.22.0",
     "eslint-config-prettier": "10.1.1",
