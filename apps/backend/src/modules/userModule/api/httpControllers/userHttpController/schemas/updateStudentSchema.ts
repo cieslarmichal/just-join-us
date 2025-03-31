@@ -3,7 +3,7 @@ import { type Static, Type } from '@sinclair/typebox';
 import { type HttpRouteSchema } from '../../../../../../common/http/httpRoute.ts';
 import { httpStatusCodes } from '../../../../../../common/http/httpStatusCode.ts';
 
-import { firstNameSchema, lastNameSchema, studentSchema, studentPhoneNumberSchema } from './studentSchema.ts';
+import { firstNameSchema, lastNameSchema, studentSchema, studentPhoneSchema } from './studentSchema.ts';
 
 const updateStudentPathParamsSchema = Type.Object({
   studentId: Type.String({ format: 'uuid' }),
@@ -15,7 +15,7 @@ const updateStudentRequestBodySchema = Type.Object({
   firstName: Type.Optional(firstNameSchema),
   lastName: Type.Optional(lastNameSchema),
   birthDate: Type.Optional(Type.String({ format: 'date' })),
-  phoneNumber: Type.Optional(studentPhoneNumberSchema),
+  phone: Type.Optional(studentPhoneSchema),
   isDeleted: Type.Optional(Type.Boolean()),
 });
 

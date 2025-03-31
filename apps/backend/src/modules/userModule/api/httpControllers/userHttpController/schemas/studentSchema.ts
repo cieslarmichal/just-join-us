@@ -14,7 +14,7 @@ export const lastNameSchema = Type.String({
   maxLength: 64,
 });
 
-export const studentPhoneNumberSchema = Type.String({
+export const studentPhoneSchema = Type.String({
   minLength: 1,
   maxLength: 20,
 });
@@ -29,7 +29,7 @@ export const studentSchema = Type.Object({
   firstName: firstNameSchema,
   lastName: lastNameSchema,
   birthDate: Type.String({ format: 'date' }),
-  phoneNumber: studentPhoneNumberSchema,
+  phone: studentPhoneSchema,
 });
 
 export type StudentDto = Static<typeof studentSchema>;

@@ -34,7 +34,7 @@ export class RegisterStudentActionImpl implements RegisterStudentAction {
   }
 
   public async execute(payload: RegisterStudentActionPayload): Promise<RegisterStudentActionResult> {
-    const { email: emailInput, password, birthDate, firstName, lastName, phoneNumber } = payload;
+    const { email: emailInput, password, birthDate, firstName, lastName, phone } = payload;
 
     const email = emailInput.toLowerCase();
 
@@ -44,7 +44,7 @@ export class RegisterStudentActionImpl implements RegisterStudentAction {
       birthDate,
       firstName,
       lastName,
-      phoneNumber,
+      phone,
     });
 
     const existingStudent = await this.studentRepository.findStudent({ email });
@@ -64,13 +64,13 @@ export class RegisterStudentActionImpl implements RegisterStudentAction {
       data: {
         email,
         password: hashedPassword,
-        isEmailVerified: false,
+        isEmailVerified: true,
         isDeleted: false,
         role: userRoles.student,
         firstName,
         lastName,
         birthDate,
-        phoneNumber,
+        phone,
       },
     });
 

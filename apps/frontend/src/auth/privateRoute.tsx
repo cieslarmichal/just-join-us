@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { AuthContext } from '../context/authContext.tsx';
+import { AuthContext } from '../context/AuthContext.tsx';
 import { Navigate, useLocation } from 'react-router-dom';
 
 export default function PrivateRoute({ children }: { children: React.ReactNode }) {

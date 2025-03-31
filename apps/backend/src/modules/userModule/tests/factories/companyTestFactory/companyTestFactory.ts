@@ -13,11 +13,11 @@ export class CompanyTestFactory {
       isDeleted: false,
       role: userRoles.company,
       createdAt: Generator.pastDate(),
-      taxIdNumber: Generator.taxIdNumber(),
+      taxId: Generator.taxId(),
       name: Generator.companyName(),
       isVerified: Generator.boolean(),
       logoUrl: Generator.imageUrl(),
-      phoneNumber: Generator.phoneNumber(),
+      phone: Generator.phone(),
       ...input,
     });
   }
@@ -25,11 +25,11 @@ export class CompanyTestFactory {
   public createRaw(input: Partial<CompanyRawEntity> = {}): CompanyRawEntity {
     return {
       id: Generator.uuid(),
-      tax_id_number: Generator.taxIdNumber(),
+      tax_id: Generator.taxId(),
       name: Generator.companyName(),
       is_verified: Generator.boolean(),
       logo_url: Generator.imageUrl(),
-      phone_number: Generator.phoneNumber(),
+      phone: Generator.phone(),
       ...input,
     };
   }

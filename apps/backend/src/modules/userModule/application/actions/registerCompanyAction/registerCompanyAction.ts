@@ -5,8 +5,8 @@ export interface RegisterCompanyActionPayload {
   readonly email: string;
   readonly password: string;
   readonly name: string;
-  readonly taxIdNumber: string;
-  readonly phoneNumber: string;
+  readonly taxId: string;
+  readonly phone: string;
   readonly logoUrl: string;
 }
 

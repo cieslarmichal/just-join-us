@@ -47,8 +47,8 @@ describe('RegisterCompanyAction', () => {
       email: company.getEmail(),
       password: company.getPassword(),
       name: company.getName(),
-      phoneNumber: company.getPhoneNumber(),
-      taxIdNumber: company.getTaxIdNumber(),
+      phone: company.getPhone(),
+      taxId: company.getTaxId(),
       logoUrl: company.getLogoUrl(),
     });
 
@@ -61,8 +61,8 @@ describe('RegisterCompanyAction', () => {
       isDeleted: false,
       role: userRoles.company,
       name: company.getName(),
-      phoneNumber: company.getPhoneNumber(),
-      taxIdNumber: company.getTaxIdNumber(),
+      phone: company.getPhone(),
+      taxId: company.getTaxId(),
       isVerified: false,
       createdAt: expect.any(Date),
       logoUrl: company.getLogoUrl(),
@@ -76,8 +76,8 @@ describe('RegisterCompanyAction', () => {
       is_deleted: false,
       role: userRoles.company,
       name: company.getName(),
-      phone_number: company.getPhoneNumber(),
-      tax_id_number: company.getTaxIdNumber(),
+      phone: company.getPhone(),
+      tax_id: company.getTaxId(),
       is_verified: false,
       logo_url: company.getLogoUrl(),
       created_at: expect.any(Date),
@@ -94,8 +94,8 @@ describe('RegisterCompanyAction', () => {
         email: existingCompany.email,
         password: company.getPassword(),
         name: company.getName(),
-        phoneNumber: company.getPhoneNumber(),
-        taxIdNumber: company.getTaxIdNumber(),
+        phone: company.getPhone(),
+        taxId: company.getTaxId(),
         logoUrl: company.getLogoUrl(),
       });
     } catch (error) {
@@ -120,8 +120,8 @@ describe('RegisterCompanyAction', () => {
         email: company.getEmail(),
         password: '123',
         name: company.getName(),
-        phoneNumber: company.getPhoneNumber(),
-        taxIdNumber: company.getTaxIdNumber(),
+        phone: company.getPhone(),
+        taxId: company.getTaxId(),
         logoUrl: company.getLogoUrl(),
       });
     } catch (error) {

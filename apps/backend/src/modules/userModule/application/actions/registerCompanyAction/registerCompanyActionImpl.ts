@@ -34,16 +34,16 @@ export class RegisterCompanyActionImpl implements RegisterCompanyAction {
   }
 
   public async execute(payload: RegisterCompanyActionPayload): Promise<RegisterCompanyActionResult> {
-    const { email: emailInput, password, taxIdNumber, name, phoneNumber, logoUrl } = payload;
+    const { email: emailInput, password, taxId, name, phone, logoUrl } = payload;
 
     const email = emailInput.toLowerCase();
 
     this.loggerService.debug({
       message: 'Registering Company...',
       email,
-      taxIdNumber,
+      taxId,
       name,
-      phoneNumber,
+      phone,
       logoUrl,
     });
 
@@ -64,13 +64,13 @@ export class RegisterCompanyActionImpl implements RegisterCompanyAction {
       data: {
         email,
         password: hashedPassword,
-        isEmailVerified: false,
+        isEmailVerified: true,
         isDeleted: false,
         role: userRoles.company,
         isVerified: false,
         name,
-        taxIdNumber,
-        phoneNumber,
+        taxId,
+        phone,
         logoUrl,
       },
     });

@@ -62,7 +62,7 @@ export class StudentTestUtils extends TestUtils {
         studentsTable.columns.first_name,
         studentsTable.columns.last_name,
         studentsTable.columns.birth_date,
-        studentsTable.columns.phone_number,
+        studentsTable.columns.phone,
       ])
       .join(usersTable.name, studentsTable.columns.id, '=', usersTable.columns.id)
       .where(usersTable.columns.id, id)
@@ -86,7 +86,7 @@ export class StudentTestUtils extends TestUtils {
         studentsTable.columns.first_name,
         studentsTable.columns.last_name,
         studentsTable.columns.birth_date,
-        studentsTable.columns.phone_number,
+        studentsTable.columns.phone,
       ])
       .join(usersTable.name, studentsTable.columns.id, '=', usersTable.columns.id)
       .where(usersTable.columns.email, email)

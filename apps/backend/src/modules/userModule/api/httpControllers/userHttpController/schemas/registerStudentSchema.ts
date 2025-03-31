@@ -3,7 +3,7 @@ import { type Static, Type } from '@sinclair/typebox';
 import { type HttpRouteSchema } from '../../../../../../common/http/httpRoute.ts';
 import { httpStatusCodes } from '../../../../../../common/http/httpStatusCode.ts';
 
-import { firstNameSchema, lastNameSchema, studentSchema, studentPhoneNumberSchema } from './studentSchema.ts';
+import { firstNameSchema, lastNameSchema, studentSchema, studentPhoneSchema } from './studentSchema.ts';
 import { emailSchema, passwordSchema } from './userSchema.ts';
 
 const registerStudentRequestBodySchema = Type.Object({
@@ -12,7 +12,7 @@ const registerStudentRequestBodySchema = Type.Object({
   firstName: firstNameSchema,
   lastName: lastNameSchema,
   birthDate: Type.String({ format: 'date' }),
-  phoneNumber: studentPhoneNumberSchema,
+  phone: studentPhoneSchema,
 });
 
 export type RegisterStudentRequestBody = Static<typeof registerStudentRequestBodySchema>;

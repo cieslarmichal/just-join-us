@@ -8,6 +8,9 @@ import RegisterPage from './pages/register/RegisterPage';
 import LoginPage from './pages/login/LoginPage';
 import PrivateRoute from './auth/privateRoute';
 import LogoutPage from './pages/logout/LogoutPage';
+import { StrictMode } from 'react';
+import { AuthContextProvider } from './context/AuthContextProvider';
+import { CookiesProvider } from 'react-cookie';
 
 const router = createBrowserRouter([
   {
@@ -44,7 +47,15 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <StrictMode>
+      <CookiesProvider>
+        <AuthContextProvider>
+          <RouterProvider router={router} />
+        </AuthContextProvider>
+      </CookiesProvider>
+    </StrictMode>
+  );
 }
 
 export default App;
