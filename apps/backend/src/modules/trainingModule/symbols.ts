@@ -10,13 +10,6 @@ export const symbols = {
   findTrainingsAction: Symbol('findTrainingsAction'),
   updateTrainingAction: Symbol('updateTrainingAction'),
 
-  trainingEventMapper: Symbol('trainingEventMapper'),
-  trainingEventRepository: Symbol('trainingEventRepository'),
-  createTrainingEventAction: Symbol('createTrainingEventAction'),
-  findTrainingEventAction: Symbol('findTrainingEventAction'),
-  findTrainingEventsAction: Symbol('findTrainingEventsAction'),
-  updateTrainingEventAction: Symbol('updateTrainingEventAction'),
-
   trainingHttpController: Symbol('trainingHttpController'),
   categoryHttpController: Symbol('categoryHttpController'),
 };
