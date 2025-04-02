@@ -16,7 +16,7 @@ import { userSymbols } from '../src/modules/userModule/symbols.ts';
 import { BlacklistTokenTestUtils } from '../src/modules/userModule/tests/utils/blacklistTokenTestUtils/blacklistTokenTestUtils.ts';
 import { CompanyTestUtils } from '../src/modules/userModule/tests/utils/companyTestUtils/companyTestUtils.ts';
 import { EmailEventTestUtils } from '../src/modules/userModule/tests/utils/emailEventTestUtils/emailEventTestUtils.ts';
-import { StudentTestUtils } from '../src/modules/userModule/tests/utils/studentTestUtils/studentTestUtils.ts';
+import { CandidateTestUtils } from '../src/modules/userModule/tests/utils/candidateTestUtils/candidateTestUtils.ts';
 import { UserTestUtils } from '../src/modules/userModule/tests/utils/userTestUtils/userTestUtils.ts';
 
 import { testSymbols } from './symbols.ts';
@@ -30,9 +30,9 @@ export class TestContainer {
       () => new UserTestUtils(container.get<DatabaseClient>(databaseSymbols.databaseClient)),
     );
 
-    container.bind<StudentTestUtils>(
-      testSymbols.studentTestUtils,
-      () => new StudentTestUtils(container.get<DatabaseClient>(databaseSymbols.databaseClient)),
+    container.bind<CandidateTestUtils>(
+      testSymbols.candidateTestUtils,
+      () => new CandidateTestUtils(container.get<DatabaseClient>(databaseSymbols.databaseClient)),
     );
 
     container.bind<CompanyTestUtils>(

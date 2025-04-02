@@ -1,8 +1,8 @@
-import type { StudentRawEntityExtended } from '../../../../../databaseModule/infrastructure/tables/studentsTable/studentRawEntity.ts';
-import { Student } from '../../../../domain/entities/student/student.ts';
+import type { CandidateRawEntityExtended } from '../../../../../databaseModule/infrastructure/tables/candidatesTable/candidateRawEntity.ts';
+import { Candidate } from '../../../../domain/entities/candidate/candidate.ts';
 
-export class StudentMapper {
-  public mapToDomain(entity: StudentRawEntityExtended): Student {
+export class CandidateMapper {
+  public mapToDomain(entity: CandidateRawEntityExtended): Candidate {
     const {
       id,
       email,
@@ -17,7 +17,7 @@ export class StudentMapper {
       birth_date: birthDate,
     } = entity;
 
-    return new Student({
+    return new Candidate({
       id,
       email,
       password,

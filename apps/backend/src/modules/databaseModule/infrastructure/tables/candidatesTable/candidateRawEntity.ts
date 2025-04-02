@@ -1,6 +1,6 @@
 import type { UserRole } from '../../../../../common/types/userRole.ts';
 
-export interface StudentRawEntity {
+export interface CandidateRawEntity {
   readonly id: string;
   readonly first_name: string;
   readonly last_name: string;
@@ -8,7 +8,7 @@ export interface StudentRawEntity {
   readonly phone: string;
 }
 
-export interface StudentRawEntityExtended {
+export interface CandidateRawEntityExtended {
   readonly id: string;
   readonly email: string;
   readonly password: string;

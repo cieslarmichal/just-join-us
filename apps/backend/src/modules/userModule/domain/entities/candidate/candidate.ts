@@ -1,13 +1,13 @@
 import { User, type UserState, type UserDraft } from '../user/user.ts';
 
-export interface StudentDraft extends UserDraft {
+export interface CandidateDraft extends UserDraft {
   readonly firstName: string;
   readonly lastName: string;
   readonly birthDate: Date;
   readonly phone: string;
 }
 
-export interface StudentState {
+export interface CandidateState {
   firstName: string;
   lastName: string;
   birthDate: Date;
@@ -30,10 +30,10 @@ interface SetPhonePayload {
   readonly phone: string;
 }
 
-export class Student extends User {
-  private studentState: StudentState;
+export class Candidate extends User {
+  private candidateState: CandidateState;
 
-  public constructor(draft: StudentDraft) {
+  public constructor(draft: CandidateDraft) {
     const { id, email, password, isEmailVerified, isDeleted, role, createdAt, birthDate, firstName, lastName, phone } =
       draft;
 
@@ -47,7 +47,7 @@ export class Student extends User {
       createdAt,
     });
 
-    this.studentState = {
+    this.candidateState = {
       birthDate,
       firstName,
       lastName,
@@ -56,44 +56,44 @@ export class Student extends User {
   }
 
   public getFirstName(): string {
-    return this.studentState.firstName;
+    return this.candidateState.firstName;
   }
 
   public getLastName(): string {
-    return this.studentState.lastName;
+    return this.candidateState.lastName;
   }
 
   public getBirthDate(): Date {
-    return this.studentState.birthDate;
+    return this.candidateState.birthDate;
   }
 
   public getPhone(): string {
-    return this.studentState.phone;
+    return this.candidateState.phone;
   }
 
   public setFirstName(payload: SetFirstNamePayload): void {
-    this.studentState.firstName = payload.firstName;
+    this.candidateState.firstName = payload.firstName;
   }
 
   public setLastName(payload: SetLastNamePayload): void {
-    this.studentState.lastName = payload.lastName;
+    this.candidateState.lastName = payload.lastName;
   }
 
   public setBirthDate(payload: SetBirthDatePayload): void {
-    this.studentState.birthDate = payload.birthDate;
+    this.candidateState.birthDate = payload.birthDate;
   }
 
   public setPhone(payload: SetPhonePayload): void {
-    this.studentState.phone = payload.phone;
+    this.candidateState.phone = payload.phone;
   }
 
-  public getStudentState(): StudentState {
-    return this.studentState;
+  public getCandidateState(): CandidateState {
+    return this.candidateState;
   }
 
-  public getState(): StudentState & UserState {
+  public getState(): CandidateState & UserState {
     return {
-      ...this.studentState,
+      ...this.candidateState,
       ...super.getUserState(),
     };
   }

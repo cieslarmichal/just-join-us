@@ -1,45 +1,45 @@
 import { ResourceAlreadyExistsError } from '../../../../../common/errors/resourceAlreadyExistsError.ts';
 import { type LoggerService } from '../../../../../common/logger/loggerService.ts';
 import { userRoles } from '../../../../../common/types/userRole.ts';
-import { type StudentRepository } from '../../../domain/repositories/studentRepository/studentRepository.ts';
+import { type CandidateRepository } from '../../../domain/repositories/candidateRepository/candidateRepository.ts';
 import { type HashService } from '../../services/hashService/hashService.ts';
 import { type PasswordValidationService } from '../../services/passwordValidationService/passwordValidationService.ts';
 import { type SendVerificationEmailAction } from '../sendVerificationEmailAction/sendVerificationEmailAction.ts';
 
 import {
-  type RegisterStudentAction,
-  type RegisterStudentActionPayload,
-  type RegisterStudentActionResult,
-} from './registerStudentAction.ts';
+  type RegisterCandidateAction,
+  type RegisterCandidateActionPayload,
+  type RegisterCandidateActionResult,
+} from './registerCandidateAction.ts';
 
-export class RegisterStudentActionImpl implements RegisterStudentAction {
-  private readonly studentRepository: StudentRepository;
+export class RegisterCandidateActionImpl implements RegisterCandidateAction {
+  private readonly candidateRepository: CandidateRepository;
   private readonly hashService: HashService;
   private readonly loggerService: LoggerService;
   private readonly passwordValidationService: PasswordValidationService;
   private readonly sendVerificationEmailAction: SendVerificationEmailAction;
 
   public constructor(
-    studentRepository: StudentRepository,
+    candidateRepository: CandidateRepository,
     hashService: HashService,
     loggerService: LoggerService,
     passwordValidationService: PasswordValidationService,
     sendVerificationEmailAction: SendVerificationEmailAction,
   ) {
-    this.studentRepository = studentRepository;
+    this.candidateRepository = candidateRepository;
     this.hashService = hashService;
     this.loggerService = loggerService;
     this.passwordValidationService = passwordValidationService;
     this.sendVerificationEmailAction = sendVerificationEmailAction;
   }
 
-  public async execute(payload: RegisterStudentActionPayload): Promise<RegisterStudentActionResult> {
+  public async execute(payload: RegisterCandidateActionPayload): Promise<RegisterCandidateActionResult> {
     const { email: emailInput, password, birthDate, firstName, lastName, phone } = payload;
 
     const email = emailInput.toLowerCase();
 
     this.loggerService.debug({
-      message: 'Registering Student...',
+      message: 'Registering Candidate...',
       email,
       birthDate,
       firstName,
@@ -47,11 +47,11 @@ export class RegisterStudentActionImpl implements RegisterStudentAction {
       phone,
     });
 
-    const existingStudent = await this.studentRepository.findStudent({ email });
+    const existingCandidate = await this.candidateRepository.findCandidate({ email });
 
-    if (existingStudent) {
+    if (existingCandidate) {
       throw new ResourceAlreadyExistsError({
-        resource: 'Student',
+        resource: 'Candidate',
         email,
       });
     }
@@ -60,13 +60,13 @@ export class RegisterStudentActionImpl implements RegisterStudentAction {
 
     const hashedPassword = await this.hashService.hash({ plainData: password });
 
-    const student = await this.studentRepository.createStudent({
+    const candidate = await this.candidateRepository.createCandidate({
       data: {
         email,
         password: hashedPassword,
         isEmailVerified: true,
         isDeleted: false,
-        role: userRoles.student,
+        role: userRoles.candidate,
         firstName,
         lastName,
         birthDate,
@@ -75,13 +75,13 @@ export class RegisterStudentActionImpl implements RegisterStudentAction {
     });
 
     this.loggerService.debug({
-      message: 'Student registered.',
+      message: 'Candidate registered.',
       email,
-      id: student.getId(),
+      id: candidate.getId(),
     });
 
     await this.sendVerificationEmailAction.execute({ email });
 
-    return { student };
+    return { candidate };
   }
 }

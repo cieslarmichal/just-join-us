@@ -25,16 +25,16 @@ import { type RefreshUserTokensAction } from './application/actions/refreshUserT
 import { RefreshUserTokensActionImpl } from './application/actions/refreshUserTokensAction/refreshUserTokensActionImpl.ts';
 import { type RegisterCompanyAction } from './application/actions/registerCompanyAction/registerCompanyAction.ts';
 import { RegisterCompanyActionImpl } from './application/actions/registerCompanyAction/registerCompanyActionImpl.ts';
-import { type RegisterStudentAction } from './application/actions/registerStudentAction/registerStudentAction.ts';
-import { RegisterStudentActionImpl } from './application/actions/registerStudentAction/registerStudentActionImpl.ts';
+import { type RegisterCandidateAction } from './application/actions/registerCandidateAction/registerCandidateAction.ts';
+import { RegisterCandidateActionImpl } from './application/actions/registerCandidateAction/registerCandidateActionImpl.ts';
 import { type SendResetPasswordEmailAction } from './application/actions/sendResetPasswordEmailAction/sendResetPasswordEmailAction.ts';
 import { SendResetPasswordEmailActionImpl } from './application/actions/sendResetPasswordEmailAction/sendResetPasswordEmailActionImpl.ts';
 import { type SendVerificationEmailAction } from './application/actions/sendVerificationEmailAction/sendVerificationEmailAction.ts';
 import { SendVerificationEmailActionImpl } from './application/actions/sendVerificationEmailAction/sendVerificationEmailActionImpl.ts';
 import { type UpdateCompanyAction } from './application/actions/updateCompanyAction/updateCompanyAction.ts';
 import { UpdateCompanyActionImpl } from './application/actions/updateCompanyAction/updateCompanyActionImpl.ts';
-import { type UpdateStudentAction } from './application/actions/updateStudentAction/updateStudentAction.ts';
-import { UpdateStudentActionImpl } from './application/actions/updateStudentAction/updateStudentActionImpl.ts';
+import { type UpdateCandidateAction } from './application/actions/updateCandidateAction/updateCandidateAction.ts';
+import { UpdateCandidateActionImpl } from './application/actions/updateCandidateAction/updateCandidateActionImpl.ts';
 import { type VerifyUserEmailAction } from './application/actions/verifyUserEmailAction/verifyUserEmailAction.ts';
 import { VerifyUserEmailActionImpl } from './application/actions/verifyUserEmailAction/verifyUserEmailActionImpl.ts';
 import { type EmailMessageBus } from './application/messageBuses/emailMessageBus/emailMessageBus.ts';
@@ -45,7 +45,7 @@ import { PasswordValidationServiceImpl } from './application/services/passwordVa
 import { type BlacklistTokenRepository } from './domain/repositories/blacklistTokenRepository/blacklistTokenRepository.ts';
 import { type CompanyRepository } from './domain/repositories/companyRepository/companyRepository.ts';
 import { type EmailEventRepository } from './domain/repositories/emailEventRepository/emailEventRepository.ts';
-import { type StudentRepository } from './domain/repositories/studentRepository/studentRepository.ts';
+import { type CandidateRepository } from './domain/repositories/candidateRepository/candidateRepository.ts';
 import { type UserRepository } from './domain/repositories/userRepository/userRepository.ts';
 import { EmailMessageBusImpl } from './infrastructure/messageBuses/emailMessageBus/emailMessageBusImpl.ts';
 import { BlacklistTokenMapper } from './infrastructure/repositories/blacklistTokenRepository/blacklistTokenMapper/blacklistTokenMapper.ts';
@@ -54,8 +54,8 @@ import { CompanyMapper } from './infrastructure/repositories/companyRepository/c
 import { CompanyRepositoryImpl } from './infrastructure/repositories/companyRepository/companyRepositoryImpl.ts';
 import { EmailEventRepositoryImpl } from './infrastructure/repositories/emailEventRepository/emailEventRepositoryImpl.ts';
 import { EmailEventMapper } from './infrastructure/repositories/emailEventRepository/mappers/emailEventMapper/emailEventMapper.ts';
-import { StudentMapper } from './infrastructure/repositories/studentRepository/studentMapper/studentMapper.ts';
-import { StudentRepositoryImpl } from './infrastructure/repositories/studentRepository/studentRepositoryImpl.ts';
+import { CandidateMapper } from './infrastructure/repositories/candidateRepository/candidateMapper/candidateMapper.ts';
+import { CandidateRepositoryImpl } from './infrastructure/repositories/candidateRepository/candidateRepositoryImpl.ts';
 import { UserMapper } from './infrastructure/repositories/userRepository/userMapper/userMapper.ts';
 import { UserRepositoryImpl } from './infrastructure/repositories/userRepository/userRepositoryImpl.ts';
 import { symbols } from './symbols.ts';
@@ -64,7 +64,7 @@ export class UserModule implements DependencyInjectionModule {
   public declareBindings(container: DependencyInjectionContainer): void {
     container.bind<UserMapper>(symbols.userMapper, () => new UserMapper());
 
-    container.bind<StudentMapper>(symbols.studentMapper, () => new StudentMapper());
+    container.bind<CandidateMapper>(symbols.candidateMapper, () => new CandidateMapper());
 
     container.bind<CompanyMapper>(symbols.companyMapper, () => new CompanyMapper());
 
@@ -78,12 +78,12 @@ export class UserModule implements DependencyInjectionModule {
         ),
     );
 
-    container.bind<StudentRepository>(
-      symbols.studentRepository,
+    container.bind<CandidateRepository>(
+      symbols.candidateRepository,
       () =>
-        new StudentRepositoryImpl(
+        new CandidateRepositoryImpl(
           container.get<DatabaseClient>(databaseSymbols.databaseClient),
-          container.get<StudentMapper>(symbols.studentMapper),
+          container.get<CandidateMapper>(symbols.candidateMapper),
           container.get<UuidService>(applicationSymbols.uuidService),
         ),
     );
@@ -132,11 +132,11 @@ export class UserModule implements DependencyInjectionModule {
         ),
     );
 
-    container.bind<RegisterStudentAction>(
-      symbols.registerStudentAction,
+    container.bind<RegisterCandidateAction>(
+      symbols.registerCandidateAction,
       () =>
-        new RegisterStudentActionImpl(
-          container.get<StudentRepository>(symbols.studentRepository),
+        new RegisterCandidateActionImpl(
+          container.get<CandidateRepository>(symbols.candidateRepository),
           container.get<HashService>(symbols.hashService),
           container.get<LoggerService>(applicationSymbols.loggerService),
           container.get<PasswordValidationService>(symbols.passwordValidationService),
@@ -204,11 +204,11 @@ export class UserModule implements DependencyInjectionModule {
         ),
     );
 
-    container.bind<UpdateStudentAction>(
-      symbols.updateStudentAction,
+    container.bind<UpdateCandidateAction>(
+      symbols.updateCandidateAction,
       () =>
-        new UpdateStudentActionImpl(
-          container.get<StudentRepository>(symbols.studentRepository),
+        new UpdateCandidateActionImpl(
+          container.get<CandidateRepository>(symbols.candidateRepository),
           container.get<LoggerService>(applicationSymbols.loggerService),
         ),
     );
@@ -227,7 +227,7 @@ export class UserModule implements DependencyInjectionModule {
       () =>
         new FindUserActionImpl(
           container.get<UserRepository>(symbols.userRepository),
-          container.get<StudentRepository>(symbols.studentRepository),
+          container.get<CandidateRepository>(symbols.candidateRepository),
           container.get<CompanyRepository>(symbols.companyRepository),
         ),
     );
@@ -259,10 +259,10 @@ export class UserModule implements DependencyInjectionModule {
       () =>
         new UserHttpController(
           container.get<RegisterCompanyAction>(symbols.registerCompanyAction),
-          container.get<RegisterStudentAction>(symbols.registerStudentAction),
+          container.get<RegisterCandidateAction>(symbols.registerCandidateAction),
           container.get<LoginUserAction>(symbols.loginUserAction),
           container.get<UpdateCompanyAction>(symbols.updateCompanyAction),
-          container.get<UpdateStudentAction>(symbols.updateStudentAction),
+          container.get<UpdateCandidateAction>(symbols.updateCandidateAction),
           container.get<FindUserAction>(symbols.findUserAction),
           container.get<AccessControlService>(authSymbols.accessControlService),
           container.get<VerifyUserEmailAction>(symbols.verifyUserEmailAction),

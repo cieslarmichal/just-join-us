@@ -1,6 +1,6 @@
 export const userRoles = {
   admin: 'admin',
-  student: 'student',
+  candidate: 'candidate',
   company: 'company',
 } as const;
 

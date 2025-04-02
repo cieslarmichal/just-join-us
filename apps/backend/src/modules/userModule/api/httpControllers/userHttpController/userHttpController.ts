@@ -12,14 +12,14 @@ import { type LoginUserAction } from '../../../application/actions/loginUserActi
 import { type LogoutUserAction } from '../../../application/actions/logoutUserAction/logoutUserAction.ts';
 import { type RefreshUserTokensAction } from '../../../application/actions/refreshUserTokensAction/refreshUserTokensAction.ts';
 import { type RegisterCompanyAction } from '../../../application/actions/registerCompanyAction/registerCompanyAction.ts';
-import { type RegisterStudentAction } from '../../../application/actions/registerStudentAction/registerStudentAction.ts';
+import { type RegisterCandidateAction } from '../../../application/actions/registerCandidateAction/registerCandidateAction.ts';
 import { type SendResetPasswordEmailAction } from '../../../application/actions/sendResetPasswordEmailAction/sendResetPasswordEmailAction.ts';
 import { type SendVerificationEmailAction } from '../../../application/actions/sendVerificationEmailAction/sendVerificationEmailAction.ts';
 import { type UpdateCompanyAction } from '../../../application/actions/updateCompanyAction/updateCompanyAction.ts';
-import { type UpdateStudentAction } from '../../../application/actions/updateStudentAction/updateStudentAction.ts';
+import { type UpdateCandidateAction } from '../../../application/actions/updateCandidateAction/updateCandidateAction.ts';
 import { type VerifyUserEmailAction } from '../../../application/actions/verifyUserEmailAction/verifyUserEmailAction.ts';
 import { Company } from '../../../domain/entities/company/company.ts';
-import { Student } from '../../../domain/entities/student/student.ts';
+import { Candidate } from '../../../domain/entities/candidate/candidate.ts';
 import { type User } from '../../../domain/entities/user/user.ts';
 
 import {
@@ -47,10 +47,10 @@ import {
   type RegisterCompanyResponseBody,
 } from './schemas/registerCompanySchema.ts';
 import {
-  registerStudentSchema,
-  type RegisterStudentRequestBody,
-  type RegisterStudentResponseBody,
-} from './schemas/registerStudentSchema.ts';
+  registerCandidateSchema,
+  type RegisterCandidateRequestBody,
+  type RegisterCandidateResponseBody,
+} from './schemas/registerCandidateSchema.ts';
 import {
   type ResetUserPasswordBody,
   type ResetUserPasswordResponseBody,
@@ -61,7 +61,7 @@ import {
   type SendVerificationEmailResponseBody,
   sendVerificationEmailSchema,
 } from './schemas/sendVerificationEmailSchema.ts';
-import { type StudentDto } from './schemas/studentSchema.ts';
+import { type CandidateDto } from './schemas/candidateSchema.ts';
 import {
   type UpdateCompanyRequestBody,
   type UpdateCompanyPathParams,
@@ -69,11 +69,11 @@ import {
   updateCompanySchema,
 } from './schemas/updateCompanySchema.ts';
 import {
-  type UpdateStudentRequestBody,
-  type UpdateStudentPathParams,
-  type UpdateStudentResponseBody,
-  updateStudentSchema,
-} from './schemas/updateStudentSchema.ts';
+  type UpdateCandidateRequestBody,
+  type UpdateCandidatePathParams,
+  type UpdateCandidateResponseBody,
+  updateCandidateSchema,
+} from './schemas/updateCandidateSchema.ts';
 import { type UserDto } from './schemas/userSchema.ts';
 import {
   verifyUserEmailSchema,
@@ -84,10 +84,10 @@ import {
 export class UserHttpController implements HttpController {
   public readonly tags = ['User'];
   private readonly registerCompanyAction: RegisterCompanyAction;
-  private readonly registerStudentAction: RegisterStudentAction;
+  private readonly registerCandidateAction: RegisterCandidateAction;
   private readonly loginUserAction: LoginUserAction;
   private readonly updateCompanyAction: UpdateCompanyAction;
-  private readonly updateStudentAction: UpdateStudentAction;
+  private readonly updateCandidateAction: UpdateCandidateAction;
   private readonly findUserAction: FindUserAction;
   private readonly accessControlService: AccessControlService;
   private readonly verifyUserEmailAction: VerifyUserEmailAction;
@@ -99,10 +99,10 @@ export class UserHttpController implements HttpController {
 
   public constructor(
     registerCompanyAction: RegisterCompanyAction,
-    registerStudentAction: RegisterStudentAction,
+    registerCandidateAction: RegisterCandidateAction,
     loginUserAction: LoginUserAction,
     updateCompanyAction: UpdateCompanyAction,
-    updateStudentAction: UpdateStudentAction,
+    updateCandidateAction: UpdateCandidateAction,
     findUserAction: FindUserAction,
     accessControlService: AccessControlService,
     verifyUserEmailAction: VerifyUserEmailAction,
@@ -113,10 +113,10 @@ export class UserHttpController implements HttpController {
     sendVerificationEmailAction: SendVerificationEmailAction,
   ) {
     this.registerCompanyAction = registerCompanyAction;
-    this.registerStudentAction = registerStudentAction;
+    this.registerCandidateAction = registerCandidateAction;
     this.loginUserAction = loginUserAction;
     this.updateCompanyAction = updateCompanyAction;
-    this.updateStudentAction = updateStudentAction;
+    this.updateCandidateAction = updateCandidateAction;
     this.findUserAction = findUserAction;
     this.accessControlService = accessControlService;
     this.verifyUserEmailAction = verifyUserEmailAction;
@@ -138,10 +138,10 @@ export class UserHttpController implements HttpController {
       }),
       new HttpRoute({
         method: httpMethodNames.post,
-        path: '/students/register',
-        handler: this.registerStudent.bind(this),
-        schema: registerStudentSchema,
-        description: 'Register student',
+        path: '/candidates/register',
+        handler: this.registerCandidate.bind(this),
+        schema: registerCandidateSchema,
+        description: 'Register candidate',
       }),
       new HttpRoute({
         method: httpMethodNames.post,
@@ -194,10 +194,10 @@ export class UserHttpController implements HttpController {
       }),
       new HttpRoute({
         method: httpMethodNames.patch,
-        path: '/students/:studentId',
-        handler: this.updateStudent.bind(this),
-        schema: updateStudentSchema,
-        description: 'Update student',
+        path: '/candidates/:candidateId',
+        handler: this.updateCandidate.bind(this),
+        schema: updateCandidateSchema,
+        description: 'Update candidate',
       }),
       new HttpRoute({
         method: httpMethodNames.patch,
@@ -216,12 +216,12 @@ export class UserHttpController implements HttpController {
     ];
   }
 
-  private async registerStudent(
-    request: HttpRequest<RegisterStudentRequestBody>,
-  ): Promise<HttpCreatedResponse<RegisterStudentResponseBody>> {
+  private async registerCandidate(
+    request: HttpRequest<RegisterCandidateRequestBody>,
+  ): Promise<HttpCreatedResponse<RegisterCandidateResponseBody>> {
     const { email, password, firstName, lastName, birthDate, phone } = request.body;
 
-    const { student } = await this.registerStudentAction.execute({
+    const { candidate } = await this.registerCandidateAction.execute({
       email,
       password,
       firstName,
@@ -232,7 +232,7 @@ export class UserHttpController implements HttpController {
 
     return {
       statusCode: httpStatusCodes.created,
-      body: this.mapStudentToDto(student),
+      body: this.mapCandidateToDto(candidate),
     };
   }
 
@@ -342,20 +342,20 @@ export class UserHttpController implements HttpController {
     };
   }
 
-  private async updateStudent(
-    request: HttpRequest<UpdateStudentRequestBody, undefined, UpdateStudentPathParams>,
-  ): Promise<HttpOkResponse<UpdateStudentResponseBody>> {
-    const { studentId } = request.pathParams;
+  private async updateCandidate(
+    request: HttpRequest<UpdateCandidateRequestBody, undefined, UpdateCandidatePathParams>,
+  ): Promise<HttpOkResponse<UpdateCandidateResponseBody>> {
+    const { candidateId } = request.pathParams;
 
     const { firstName, lastName, birthDate, phone, isDeleted } = request.body;
 
     await this.accessControlService.verifyBearerToken({
       requestHeaders: request.headers,
-      expectedUserId: studentId,
+      expectedUserId: candidateId,
     });
 
-    const { student } = await this.updateStudentAction.execute({
-      id: studentId,
+    const { candidate } = await this.updateCandidateAction.execute({
+      id: candidateId,
       firstName,
       lastName,
       birthDate: birthDate ? new Date(birthDate) : undefined,
@@ -365,7 +365,7 @@ export class UserHttpController implements HttpController {
 
     return {
       statusCode: httpStatusCodes.ok,
-      body: this.mapStudentToDto(student),
+      body: this.mapCandidateToDto(candidate),
     };
   }
 
@@ -464,9 +464,9 @@ export class UserHttpController implements HttpController {
     };
   }
 
-  private mapUserToDto(user: User): UserDto | StudentDto | CompanyDto {
-    if (user instanceof Student) {
-      return this.mapStudentToDto(user);
+  private mapUserToDto(user: User): UserDto | CandidateDto | CompanyDto {
+    if (user instanceof Candidate) {
+      return this.mapCandidateToDto(user);
     } else if (user instanceof Company) {
       return this.mapCompanyToDto(user);
     }
@@ -481,18 +481,18 @@ export class UserHttpController implements HttpController {
     };
   }
 
-  private mapStudentToDto(student: Student): StudentDto {
+  private mapCandidateToDto(candidate: Candidate): CandidateDto {
     return {
-      id: student.getId(),
-      email: student.getEmail(),
-      isEmailVerified: student.getIsEmailVerified(),
-      isDeleted: student.getIsDeleted(),
-      role: student.getRole(),
-      createdAt: student.getCreatedAt().toISOString(),
-      firstName: student.getFirstName(),
-      lastName: student.getLastName(),
-      birthDate: student.getBirthDate().toISOString(),
-      phone: student.getPhone(),
+      id: candidate.getId(),
+      email: candidate.getEmail(),
+      isEmailVerified: candidate.getIsEmailVerified(),
+      isDeleted: candidate.getIsDeleted(),
+      role: candidate.getRole(),
+      createdAt: candidate.getCreatedAt().toISOString(),
+      firstName: candidate.getFirstName(),
+      lastName: candidate.getLastName(),
+      birthDate: candidate.getBirthDate().toISOString(),
+      phone: candidate.getPhone(),
     };
   }
 

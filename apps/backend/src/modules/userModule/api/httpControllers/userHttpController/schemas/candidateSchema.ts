@@ -14,12 +14,12 @@ export const lastNameSchema = Type.String({
   maxLength: 64,
 });
 
-export const studentPhoneSchema = Type.String({
+export const candidatePhoneSchema = Type.String({
   minLength: 1,
   maxLength: 20,
 });
 
-export const studentSchema = Type.Object({
+export const candidateSchema = Type.Object({
   id: Type.String({ format: 'uuid' }),
   email: emailSchema,
   isEmailVerified: Type.Boolean(),
@@ -29,7 +29,7 @@ export const studentSchema = Type.Object({
   firstName: firstNameSchema,
   lastName: lastNameSchema,
   birthDate: Type.String({ format: 'date' }),
-  phone: studentPhoneSchema,
+  phone: candidatePhoneSchema,
 });
 
-export type StudentDto = Static<typeof studentSchema>;
+export type CandidateDto = Static<typeof candidateSchema>;

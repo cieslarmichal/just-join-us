@@ -1,10 +1,10 @@
 import type { DatabaseClient } from '../../../types/databaseClient.ts';
 import type { Migration } from '../../../types/migration.ts';
 
-export class M2CreateStudentsTableMigration implements Migration {
-  public readonly name = 'M2CreateStudentsTableMigration';
+export class M2CreateCandidatesTableMigration implements Migration {
+  public readonly name = 'M2CreateCandidatesTableMigration';
 
-  private readonly tableName = 'students';
+  private readonly tableName = 'candidates';
 
   public async up(databaseClient: DatabaseClient): Promise<void> {
     await databaseClient.schema.createTable(this.tableName, (table) => {

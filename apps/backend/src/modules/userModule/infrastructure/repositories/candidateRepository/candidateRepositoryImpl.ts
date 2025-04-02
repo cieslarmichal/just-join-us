@@ -1,36 +1,36 @@
 import { RepositoryError } from '../../../../../common/errors/repositoryError.ts';
 import { type UuidService } from '../../../../../common/uuid/uuidService.ts';
 import type {
-  StudentRawEntity,
-  StudentRawEntityExtended,
-} from '../../../../databaseModule/infrastructure/tables/studentsTable/studentRawEntity.ts';
-import { studentsTable } from '../../../../databaseModule/infrastructure/tables/studentsTable/studentsTable.ts';
+  CandidateRawEntity,
+  CandidateRawEntityExtended,
+} from '../../../../databaseModule/infrastructure/tables/candidatesTable/candidateRawEntity.ts';
+import { candidatesTable } from '../../../../databaseModule/infrastructure/tables/candidatesTable/candidatesTable.ts';
 import type { UserRawEntity } from '../../../../databaseModule/infrastructure/tables/usersTable/userRawEntity.ts';
 import { usersTable } from '../../../../databaseModule/infrastructure/tables/usersTable/usersTable.ts';
 import type { DatabaseClient } from '../../../../databaseModule/types/databaseClient.ts';
-import { type Student } from '../../../domain/entities/student/student.ts';
+import { type Candidate } from '../../../domain/entities/candidate/candidate.ts';
 import {
-  type FindStudentsPayload,
-  type FindStudentPayload,
-  type CreateStudentPayload,
-  type StudentRepository,
-  type UpdateStudentPayload,
-} from '../../../domain/repositories/studentRepository/studentRepository.ts';
+  type FindCandidatesPayload,
+  type FindCandidatePayload,
+  type CreateCandidatePayload,
+  type CandidateRepository,
+  type UpdateCandidatePayload,
+} from '../../../domain/repositories/candidateRepository/candidateRepository.ts';
 
-import { type StudentMapper } from './studentMapper/studentMapper.ts';
+import { type CandidateMapper } from './candidateMapper/candidateMapper.ts';
 
-export class StudentRepositoryImpl implements StudentRepository {
+export class CandidateRepositoryImpl implements CandidateRepository {
   private readonly databaseClient: DatabaseClient;
-  private readonly studentMapper: StudentMapper;
+  private readonly candidateMapper: CandidateMapper;
   private readonly uuidService: UuidService;
 
-  public constructor(databaseClient: DatabaseClient, studentMapper: StudentMapper, uuidService: UuidService) {
+  public constructor(databaseClient: DatabaseClient, candidateMapper: CandidateMapper, uuidService: UuidService) {
     this.databaseClient = databaseClient;
-    this.studentMapper = studentMapper;
+    this.candidateMapper = candidateMapper;
     this.uuidService = uuidService;
   }
 
-  public async createStudent(payload: CreateStudentPayload): Promise<Student> {
+  public async createCandidate(payload: CreateCandidatePayload): Promise<Candidate> {
     const {
       data: { email, password, isEmailVerified, isDeleted, role, firstName, lastName, birthDate, phone },
     } = payload;
@@ -48,7 +48,7 @@ export class StudentRepositoryImpl implements StudentRepository {
           role,
         });
 
-        await transaction<StudentRawEntity>(studentsTable.name).insert({
+        await transaction<CandidateRawEntity>(candidatesTable.name).insert({
           id,
           first_name: firstName,
           last_name: lastName,
@@ -58,23 +58,23 @@ export class StudentRepositoryImpl implements StudentRepository {
       });
     } catch (error) {
       throw new RepositoryError({
-        entity: 'Student',
+        entity: 'Candidate',
         operation: 'create',
         originalError: error,
       });
     }
 
-    const createdStudent = await this.findStudent({ id });
+    const createdCandidate = await this.findCandidate({ id });
 
-    return createdStudent as Student;
+    return createdCandidate as Candidate;
   }
 
-  public async updateStudent(payload: UpdateStudentPayload): Promise<Student> {
-    const { student } = payload;
+  public async updateCandidate(payload: UpdateCandidatePayload): Promise<Candidate> {
+    const { candidate } = payload;
 
-    const { password, isDeleted, isEmailVerified } = student.getUserState();
+    const { password, isDeleted, isEmailVerified } = candidate.getUserState();
 
-    const { phone, birthDate, firstName, lastName } = student.getStudentState();
+    const { phone, birthDate, firstName, lastName } = candidate.getCandidateState();
 
     try {
       await this.databaseClient.transaction(async (transaction) => {
@@ -84,45 +84,45 @@ export class StudentRepositoryImpl implements StudentRepository {
             is_email_verified: isEmailVerified,
             is_deleted: isDeleted,
           })
-          .where({ id: student.getId() });
+          .where({ id: candidate.getId() });
 
-        await transaction<StudentRawEntity>(studentsTable.name)
+        await transaction<CandidateRawEntity>(candidatesTable.name)
           .update({
             phone: phone,
             birth_date: birthDate,
             first_name: firstName,
             last_name: lastName,
           })
-          .where({ id: student.getId() });
+          .where({ id: candidate.getId() });
       });
     } catch (error) {
       throw new RepositoryError({
-        entity: 'Student',
+        entity: 'Candidate',
         operation: 'update',
         originalError: error,
       });
     }
 
-    const updatedStudent = await this.findStudent({ id: student.getId() });
+    const updatedCandidate = await this.findCandidate({ id: candidate.getId() });
 
-    return updatedStudent as Student;
+    return updatedCandidate as Candidate;
   }
 
-  public async findStudent(payload: FindStudentPayload): Promise<Student | null> {
+  public async findCandidate(payload: FindCandidatePayload): Promise<Candidate | null> {
     const { id, email } = payload;
 
-    let rawEntity: StudentRawEntityExtended | undefined;
+    let rawEntity: CandidateRawEntityExtended | undefined;
 
     try {
-      const query = this.databaseClient<StudentRawEntityExtended>(studentsTable.name)
+      const query = this.databaseClient<CandidateRawEntityExtended>(candidatesTable.name)
         .select([
           usersTable.allColumns,
-          studentsTable.columns.first_name,
-          studentsTable.columns.last_name,
-          studentsTable.columns.birth_date,
-          studentsTable.columns.phone,
+          candidatesTable.columns.first_name,
+          candidatesTable.columns.last_name,
+          candidatesTable.columns.birth_date,
+          candidatesTable.columns.phone,
         ])
-        .join(usersTable.name, studentsTable.columns.id, '=', usersTable.columns.id);
+        .join(usersTable.name, candidatesTable.columns.id, '=', usersTable.columns.id);
 
       if (id) {
         query.where(usersTable.columns.id, id);
@@ -135,7 +135,7 @@ export class StudentRepositoryImpl implements StudentRepository {
       rawEntity = await query.first();
     } catch (error) {
       throw new RepositoryError({
-        entity: 'Student',
+        entity: 'Candidate',
         operation: 'find',
         originalError: error,
       });
@@ -145,41 +145,41 @@ export class StudentRepositoryImpl implements StudentRepository {
       return null;
     }
 
-    return this.studentMapper.mapToDomain(rawEntity);
+    return this.candidateMapper.mapToDomain(rawEntity);
   }
 
-  public async findStudents(payload: FindStudentsPayload): Promise<Student[]> {
+  public async findCandidates(payload: FindCandidatesPayload): Promise<Candidate[]> {
     const { page, pageSize } = payload;
 
-    let rawEntities: StudentRawEntityExtended[];
+    let rawEntities: CandidateRawEntityExtended[];
 
     try {
-      const query = this.databaseClient<StudentRawEntityExtended>(studentsTable.name)
+      const query = this.databaseClient<CandidateRawEntityExtended>(candidatesTable.name)
         .select([
           usersTable.allColumns,
-          studentsTable.columns.first_name,
-          studentsTable.columns.last_name,
-          studentsTable.columns.birth_date,
-          studentsTable.columns.phone,
+          candidatesTable.columns.first_name,
+          candidatesTable.columns.last_name,
+          candidatesTable.columns.birth_date,
+          candidatesTable.columns.phone,
         ])
-        .join(usersTable.name, studentsTable.columns.id, '=', usersTable.columns.id)
-        .orderBy(studentsTable.columns.id, 'desc');
+        .join(usersTable.name, candidatesTable.columns.id, '=', usersTable.columns.id)
+        .orderBy(candidatesTable.columns.id, 'desc');
 
       rawEntities = await query.limit(pageSize).offset((page - 1) * pageSize);
     } catch (error) {
       throw new RepositoryError({
-        entity: 'Student',
+        entity: 'Candidate',
         operation: 'find',
         originalError: error,
       });
     }
 
-    return rawEntities.map((rawEntity) => this.studentMapper.mapToDomain(rawEntity));
+    return rawEntities.map((rawEntity) => this.candidateMapper.mapToDomain(rawEntity));
   }
 
-  public async countStudents(): Promise<number> {
+  public async countCandidates(): Promise<number> {
     try {
-      const query = this.databaseClient<StudentRawEntity>(studentsTable.name);
+      const query = this.databaseClient<CandidateRawEntity>(candidatesTable.name);
 
       const countResult = await query.count().first();
 
@@ -187,7 +187,7 @@ export class StudentRepositoryImpl implements StudentRepository {
 
       if (count === undefined) {
         throw new RepositoryError({
-          entity: 'Student',
+          entity: 'Candidate',
           operation: 'count',
           countResult,
         });
@@ -200,7 +200,7 @@ export class StudentRepositoryImpl implements StudentRepository {
       return count;
     } catch (error) {
       throw new RepositoryError({
-        entity: 'Student',
+        entity: 'Candidate',
         operation: 'count',
         originalError: error,
       });

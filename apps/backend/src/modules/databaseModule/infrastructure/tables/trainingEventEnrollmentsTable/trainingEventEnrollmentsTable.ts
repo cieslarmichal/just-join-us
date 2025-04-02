@@ -12,7 +12,7 @@ export const trainingEventEnrollmentsTable: DatabaseTable<
   allColumns: `${trainingEventEnrollmentsTableName}.*`,
   columns: {
     id: `${trainingEventEnrollmentsTableName}.id`,
-    student_id: `${trainingEventEnrollmentsTableName}.student_id`,
+    candidate_id: `${trainingEventEnrollmentsTableName}.candidate_id`,
     training_event_id: `${trainingEventEnrollmentsTableName}.training_event_id`,
     created_at: `${trainingEventEnrollmentsTableName}.created_at`,
   },

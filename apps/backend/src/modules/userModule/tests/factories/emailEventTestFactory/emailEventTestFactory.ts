@@ -14,7 +14,7 @@ export class EmailEventTestFactory {
       payload: {
         recipientEmail: Generator.email(),
         emailEventType: Generator.arrayElement<EmailEventType>(Object.keys(emailEventTypes) as EmailEventType[]),
-        // TODO: fix to student/company name
+        // TODO: fix to candidate/company name
         name: Generator.word(),
         ...overrides.payload,
       },
@@ -32,7 +32,7 @@ export class EmailEventTestFactory {
       payload: {
         recipientEmail: Generator.email(),
         emailEventType: Generator.arrayElement<EmailEventType>(Object.keys(emailEventTypes) as EmailEventType[]),
-        // TODO: fix to student/company name
+        // TODO: fix to candidate/company name
         name: Generator.word(),
         ...overrides.payload,
       },

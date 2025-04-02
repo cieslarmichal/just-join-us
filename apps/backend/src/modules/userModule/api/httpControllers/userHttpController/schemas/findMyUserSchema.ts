@@ -4,10 +4,10 @@ import { type HttpRouteSchema } from '../../../../../../common/http/httpRoute.ts
 import { httpStatusCodes } from '../../../../../../common/http/httpStatusCode.ts';
 
 import { companySchema } from './companySchema.ts';
-import { studentSchema } from './studentSchema.ts';
+import { candidateSchema } from './candidateSchema.ts';
 import { userSchema } from './userSchema.ts';
 
-const findMyUserResponseBodySchema = Type.Union([userSchema, studentSchema, companySchema]);
+const findMyUserResponseBodySchema = Type.Union([userSchema, candidateSchema, companySchema]);
 
 export type FindMyUserResponseBody = Static<typeof findMyUserResponseBodySchema>;
 

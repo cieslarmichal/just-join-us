@@ -1,6 +1,6 @@
 export const testSymbols = {
   userTestUtils: Symbol('userTestUtils'),
-  studentTestUtils: Symbol('studentTestUtils'),
+  candidateTestUtils: Symbol('candidateTestUtils'),
   companyTestUtils: Symbol('companyTestUtils'),
   blacklistTokenTestUtils: Symbol('blacklistTokenTestUtils'),
   emailEventTestUtils: Symbol('emailEventTestUtils'),

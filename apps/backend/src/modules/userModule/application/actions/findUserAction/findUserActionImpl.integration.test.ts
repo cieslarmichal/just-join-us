@@ -6,11 +6,11 @@ import { ResourceNotFoundError } from '../../../../../common/errors/resourceNotF
 import { databaseSymbols } from '../../../../databaseModule/symbols.ts';
 import type { DatabaseClient } from '../../../../databaseModule/types/databaseClient.ts';
 import type { Company } from '../../../domain/entities/company/company.ts';
-import type { Student } from '../../../domain/entities/student/student.ts';
+import type { Candidate } from '../../../domain/entities/candidate/candidate.ts';
 import { symbols } from '../../../symbols.ts';
 import { UserTestFactory } from '../../../tests/factories/userTestFactory/userTestFactory.ts';
 import type { CompanyTestUtils } from '../../../tests/utils/companyTestUtils/companyTestUtils.ts';
-import type { StudentTestUtils } from '../../../tests/utils/studentTestUtils/studentTestUtils.ts';
+import type { CandidateTestUtils } from '../../../tests/utils/candidateTestUtils/candidateTestUtils.ts';
 import { type UserTestUtils } from '../../../tests/utils/userTestUtils/userTestUtils.ts';
 
 import { type FindUserAction } from './findUserAction.ts';
@@ -22,7 +22,7 @@ describe('FindUserAction', () => {
 
   let userTestUtils: UserTestUtils;
 
-  let studentTestUtils: StudentTestUtils;
+  let candidateTestUtils: CandidateTestUtils;
 
   let companyTestUtils: CompanyTestUtils;
 
@@ -37,18 +37,18 @@ describe('FindUserAction', () => {
 
     userTestUtils = container.get<UserTestUtils>(testSymbols.userTestUtils);
 
-    studentTestUtils = container.get<StudentTestUtils>(testSymbols.studentTestUtils);
+    candidateTestUtils = container.get<CandidateTestUtils>(testSymbols.candidateTestUtils);
 
     companyTestUtils = container.get<CompanyTestUtils>(testSymbols.companyTestUtils);
 
     await userTestUtils.truncate();
-    await studentTestUtils.truncate();
+    await candidateTestUtils.truncate();
     await companyTestUtils.truncate();
   });
 
   afterEach(async () => {
     await userTestUtils.truncate();
-    await studentTestUtils.truncate();
+    await candidateTestUtils.truncate();
     await companyTestUtils.truncate();
 
     await databaseClient.destroy();
@@ -86,22 +86,22 @@ describe('FindUserAction', () => {
       });
     });
 
-    it('finds student', async () => {
-      const student = await studentTestUtils.createAndPersist();
+    it('finds candidate', async () => {
+      const candidate = await candidateTestUtils.createAndPersist();
 
-      const { user: foundUser } = await action.execute({ id: student.id });
+      const { user: foundUser } = await action.execute({ id: candidate.id });
 
-      expect((foundUser as Student).getState()).toEqual({
-        email: student.email,
-        password: student.password,
-        role: 'student',
-        isEmailVerified: student.is_email_verified,
-        isDeleted: student.is_deleted,
-        createdAt: student.created_at,
-        firstName: student.first_name,
-        lastName: student.last_name,
-        birthDate: student.birth_date,
-        phone: student.phone,
+      expect((foundUser as Candidate).getState()).toEqual({
+        email: candidate.email,
+        password: candidate.password,
+        role: 'candidate',
+        isEmailVerified: candidate.is_email_verified,
+        isDeleted: candidate.is_deleted,
+        createdAt: candidate.created_at,
+        firstName: candidate.first_name,
+        lastName: candidate.last_name,
+        birthDate: candidate.birth_date,
+        phone: candidate.phone,
       });
     });
 
@@ -158,22 +158,22 @@ describe('FindUserAction', () => {
       });
     });
 
-    it('finds student', async () => {
-      const student = await studentTestUtils.createAndPersist();
+    it('finds candidate', async () => {
+      const candidate = await candidateTestUtils.createAndPersist();
 
-      const { user: foundUser } = await action.execute({ id: student.id, role: 'student' });
+      const { user: foundUser } = await action.execute({ id: candidate.id, role: 'candidate' });
 
-      expect((foundUser as Student).getState()).toEqual({
-        email: student.email,
-        password: student.password,
-        role: 'student',
-        isEmailVerified: student.is_email_verified,
-        isDeleted: student.is_deleted,
-        createdAt: student.created_at,
-        firstName: student.first_name,
-        lastName: student.last_name,
-        birthDate: student.birth_date,
-        phone: student.phone,
+      expect((foundUser as Candidate).getState()).toEqual({
+        email: candidate.email,
+        password: candidate.password,
+        role: 'candidate',
+        isEmailVerified: candidate.is_email_verified,
+        isDeleted: candidate.is_deleted,
+        createdAt: candidate.created_at,
+        firstName: candidate.first_name,
+        lastName: candidate.last_name,
+        birthDate: candidate.birth_date,
+        phone: candidate.phone,
       });
     });
 

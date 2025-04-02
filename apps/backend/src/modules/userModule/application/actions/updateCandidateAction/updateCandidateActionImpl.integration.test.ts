@@ -7,37 +7,37 @@ import { OperationNotValidError } from '../../../../../common/errors/operationNo
 import { databaseSymbols } from '../../../../databaseModule/symbols.ts';
 import type { DatabaseClient } from '../../../../databaseModule/types/databaseClient.ts';
 import { symbols } from '../../../symbols.ts';
-import { type StudentTestUtils } from '../../../tests/utils/studentTestUtils/studentTestUtils.ts';
+import { type CandidateTestUtils } from '../../../tests/utils/candidateTestUtils/candidateTestUtils.ts';
 
-import { type UpdateStudentAction } from './updateStudentAction.ts';
+import { type UpdateCandidateAction } from './updateCandidateAction.ts';
 
-describe('UpdateStudentActionImpl', () => {
-  let action: UpdateStudentAction;
+describe('UpdateCandidateActionImpl', () => {
+  let action: UpdateCandidateAction;
 
   let databaseClient: DatabaseClient;
 
-  let studentTestUtils: StudentTestUtils;
+  let candidateTestUtils: CandidateTestUtils;
 
   beforeEach(async () => {
     const container = await TestContainer.create();
 
-    action = container.get<UpdateStudentAction>(symbols.updateStudentAction);
+    action = container.get<UpdateCandidateAction>(symbols.updateCandidateAction);
 
     databaseClient = container.get<DatabaseClient>(databaseSymbols.databaseClient);
 
-    studentTestUtils = container.get<StudentTestUtils>(testSymbols.studentTestUtils);
+    candidateTestUtils = container.get<CandidateTestUtils>(testSymbols.candidateTestUtils);
 
-    await studentTestUtils.truncate();
+    await candidateTestUtils.truncate();
   });
 
   afterEach(async () => {
-    await studentTestUtils.truncate();
+    await candidateTestUtils.truncate();
 
     await databaseClient.destroy();
   });
 
-  it('updates student data', async () => {
-    const student = await studentTestUtils.createAndPersist();
+  it('updates candidate data', async () => {
+    const candidate = await candidateTestUtils.createAndPersist();
 
     const firstName = Generator.firstName();
 
@@ -50,7 +50,7 @@ describe('UpdateStudentActionImpl', () => {
     const isDeleted = Generator.boolean();
 
     await action.execute({
-      id: student.id,
+      id: candidate.id,
       firstName,
       lastName,
       birthDate,
@@ -58,35 +58,35 @@ describe('UpdateStudentActionImpl', () => {
       isDeleted,
     });
 
-    const updatedStudent = await studentTestUtils.findById({ id: student.id });
+    const updatedCandidate = await candidateTestUtils.findById({ id: candidate.id });
 
-    expect(updatedStudent?.first_name).toBe(firstName);
+    expect(updatedCandidate?.first_name).toBe(firstName);
 
-    expect(updatedStudent?.last_name).toBe(lastName);
+    expect(updatedCandidate?.last_name).toBe(lastName);
 
-    expect(updatedStudent?.birth_date).toStrictEqual(birthDate);
+    expect(updatedCandidate?.birth_date).toStrictEqual(birthDate);
 
-    expect(updatedStudent?.phone).toBe(phone);
+    expect(updatedCandidate?.phone).toBe(phone);
 
-    expect(updatedStudent?.is_deleted).toBe(isDeleted);
+    expect(updatedCandidate?.is_deleted).toBe(isDeleted);
   });
 
-  it('throws an error - when a Student with given id not found', async () => {
-    const studentId = Generator.uuid();
+  it('throws an error - when a Candidate with given id not found', async () => {
+    const candidateId = Generator.uuid();
 
     const firstName = Generator.firstName();
 
     try {
       await action.execute({
-        id: studentId,
+        id: candidateId,
         firstName,
       });
     } catch (error) {
       expect(error).toBeInstanceOf(OperationNotValidError);
 
       expect((error as OperationNotValidError).context).toMatchObject({
-        reason: 'Student not found.',
-        id: studentId,
+        reason: 'Candidate not found.',
+        id: candidateId,
       });
 
       return;

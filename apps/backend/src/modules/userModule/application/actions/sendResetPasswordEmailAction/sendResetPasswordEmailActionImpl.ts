@@ -35,7 +35,7 @@ export class SendResetPasswordEmailActionImpl implements SendResetPasswordEmailA
 
     const email = emailInput.toLowerCase();
 
-    // TODO: find either student or company
+    // TODO: find either candidate or company
     const user = await this.userRepository.findUser({ email });
 
     if (!user) {
