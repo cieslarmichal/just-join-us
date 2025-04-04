@@ -2,14 +2,14 @@ import { type DatabaseTable } from '../../../types/databaseTable.ts';
 
 import { type BlacklistTokenRawEntity } from './blacklistTokenRawEntity.ts';
 
-const blacklistTokensTableName = 'blacklist_tokens';
+const tableName = 'blacklist_tokens';
 
-export const blacklistTokensTable: DatabaseTable<BlacklistTokenRawEntity, typeof blacklistTokensTableName> = {
-  name: blacklistTokensTableName,
-  allColumns: `${blacklistTokensTableName}.*`,
+export const blacklistTokensTable: DatabaseTable<BlacklistTokenRawEntity, typeof tableName> = {
+  name: tableName,
+  allColumns: `${tableName}.*`,
   columns: {
-    id: `${blacklistTokensTableName}.id`,
-    token: `${blacklistTokensTableName}.token`,
-    expires_at: `${blacklistTokensTableName}.expires_at`,
+    id: `${tableName}.id`,
+    token: `${tableName}.token`,
+    expires_at: `${tableName}.expires_at`,
   },
 };

@@ -13,9 +13,8 @@ export class CompanyTestFactory {
       isDeleted: false,
       role: userRoles.company,
       createdAt: Generator.pastDate(),
-      taxId: Generator.taxId(),
       name: Generator.companyName(),
-      isVerified: Generator.boolean(),
+      description: Generator.companyDescription(),
       logoUrl: Generator.imageUrl(),
       phone: Generator.phone(),
       ...input,
@@ -25,9 +24,8 @@ export class CompanyTestFactory {
   public createRaw(input: Partial<CompanyRawEntity> = {}): CompanyRawEntity {
     return {
       id: Generator.uuid(),
-      tax_id: Generator.taxId(),
       name: Generator.companyName(),
-      is_verified: Generator.boolean(),
+      description: Generator.companyDescription(),
       logo_url: Generator.imageUrl(),
       phone: Generator.phone(),
       ...input,

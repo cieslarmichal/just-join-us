@@ -2,17 +2,16 @@ import { type DatabaseTable } from '../../../types/databaseTable.ts';
 
 import { type CompanyRawEntity } from './companyRawEntity.ts';
 
-const companiesTableName = 'companies';
+const tableName = 'companies';
 
-export const companiesTable: DatabaseTable<CompanyRawEntity, typeof companiesTableName> = {
-  name: companiesTableName,
-  allColumns: `${companiesTableName}.*`,
+export const companiesTable: DatabaseTable<CompanyRawEntity, typeof tableName> = {
+  name: tableName,
+  allColumns: `${tableName}.*`,
   columns: {
-    id: `${companiesTableName}.id`,
-    name: `${companiesTableName}.name`,
-    tax_id: `${companiesTableName}.tax_id`,
-    phone: `${companiesTableName}.phone`,
-    is_verified: `${companiesTableName}.is_verified`,
-    logo_url: `${companiesTableName}.logo_url`,
+    id: `${tableName}.id`,
+    name: `${tableName}.name`,
+    description: `${tableName}.description`,
+    phone: `${tableName}.phone`,
+    logo_url: `${tableName}.logo_url`,
   },
 };

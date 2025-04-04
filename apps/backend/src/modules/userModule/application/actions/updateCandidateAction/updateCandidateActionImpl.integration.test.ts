@@ -40,34 +40,29 @@ describe('UpdateCandidateActionImpl', () => {
     const candidate = await candidateTestUtils.createAndPersist();
 
     const firstName = Generator.firstName();
-
     const lastName = Generator.lastName();
-
-    const birthDate = Generator.birthDate();
-
-    const phone = Generator.phone();
-
+    const githubUrl = Generator.url();
+    const linkedinUrl = Generator.url();
+    const resumeUrl = Generator.url();
     const isDeleted = Generator.boolean();
 
     await action.execute({
       id: candidate.id,
       firstName,
       lastName,
-      birthDate,
-      phone,
+      githubUrl,
+      linkedinUrl,
+      resumeUrl,
       isDeleted,
     });
 
     const updatedCandidate = await candidateTestUtils.findById({ id: candidate.id });
 
     expect(updatedCandidate?.first_name).toBe(firstName);
-
     expect(updatedCandidate?.last_name).toBe(lastName);
-
-    expect(updatedCandidate?.birth_date).toStrictEqual(birthDate);
-
-    expect(updatedCandidate?.phone).toBe(phone);
-
+    expect(updatedCandidate?.github_url).toBe(githubUrl);
+    expect(updatedCandidate?.linkedin_url).toBe(linkedinUrl);
+    expect(updatedCandidate?.resume_url).toBe(resumeUrl);
     expect(updatedCandidate?.is_deleted).toBe(isDeleted);
   });
 

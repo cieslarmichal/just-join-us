@@ -1,10 +1,10 @@
 import { ResourceNotFoundError } from '../../../../../common/errors/resourceNotFoundError.ts';
 import type { UserRole } from '../../../../../common/types/userRole.ts';
-import type { Company } from '../../../domain/entities/company/company.ts';
 import type { Candidate } from '../../../domain/entities/candidate/candidate.ts';
+import type { Company } from '../../../domain/entities/company/company.ts';
 import type { User } from '../../../domain/entities/user/user.ts';
-import type { CompanyRepository } from '../../../domain/repositories/companyRepository/companyRepository.ts';
 import type { CandidateRepository } from '../../../domain/repositories/candidateRepository/candidateRepository.ts';
+import type { CompanyRepository } from '../../../domain/repositories/companyRepository/companyRepository.ts';
 import { type UserRepository } from '../../../domain/repositories/userRepository/userRepository.ts';
 
 import { type FindUserAction, type FindUserActionPayload, type FindUserActionResult } from './findUserAction.ts';

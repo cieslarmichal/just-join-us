@@ -2,18 +2,18 @@ import { type DatabaseTable } from '../../../types/databaseTable.ts';
 
 import { type UserRawEntity } from './userRawEntity.ts';
 
-const usersTableName = 'users';
+const tableName = 'users';
 
-export const usersTable: DatabaseTable<UserRawEntity, typeof usersTableName> = {
-  name: usersTableName,
-  allColumns: `${usersTableName}.*`,
+export const usersTable: DatabaseTable<UserRawEntity, typeof tableName> = {
+  name: tableName,
+  allColumns: `${tableName}.*`,
   columns: {
-    id: `${usersTableName}.id`,
-    email: `${usersTableName}.email`,
-    password: `${usersTableName}.password`,
-    is_email_verified: `${usersTableName}.is_email_verified`,
-    is_deleted: `${usersTableName}.is_deleted`,
-    role: `${usersTableName}.role`,
-    created_at: `${usersTableName}.created_at`,
+    id: `${tableName}.id`,
+    email: `${tableName}.email`,
+    password: `${tableName}.password`,
+    is_email_verified: `${tableName}.is_email_verified`,
+    is_deleted: `${tableName}.is_deleted`,
+    role: `${tableName}.role`,
+    created_at: `${tableName}.created_at`,
   },
 };

@@ -13,8 +13,9 @@ export class CandidateMapper {
       created_at: createdAt,
       first_name: firstName,
       last_name: lastName,
-      phone: phone,
-      birth_date: birthDate,
+      github_url: githubUrl,
+      linkedin_url: linkedinUrl,
+      resume_url: resumeUrl,
     } = entity;
 
     return new Candidate({
@@ -27,8 +28,9 @@ export class CandidateMapper {
       createdAt,
       firstName,
       lastName,
-      phone,
-      birthDate,
+      githubUrl,
+      linkedinUrl,
+      resumeUrl,
     });
   }
 }

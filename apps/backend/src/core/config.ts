@@ -61,6 +61,8 @@ const configSchema = Type.Object({
       maximum: 65535,
     }),
   }),
+  categories: Type.Array(Type.String({ minLength: 1 })),
+  skills: Type.Array(Type.String({ minLength: 1 })),
 });
 
 export type Config = Static<typeof configSchema>;

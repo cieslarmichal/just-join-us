@@ -50,8 +50,9 @@ describe('CandidateRepositoryImpl', () => {
           role: createdCandidate.getRole(),
           firstName: createdCandidate.getFirstName(),
           lastName: createdCandidate.getLastName(),
-          birthDate: createdCandidate.getBirthDate(),
-          phone: createdCandidate.getPhone(),
+          githubUrl: createdCandidate.getGithubUrl(),
+          linkedinUrl: createdCandidate.getLinkedinUrl(),
+          resumeUrl: createdCandidate.getResumeUrl(),
         },
       });
 
@@ -77,8 +78,9 @@ describe('CandidateRepositoryImpl', () => {
             role: createdCandidate.getRole(),
             firstName: createdCandidate.getFirstName(),
             lastName: createdCandidate.getLastName(),
-            birthDate: createdCandidate.getBirthDate(),
-            phone: createdCandidate.getPhone(),
+            githubUrl: createdCandidate.getGithubUrl(),
+            linkedinUrl: createdCandidate.getLinkedinUrl(),
+            resumeUrl: createdCandidate.getResumeUrl(),
           },
         });
       } catch (error) {
@@ -102,37 +104,28 @@ describe('CandidateRepositoryImpl', () => {
         isDeleted: candidateRawEntity.is_deleted,
         firstName: candidateRawEntity.first_name,
         lastName: candidateRawEntity.last_name,
-        phone: candidateRawEntity.phone,
-        birthDate: candidateRawEntity.birth_date,
+        githubUrl: candidateRawEntity.github_url,
+        linkedinUrl: candidateRawEntity.linkedin_url,
+        resumeUrl: candidateRawEntity.resume_url,
       });
 
       const password = Generator.password();
-
       const firstName = Generator.firstName();
-
       const lastName = Generator.lastName();
-
-      const birthDate = Generator.birthDate();
-
-      const phone = Generator.phone();
-
+      const githubUrl = Generator.url();
+      const linkedinUrl = Generator.url();
+      const resumeUrl = Generator.url();
       const isEmailVerified = Generator.boolean();
-
       const isDeleted = Generator.boolean();
 
       candidate.setPassword({ password });
-
       candidate.setIsEmailVerified({ isEmailVerified });
-
       candidate.setIsDeleted({ isDeleted });
-
       candidate.setFirstName({ firstName });
-
       candidate.setLastName({ lastName });
-
-      candidate.setBirthDate({ birthDate });
-
-      candidate.setPhone({ phone });
+      candidate.setGithubUrl({ githubUrl });
+      candidate.setLinkedinUrl({ linkedinUrl });
+      candidate.setResumeUrl({ resumeUrl });
 
       const updatedCandidate = await candidateRepository.updateCandidate({ candidate });
 
@@ -143,8 +136,9 @@ describe('CandidateRepositoryImpl', () => {
         password,
         firstName,
         lastName,
-        birthDate,
-        phone,
+        githubUrl,
+        linkedinUrl,
+        resumeUrl,
         isEmailVerified,
         isDeleted,
         role: candidateRawEntity.role,
@@ -157,8 +151,9 @@ describe('CandidateRepositoryImpl', () => {
         password,
         first_name: firstName,
         last_name: lastName,
-        birth_date: birthDate,
-        phone: phone,
+        github_url: githubUrl,
+        linkedin_url: linkedinUrl,
+        resume_url: resumeUrl,
         is_email_verified: isEmailVerified,
         is_deleted: isDeleted,
         role: candidateRawEntity.role,
@@ -178,8 +173,9 @@ describe('CandidateRepositoryImpl', () => {
         password: candidate.password,
         firstName: candidate.first_name,
         lastName: candidate.last_name,
-        birthDate: candidate.birth_date,
-        phone: candidate.phone,
+        resumeUrl: candidate.resume_url,
+        githubUrl: candidate.github_url,
+        linkedinUrl: candidate.linkedin_url,
         isEmailVerified: candidate.is_email_verified,
         isDeleted: candidate.is_deleted,
         role: candidate.role,
@@ -197,8 +193,9 @@ describe('CandidateRepositoryImpl', () => {
         password: candidate.password,
         firstName: candidate.first_name,
         lastName: candidate.last_name,
-        birthDate: candidate.birth_date,
-        phone: candidate.phone,
+        resumeUrl: candidate.resume_url,
+        githubUrl: candidate.github_url,
+        linkedinUrl: candidate.linkedin_url,
         isEmailVerified: candidate.is_email_verified,
         isDeleted: candidate.is_deleted,
         role: candidate.role,
@@ -233,8 +230,9 @@ describe('CandidateRepositoryImpl', () => {
         password: candidate2.password,
         firstName: candidate2.first_name,
         lastName: candidate2.last_name,
-        birthDate: candidate2.birth_date,
-        phone: candidate2.phone,
+        resumeUrl: candidate2.resume_url,
+        githubUrl: candidate2.github_url,
+        linkedinUrl: candidate2.linkedin_url,
         isEmailVerified: candidate2.is_email_verified,
         isDeleted: candidate2.is_deleted,
         role: candidate2.role,
@@ -246,8 +244,9 @@ describe('CandidateRepositoryImpl', () => {
         password: candidate1.password,
         firstName: candidate1.first_name,
         lastName: candidate1.last_name,
-        birthDate: candidate1.birth_date,
-        phone: candidate1.phone,
+        resumeUrl: candidate1.resume_url,
+        githubUrl: candidate1.github_url,
+        linkedinUrl: candidate1.linkedin_url,
         isEmailVerified: candidate1.is_email_verified,
         isDeleted: candidate1.is_deleted,
         role: candidate1.role,

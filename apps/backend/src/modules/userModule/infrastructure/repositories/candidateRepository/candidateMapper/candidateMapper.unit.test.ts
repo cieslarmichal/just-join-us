@@ -39,8 +39,9 @@ describe('CandidateMapper', () => {
       createdAt: userRawEntity.created_at,
       firstName: candidateRawEntity.first_name,
       lastName: candidateRawEntity.last_name,
-      birthDate: candidateRawEntity.birth_date,
-      phone: candidateRawEntity.phone,
+      githubUrl: candidateRawEntity.github_url,
+      linkedinUrl: candidateRawEntity.linkedin_url,
+      resumeUrl: candidateRawEntity.resume_url,
     });
   });
 });

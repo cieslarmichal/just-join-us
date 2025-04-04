@@ -16,9 +16,11 @@ export class M2CreateCandidatesTableMigration implements Migration {
 
       table.string('last_name', 64).notNullable();
 
-      table.dateTime('birth_date').notNullable();
+      table.string('resume_url', 256);
 
-      table.string('phone', 20).notNullable().checkRegex('^[0-9+][0-9]*$');
+      table.string('linkedin_url', 256);
+
+      table.string('github_url', 256);
     });
   }
 

@@ -3,15 +3,17 @@ import { User, type UserState, type UserDraft } from '../user/user.ts';
 export interface CandidateDraft extends UserDraft {
   readonly firstName: string;
   readonly lastName: string;
-  readonly birthDate: Date;
-  readonly phone: string;
+  readonly resumeUrl?: string | undefined;
+  readonly linkedinUrl?: string | undefined;
+  readonly githubUrl?: string | undefined;
 }
 
 export interface CandidateState {
   firstName: string;
   lastName: string;
-  birthDate: Date;
-  phone: string;
+  resumeUrl?: string | undefined;
+  linkedinUrl?: string | undefined;
+  githubUrl?: string | undefined;
 }
 
 interface SetFirstNamePayload {
@@ -22,20 +24,36 @@ interface SetLastNamePayload {
   readonly lastName: string;
 }
 
-interface SetBirthDatePayload {
-  readonly birthDate: Date;
+interface SetResumeUrlPayload {
+  readonly resumeUrl: string;
 }
 
-interface SetPhonePayload {
-  readonly phone: string;
+interface SetLinkedinUrlPayload {
+  readonly linkedinUrl: string;
+}
+
+interface SetGithubUrlPayload {
+  readonly githubUrl: string;
 }
 
 export class Candidate extends User {
   private candidateState: CandidateState;
 
   public constructor(draft: CandidateDraft) {
-    const { id, email, password, isEmailVerified, isDeleted, role, createdAt, birthDate, firstName, lastName, phone } =
-      draft;
+    const {
+      id,
+      email,
+      password,
+      isEmailVerified,
+      isDeleted,
+      role,
+      createdAt,
+      firstName,
+      lastName,
+      githubUrl,
+      linkedinUrl,
+      resumeUrl,
+    } = draft;
 
     super({
       id,
@@ -47,12 +65,24 @@ export class Candidate extends User {
       createdAt,
     });
 
-    this.candidateState = {
-      birthDate,
+    const state: CandidateState = {
       firstName,
       lastName,
-      phone,
     };
+
+    if (githubUrl) {
+      state.githubUrl = githubUrl;
+    }
+
+    if (linkedinUrl) {
+      state.linkedinUrl = linkedinUrl;
+    }
+
+    if (resumeUrl) {
+      state.resumeUrl = resumeUrl;
+    }
+
+    this.candidateState = state;
   }
 
   public getFirstName(): string {
@@ -63,12 +93,28 @@ export class Candidate extends User {
     return this.candidateState.lastName;
   }
 
-  public getBirthDate(): Date {
-    return this.candidateState.birthDate;
+  public getResumeUrl(): string | undefined {
+    return this.candidateState.resumeUrl;
   }
 
-  public getPhone(): string {
-    return this.candidateState.phone;
+  public getLinkedinUrl(): string | undefined {
+    return this.candidateState.linkedinUrl;
+  }
+
+  public getGithubUrl(): string | undefined {
+    return this.candidateState.githubUrl;
+  }
+
+  public setResumeUrl(payload: SetResumeUrlPayload): void {
+    this.candidateState.resumeUrl = payload.resumeUrl;
+  }
+
+  public setLinkedinUrl(payload: SetLinkedinUrlPayload): void {
+    this.candidateState.linkedinUrl = payload.linkedinUrl;
+  }
+
+  public setGithubUrl(payload: SetGithubUrlPayload): void {
+    this.candidateState.githubUrl = payload.githubUrl;
   }
 
   public setFirstName(payload: SetFirstNamePayload): void {
@@ -77,14 +123,6 @@ export class Candidate extends User {
 
   public setLastName(payload: SetLastNamePayload): void {
     this.candidateState.lastName = payload.lastName;
-  }
-
-  public setBirthDate(payload: SetBirthDatePayload): void {
-    this.candidateState.birthDate = payload.birthDate;
-  }
-
-  public setPhone(payload: SetPhonePayload): void {
-    this.candidateState.phone = payload.phone;
   }
 
   public getCandidateState(): CandidateState {

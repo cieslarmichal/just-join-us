@@ -32,7 +32,18 @@ export class CandidateRepositoryImpl implements CandidateRepository {
 
   public async createCandidate(payload: CreateCandidatePayload): Promise<Candidate> {
     const {
-      data: { email, password, isEmailVerified, isDeleted, role, firstName, lastName, birthDate, phone },
+      data: {
+        email,
+        password,
+        isEmailVerified,
+        isDeleted,
+        role,
+        firstName,
+        lastName,
+        githubUrl,
+        linkedinUrl,
+        resumeUrl,
+      },
     } = payload;
 
     const id = this.uuidService.generateUuid();
@@ -52,8 +63,9 @@ export class CandidateRepositoryImpl implements CandidateRepository {
           id,
           first_name: firstName,
           last_name: lastName,
-          birth_date: birthDate,
-          phone: phone,
+          github_url: githubUrl,
+          linkedin_url: linkedinUrl,
+          resume_url: resumeUrl,
         });
       });
     } catch (error) {
@@ -74,7 +86,7 @@ export class CandidateRepositoryImpl implements CandidateRepository {
 
     const { password, isDeleted, isEmailVerified } = candidate.getUserState();
 
-    const { phone, birthDate, firstName, lastName } = candidate.getCandidateState();
+    const { firstName, lastName, resumeUrl, githubUrl, linkedinUrl } = candidate.getCandidateState();
 
     try {
       await this.databaseClient.transaction(async (transaction) => {
@@ -88,10 +100,11 @@ export class CandidateRepositoryImpl implements CandidateRepository {
 
         await transaction<CandidateRawEntity>(candidatesTable.name)
           .update({
-            phone: phone,
-            birth_date: birthDate,
             first_name: firstName,
             last_name: lastName,
+            github_url: githubUrl,
+            linkedin_url: linkedinUrl,
+            resume_url: resumeUrl,
           })
           .where({ id: candidate.getId() });
       });
@@ -119,8 +132,9 @@ export class CandidateRepositoryImpl implements CandidateRepository {
           usersTable.allColumns,
           candidatesTable.columns.first_name,
           candidatesTable.columns.last_name,
-          candidatesTable.columns.birth_date,
-          candidatesTable.columns.phone,
+          candidatesTable.columns.resume_url,
+          candidatesTable.columns.linkedin_url,
+          candidatesTable.columns.github_url,
         ])
         .join(usersTable.name, candidatesTable.columns.id, '=', usersTable.columns.id);
 
@@ -159,8 +173,9 @@ export class CandidateRepositoryImpl implements CandidateRepository {
           usersTable.allColumns,
           candidatesTable.columns.first_name,
           candidatesTable.columns.last_name,
-          candidatesTable.columns.birth_date,
-          candidatesTable.columns.phone,
+          candidatesTable.columns.resume_url,
+          candidatesTable.columns.linkedin_url,
+          candidatesTable.columns.github_url,
         ])
         .join(usersTable.name, candidatesTable.columns.id, '=', usersTable.columns.id)
         .orderBy(candidatesTable.columns.id, 'desc');

@@ -1,6 +1,6 @@
 import type { DatabaseClient } from '../types/databaseClient.ts';
 
-import { TrainingMigrationSource } from './migrations/training/trainingMigrationSource.ts';
+import { JobOfferMigrationSource } from './migrations/jobOffer/jobOfferMigrationSource.ts';
 import { UserMigrationSource } from './migrations/user/userMigrationSource.ts';
 
 export class DatabaseManager {
@@ -11,7 +11,7 @@ export class DatabaseManager {
   }
 
   public async setupDatabase(): Promise<void> {
-    const migrationSources = [new UserMigrationSource(), new TrainingMigrationSource()];
+    const migrationSources = [new UserMigrationSource(), new JobOfferMigrationSource()];
 
     for (const migrationSource of migrationSources) {
       await this.databaseClient.migrate.latest({
@@ -22,7 +22,7 @@ export class DatabaseManager {
   }
 
   public async teardownDatabase(): Promise<void> {
-    const migrationSources = [new UserMigrationSource(), new TrainingMigrationSource()];
+    const migrationSources = [new UserMigrationSource(), new JobOfferMigrationSource()];
 
     for (const migrationSource of migrationSources) {
       await this.databaseClient.migrate.rollback({

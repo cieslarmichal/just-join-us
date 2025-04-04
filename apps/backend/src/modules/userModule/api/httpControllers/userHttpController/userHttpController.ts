@@ -239,13 +239,13 @@ export class UserHttpController implements HttpController {
   private async registerCompany(
     request: HttpRequest<RegisterCompanyRequestBody>,
   ): Promise<HttpCreatedResponse<RegisterCompanyResponseBody>> {
-    const { email, password, name, taxId, phone, logoUrl } = request.body;
+    const { email, password, name, description, phone, logoUrl } = request.body;
 
     const { company } = await this.registerCompanyAction.execute({
       email,
       password,
       name,
-      taxId,
+      description,
       phone,
       logoUrl,
     });
@@ -505,7 +505,7 @@ export class UserHttpController implements HttpController {
       role: company.getRole(),
       createdAt: company.getCreatedAt().toISOString(),
       name: company.getName(),
-      taxId: company.getTaxId(),
+      description: company.getDescription(),
       phone: company.getPhone(),
       isVerified: company.getIsVerified(),
       logoUrl: company.getLogoUrl(),

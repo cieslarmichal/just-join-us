@@ -3,10 +3,11 @@ import { type Company } from '../../../domain/entities/company/company.ts';
 
 export interface UpdateCompanyActionPayload {
   readonly id: string;
-  readonly isVerified?: boolean | undefined;
+  readonly name?: string | undefined;
+  readonly description?: string | undefined;
   readonly phone?: string | undefined;
-  readonly isDeleted?: boolean | undefined;
   readonly logoUrl?: string | undefined;
+  readonly isDeleted?: boolean | undefined;
 }
 
 export interface UpdateCompanyActionResult {

@@ -34,17 +34,18 @@ export class RegisterCandidateActionImpl implements RegisterCandidateAction {
   }
 
   public async execute(payload: RegisterCandidateActionPayload): Promise<RegisterCandidateActionResult> {
-    const { email: emailInput, password, birthDate, firstName, lastName, phone } = payload;
+    const { email: emailInput, password, firstName, lastName, resumeUrl, githubUrl, linkedinUrl } = payload;
 
     const email = emailInput.toLowerCase();
 
     this.loggerService.debug({
       message: 'Registering Candidate...',
       email,
-      birthDate,
       firstName,
       lastName,
-      phone,
+      resumeUrl,
+      githubUrl,
+      linkedinUrl,
     });
 
     const existingCandidate = await this.candidateRepository.findCandidate({ email });
@@ -69,8 +70,9 @@ export class RegisterCandidateActionImpl implements RegisterCandidateAction {
         role: userRoles.candidate,
         firstName,
         lastName,
-        birthDate,
-        phone,
+        resumeUrl,
+        githubUrl,
+        linkedinUrl,
       },
     });
 

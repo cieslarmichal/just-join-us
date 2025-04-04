@@ -5,12 +5,12 @@ import { TestContainer } from '../../../../../../tests/testContainer.ts';
 import { ResourceNotFoundError } from '../../../../../common/errors/resourceNotFoundError.ts';
 import { databaseSymbols } from '../../../../databaseModule/symbols.ts';
 import type { DatabaseClient } from '../../../../databaseModule/types/databaseClient.ts';
-import type { Company } from '../../../domain/entities/company/company.ts';
 import type { Candidate } from '../../../domain/entities/candidate/candidate.ts';
+import type { Company } from '../../../domain/entities/company/company.ts';
 import { symbols } from '../../../symbols.ts';
 import { UserTestFactory } from '../../../tests/factories/userTestFactory/userTestFactory.ts';
-import type { CompanyTestUtils } from '../../../tests/utils/companyTestUtils/companyTestUtils.ts';
 import type { CandidateTestUtils } from '../../../tests/utils/candidateTestUtils/candidateTestUtils.ts';
+import type { CompanyTestUtils } from '../../../tests/utils/companyTestUtils/companyTestUtils.ts';
 import { type UserTestUtils } from '../../../tests/utils/userTestUtils/userTestUtils.ts';
 
 import { type FindUserAction } from './findUserAction.ts';
@@ -100,8 +100,9 @@ describe('FindUserAction', () => {
         createdAt: candidate.created_at,
         firstName: candidate.first_name,
         lastName: candidate.last_name,
-        birthDate: candidate.birth_date,
-        phone: candidate.phone,
+        resumeUrl: candidate.resume_url,
+        linkedinUrl: candidate.linkedin_url,
+        githubUrl: candidate.github_url,
       });
     });
 
@@ -120,8 +121,7 @@ describe('FindUserAction', () => {
         name: company.name,
         logoUrl: company.logo_url,
         phone: company.phone,
-        taxId: company.tax_id,
-        isVerified: company.is_verified,
+        description: company.description,
       });
     });
   });
@@ -172,8 +172,9 @@ describe('FindUserAction', () => {
         createdAt: candidate.created_at,
         firstName: candidate.first_name,
         lastName: candidate.last_name,
-        birthDate: candidate.birth_date,
-        phone: candidate.phone,
+        resumeUrl: candidate.resume_url,
+        linkedinUrl: candidate.linkedin_url,
+        githubUrl: candidate.github_url,
       });
     });
 
@@ -192,8 +193,7 @@ describe('FindUserAction', () => {
         name: company.name,
         logoUrl: company.logo_url,
         phone: company.phone,
-        taxId: company.tax_id,
-        isVerified: company.is_verified,
+        description: company.description,
       });
     });
   });

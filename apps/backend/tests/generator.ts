@@ -51,11 +51,15 @@ export class Generator {
     return faker.company.name();
   }
 
-  public static trainingName(): string {
+  public static companyDescription(): string {
+    return faker.lorem.paragraphs(3);
+  }
+
+  public static jobOfferName(): string {
     return faker.lorem.words(3);
   }
 
-  public static trainingDescription(): string {
+  public static jobOfferDescription(): string {
     return faker.lorem.sentences(5);
   }
 
@@ -63,8 +67,12 @@ export class Generator {
     return faker.location.city();
   }
 
-  public static place(): string {
+  public static address(): string {
     return faker.location.streetAddress();
+  }
+
+  public static province(): string {
+    return faker.helpers.arrayElement(['Śląskie', 'Małopolskie', 'Mazowieckie', 'Łódzkie', 'Wielkopolskie']);
   }
 
   public static latitude(): number {
@@ -80,15 +88,106 @@ export class Generator {
   }
 
   public static categoryName(): string {
-    const categories = ['Strzelectwo', 'Medycyna', 'Cyberbezpieczeństwo', 'Samoobrona', 'Drony', 'Prawo', 'Survival'];
+    const categories = [
+      'AI/ML',
+      'JS',
+      'HTML',
+      'PHP',
+      'Ruby',
+      'Python',
+      'Java',
+      'Net',
+      'Scala',
+      'C',
+      'Mobile',
+      'Testing',
+      'DevOps',
+      'Admin',
+      'UX/UI',
+      'PM',
+      'Game',
+      'Analytics',
+      'Data',
+      'Security',
+      'Go',
+      'Support',
+      'ERP',
+      'Architecture',
+      'Other',
+    ];
 
     const uniqueCategoryName = faker.helpers.arrayElement(categories) + faker.number.int({ min: 1, max: 9 }).toString();
 
     return uniqueCategoryName;
   }
 
-  public static taxId(): string {
-    return faker.string.numeric(10);
+  public static skillName(): string {
+    const skills = [
+      'JavaScript',
+      'TypeScript',
+      'React',
+      'Node',
+      'Angular',
+      'Vue',
+      'HTML',
+      'CSS',
+      'PHP',
+      'Java',
+      'Python',
+      'Ruby',
+      'C#',
+      'C++',
+      'C',
+      'Go',
+      'Swift',
+      'Kotlin',
+      'Rust',
+      'Scala',
+      'Dart',
+      'Elixir',
+      'Haskell',
+      'SQL',
+      'NoSQL',
+      'MongoDB',
+      'RabbitMQ',
+      'Kafka',
+      'PostgreSQL',
+      'MySQL',
+      'Redis',
+      'Elasticsearch',
+      'Docker',
+      'Kubernetes',
+      'AWS',
+      'Azure',
+      'GCP',
+      'DevOps',
+      'CI/CD',
+      'Agile',
+      'Scrum',
+      'Kanban',
+      'REST API',
+      'GraphQL',
+      'Microservices',
+      'Serverless',
+      'Blockchain',
+      'Machine Learning',
+      'Django',
+      'Flask',
+      'Spring',
+      'Laravel',
+      'Symfony',
+      'Ruby on Rails',
+      'Express',
+      'FastAPI',
+      'NestJS',
+      'Next.js',
+      'Tailwind CSS',
+      'Bootstrap',
+    ];
+
+    const uniqueSkillName = faker.helpers.arrayElement(skills) + faker.number.int({ min: 1, max: 9 }).toString();
+
+    return uniqueSkillName;
   }
 
   public static phone(): string {
@@ -145,6 +244,10 @@ export class Generator {
       from: '1970-01-01',
       to: '2006-01-01',
     });
+  }
+
+  public static url(): string {
+    return faker.internet.url();
   }
 
   public static imageUrl(width = 200, height = 120): string {

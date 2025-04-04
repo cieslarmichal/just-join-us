@@ -39,17 +39,14 @@ describe('UpdateCompanyActionImpl', () => {
   it('updates company data', async () => {
     const company = await companyTestUtils.createAndPersist();
 
-    const isVerified = Generator.boolean();
-
+    const name = Generator.companyName();
+    const description = Generator.companyDescription();
     const phone = Generator.phone();
-
-    const isDeleted = Generator.boolean();
-
     const logoUrl = Generator.imageUrl();
+    const isDeleted = Generator.boolean();
 
     await action.execute({
       id: company.id,
-      isVerified,
       phone,
       isDeleted,
       logoUrl,
@@ -57,26 +54,21 @@ describe('UpdateCompanyActionImpl', () => {
 
     const updatedCompany = await companyTestUtils.findById({ id: company.id });
 
-    expect(updatedCompany?.is_verified).toBe(isVerified);
-
     expect(updatedCompany?.phone).toBe(phone);
-
     expect(updatedCompany?.is_deleted).toBe(isDeleted);
-
     expect(updatedCompany?.logo_url).toBe(logoUrl);
+    expect(updatedCompany?.name).toBe(name);
+    expect(updatedCompany?.description).toBe(description);
   });
 
   it('throws an error - when a Company with given id not found', async () => {
     const companyId = Generator.uuid();
-
-    const isVerified = Generator.boolean();
 
     const phone = Generator.phone();
 
     try {
       await action.execute({
         id: companyId,
-        isVerified,
         phone,
       });
     } catch (error) {

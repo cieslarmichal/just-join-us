@@ -61,7 +61,7 @@ export class CompanyTestUtils extends TestUtils {
         usersTable.allColumns,
         companiesTable.columns.name,
         companiesTable.columns.phone,
-        companiesTable.columns.tax_id,
+        companiesTable.columns.description,
         companiesTable.columns.logo_url,
         companiesTable.columns.is_verified,
       ])
@@ -84,7 +84,7 @@ export class CompanyTestUtils extends TestUtils {
         usersTable.allColumns,
         companiesTable.columns.name,
         companiesTable.columns.phone,
-        companiesTable.columns.tax_id,
+        companiesTable.columns.description,
         companiesTable.columns.logo_url,
         companiesTable.columns.is_verified,
       ])

@@ -12,13 +12,11 @@ export class M3CreateCompaniesTableMigration implements Migration {
 
       table.foreign('id').references('id').inTable('users').onDelete('CASCADE');
 
-      table.string('tax_id', 16).notNullable().checkRegex('^[A-Z0-9]+$');
-
       table.string('name', 128).notNullable();
 
-      table.string('phone', 20).notNullable().checkRegex('^[0-9+][0-9]*$');
+      table.text('description').notNullable();
 
-      table.boolean('is_verified').notNullable();
+      table.string('phone', 20).notNullable().checkRegex('^[0-9+][0-9]*$');
 
       table.string('logo_url', 256).notNullable();
     });

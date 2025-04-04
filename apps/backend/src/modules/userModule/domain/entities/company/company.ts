@@ -1,27 +1,29 @@
 import { User, type UserState, type UserDraft } from '../user/user.ts';
 
 export interface CompanyDraft extends UserDraft {
-  readonly taxId: string;
   readonly name: string;
+  readonly description: string;
   readonly phone: string;
-  readonly isVerified: boolean;
   readonly logoUrl: string;
 }
 
 export interface CompanyState {
-  readonly taxId: string;
-  readonly name: string;
+  name: string;
+  description: string;
   phone: string;
-  isVerified: boolean;
   logoUrl: string;
+}
+
+interface SetNamePayload {
+  readonly name: string;
 }
 
 interface SetPhonePayload {
   readonly phone: string;
 }
 
-interface SetIsVerifiedPayload {
-  readonly isVerified: boolean;
+interface SetDescriptionPayload {
+  readonly description: string;
 }
 
 interface SetLogoUrlPayload {
@@ -32,20 +34,8 @@ export class Company extends User {
   private companyState: CompanyState;
 
   public constructor(draft: CompanyDraft) {
-    const {
-      id,
-      email,
-      password,
-      isEmailVerified,
-      isDeleted,
-      role,
-      createdAt,
-      isVerified,
-      name,
-      taxId,
-      logoUrl,
-      phone,
-    } = draft;
+    const { id, email, password, isEmailVerified, isDeleted, role, createdAt, name, logoUrl, phone, description } =
+      draft;
 
     super({
       id,
@@ -58,11 +48,10 @@ export class Company extends User {
     });
 
     this.companyState = {
-      taxId,
       name,
-      isVerified,
       phone,
       logoUrl,
+      description,
     };
   }
 
@@ -72,10 +61,10 @@ export class Company extends User {
     this.companyState.phone = phone;
   }
 
-  public setIsVerified(payload: SetIsVerifiedPayload): void {
-    const { isVerified } = payload;
+  public setDescription(payload: SetDescriptionPayload): void {
+    const { description } = payload;
 
-    this.companyState.isVerified = isVerified;
+    this.companyState.description = description;
   }
 
   public setLogoUrl(payload: SetLogoUrlPayload): void {
@@ -84,20 +73,22 @@ export class Company extends User {
     this.companyState.logoUrl = logoUrl;
   }
 
-  public getPhone(): string {
-    return this.companyState.phone;
+  public setName(payload: SetNamePayload): void {
+    const { name } = payload;
+
+    this.companyState.name = name;
   }
 
-  public getIsVerified(): boolean {
-    return this.companyState.isVerified;
+  public getPhone(): string {
+    return this.companyState.phone;
   }
 
   public getLogoUrl(): string {
     return this.companyState.logoUrl;
   }
 
-  public getTaxId(): string {
-    return this.companyState.taxId;
+  public getDescription(): string {
+    return this.companyState.description;
   }
 
   public getName(): string {

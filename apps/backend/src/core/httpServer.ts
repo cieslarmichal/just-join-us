@@ -22,9 +22,13 @@ import { httpStatusCodes } from '../common/http/httpStatusCode.ts';
 import { type LoggerService } from '../common/logger/loggerService.ts';
 import type { ApplicationHttpController } from '../modules/applicationModule/api/httpControllers/applicationHttpController/applicationHttpController.ts';
 import { applicationSymbols } from '../modules/applicationModule/symbols.ts';
-import type { CategoryHttpController } from '../modules/trainingModule/api/httpControllers/categoryHttpController/categoryHttpController.ts';
-import type { TrainingHttpController } from '../modules/trainingModule/api/httpControllers/trainingHttpController/trainingHttpController.ts';
-import { trainingSymbols } from '../modules/trainingModule/symbols.ts';
+import type { CategoryHttpController } from '../modules/jobOfferModule/api/httpControllers/categoryHttpController/categoryHttpController.ts';
+import type { JobOfferHttpController } from '../modules/jobOfferModule/api/httpControllers/jobOfferHttpController/jobOfferHttpController.ts';
+import type { SkillHttpController } from '../modules/jobOfferModule/api/httpControllers/skillHttpController/skillHttpController.ts';
+import { jobOfferSymbols } from '../modules/jobOfferModule/symbols.ts';
+import type { CityHttpController } from '../modules/locationModule/api/httpControllers/cityHttpController/cityHttpController.ts';
+import type { LocationHttpController } from '../modules/locationModule/api/httpControllers/locationHttpController/locationHttpController.ts';
+import { locationSymbols } from '../modules/locationModule/symbols.ts';
 import { type UserHttpController } from '../modules/userModule/api/httpControllers/userHttpController/userHttpController.ts';
 import { userSymbols } from '../modules/userModule/symbols.ts';
 
@@ -54,8 +58,11 @@ export class HttpServer {
     return [
       this.container.get<ApplicationHttpController>(applicationSymbols.applicationHttpController),
       this.container.get<UserHttpController>(userSymbols.userHttpController),
-      this.container.get<TrainingHttpController>(trainingSymbols.trainingHttpController),
-      this.container.get<CategoryHttpController>(trainingSymbols.categoryHttpController),
+      this.container.get<JobOfferHttpController>(jobOfferSymbols.jobOfferHttpController),
+      this.container.get<CategoryHttpController>(jobOfferSymbols.categoryHttpController),
+      this.container.get<SkillHttpController>(jobOfferSymbols.skillHttpController),
+      this.container.get<CityHttpController>(locationSymbols.cityHttpController),
+      this.container.get<LocationHttpController>(locationSymbols.locationHttpController),
     ];
   }
 

@@ -12,9 +12,8 @@ export class CompanyMapper {
       role,
       created_at: createdAt,
       name,
-      tax_id: taxId,
-      is_verified: isVerified,
-      phone: phone,
+      description,
+      phone,
       logo_url: logoUrl,
     } = entity;
 
@@ -27,8 +26,7 @@ export class CompanyMapper {
       role,
       createdAt,
       name,
-      taxId,
-      isVerified,
+      description,
       phone,
       logoUrl,
     });

@@ -5,9 +5,10 @@ export interface UpdateCandidateActionPayload {
   readonly id: string;
   readonly firstName?: string | undefined;
   readonly lastName?: string | undefined;
-  readonly birthDate?: Date | undefined;
-  readonly phone?: string | undefined;
   readonly isDeleted?: boolean | undefined;
+  readonly resumeUrl?: string | undefined;
+  readonly githubUrl?: string | undefined;
+  readonly linkedinUrl?: string | undefined;
 }
 
 export interface UpdateCandidateActionResult {

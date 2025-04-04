@@ -36,8 +36,7 @@ describe('CompanyMapper', () => {
       role: userRawEntity.role,
       createdAt: userRawEntity.created_at,
       name: companyRawEntity.name,
-      taxId: companyRawEntity.tax_id,
-      isVerified: companyRawEntity.is_verified,
+      description: companyRawEntity.description,
       phone: companyRawEntity.phone,
       logoUrl: companyRawEntity.logo_url,
     });

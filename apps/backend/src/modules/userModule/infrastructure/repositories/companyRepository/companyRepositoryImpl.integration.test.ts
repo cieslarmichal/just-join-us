@@ -48,10 +48,9 @@ describe('CompanyRepositoryImpl', () => {
           isEmailVerified: createdCompany.getIsEmailVerified(),
           isDeleted: createdCompany.getIsDeleted(),
           role: createdCompany.getRole(),
-          isVerified: createdCompany.getIsVerified(),
           name: createdCompany.getName(),
           phone: createdCompany.getPhone(),
-          taxId: createdCompany.getTaxId(),
+          description: createdCompany.getDescription(),
           logoUrl: createdCompany.getLogoUrl(),
         },
       });
@@ -76,10 +75,9 @@ describe('CompanyRepositoryImpl', () => {
             isEmailVerified: createdCompany.getIsEmailVerified(),
             isDeleted: createdCompany.getIsDeleted(),
             role: createdCompany.getRole(),
-            isVerified: createdCompany.getIsVerified(),
             name: createdCompany.getName(),
             phone: createdCompany.getPhone(),
-            taxId: createdCompany.getTaxId(),
+            description: createdCompany.getDescription(),
             logoUrl: createdCompany.getLogoUrl(),
           },
         });
@@ -100,10 +98,9 @@ describe('CompanyRepositoryImpl', () => {
         email: companyRawEntity.email,
         password: companyRawEntity.password,
         name: companyRawEntity.name,
-        taxId: companyRawEntity.tax_id,
+        description: companyRawEntity.description,
         logoUrl: companyRawEntity.logo_url,
         phone: companyRawEntity.phone,
-        isVerified: companyRawEntity.is_verified,
         isEmailVerified: companyRawEntity.is_email_verified,
         isDeleted: companyRawEntity.is_deleted,
         role: companyRawEntity.role,
@@ -111,24 +108,20 @@ describe('CompanyRepositoryImpl', () => {
       });
 
       const password = Generator.password();
-
       const isEmailVerified = Generator.boolean();
-
       const isDeleted = Generator.boolean();
-
       const logoUrl = Generator.imageUrl();
-
       const phone = Generator.phone();
+      const name = Generator.companyName();
+      const description = Generator.companyDescription();
 
       company.setPassword({ password });
-
       company.setIsEmailVerified({ isEmailVerified });
-
       company.setIsDeleted({ isDeleted });
-
       company.setLogoUrl({ logoUrl });
-
       company.setPhone({ phone });
+      company.setName({ name });
+      company.setDescription({ description });
 
       const updatedCompany = await companyRepository.updateCompany({
         company,
@@ -139,11 +132,10 @@ describe('CompanyRepositoryImpl', () => {
       expect(updatedCompany.getState()).toEqual({
         email: company.getEmail(),
         password,
-        name: company.getName(),
-        taxId: company.getTaxId(),
+        name,
+        description,
         logoUrl,
         phone,
-        isVerified: company.getIsVerified(),
         isEmailVerified,
         isDeleted,
         role: companyRawEntity.role,
@@ -154,11 +146,10 @@ describe('CompanyRepositoryImpl', () => {
         id: company.getId(),
         email: company.getEmail(),
         password,
-        name: company.getName(),
-        tax_id: company.getTaxId(),
+        name,
+        description,
         logo_url: logoUrl,
-        phone: phone,
-        is_verified: company.getIsVerified(),
+        phone,
         is_email_verified: isEmailVerified,
         is_deleted: isDeleted,
         role: companyRawEntity.role,
@@ -177,10 +168,9 @@ describe('CompanyRepositoryImpl', () => {
         email: company.email,
         password: company.password,
         name: company.name,
-        taxId: company.tax_id,
+        description: company.description,
         logoUrl: company.logo_url,
         phone: company.phone,
-        isVerified: company.is_verified,
         isEmailVerified: company.is_email_verified,
         isDeleted: company.is_deleted,
         role: company.role,
@@ -232,10 +222,9 @@ describe('CompanyRepositoryImpl', () => {
         email: company.email,
         password: company.password,
         name: company.name,
-        taxId: company.tax_id,
+        description: company.description,
         logoUrl: company.logo_url,
         phone: company.phone,
-        isVerified: company.is_verified,
         isEmailVerified: company.is_email_verified,
         isDeleted: company.is_deleted,
         role: company.role,

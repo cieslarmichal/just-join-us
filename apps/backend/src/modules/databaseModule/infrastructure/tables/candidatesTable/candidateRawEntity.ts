@@ -4,8 +4,9 @@ export interface CandidateRawEntity {
   readonly id: string;
   readonly first_name: string;
   readonly last_name: string;
-  readonly birth_date: Date;
-  readonly phone: string;
+  readonly resume_url?: string | undefined;
+  readonly linkedin_url?: string | undefined;
+  readonly github_url?: string | undefined;
 }
 
 export interface CandidateRawEntityExtended {
@@ -18,6 +19,7 @@ export interface CandidateRawEntityExtended {
   readonly created_at: Date;
   readonly first_name: string;
   readonly last_name: string;
-  readonly birth_date: Date;
-  readonly phone: string;
+  readonly resume_url?: string | undefined;
+  readonly linkedin_url?: string | undefined;
+  readonly github_url?: string | undefined;
 }

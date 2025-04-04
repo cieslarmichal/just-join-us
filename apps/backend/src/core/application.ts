@@ -12,7 +12,8 @@ import type { UserRawEntity } from '../modules/databaseModule/infrastructure/tab
 import { usersTable } from '../modules/databaseModule/infrastructure/tables/usersTable/usersTable.ts';
 import { databaseSymbols } from '../modules/databaseModule/symbols.ts';
 import type { DatabaseClient } from '../modules/databaseModule/types/databaseClient.ts';
-import { TrainingModule } from '../modules/trainingModule/trainingModule.ts';
+import { JobOfferModule } from '../modules/jobOfferModule/jobOfferModule.ts';
+import { LocationModule } from '../modules/locationModule/locationModule.ts';
 import { type HashService } from '../modules/userModule/application/services/hashService/hashService.ts';
 import { userSymbols } from '../modules/userModule/symbols.ts';
 import { UserModule } from '../modules/userModule/userModule.ts';
@@ -30,7 +31,8 @@ export class Application {
       new AuthModule(),
       new DatabaseModule(),
       new UserModule(),
-      new TrainingModule(),
+      new LocationModule(),
+      new JobOfferModule(),
     ];
 
     const container = DependencyInjectionContainerFactory.create({ modules });

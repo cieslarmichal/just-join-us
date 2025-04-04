@@ -18,12 +18,13 @@ export class UpdateCompanyActionImpl implements UpdateCompanyAction {
   }
 
   public async execute(payload: UpdateCompanyActionPayload): Promise<UpdateCompanyActionResult> {
-    const { id, isVerified, phone, isDeleted, logoUrl } = payload;
+    const { id, name, description, phone, isDeleted, logoUrl } = payload;
 
     this.loggerService.debug({
       message: 'Updating company...',
       id,
-      isVerified,
+      name,
+      description,
       phone,
       logoUrl,
     });
@@ -37,8 +38,12 @@ export class UpdateCompanyActionImpl implements UpdateCompanyAction {
       });
     }
 
-    if (isVerified !== undefined) {
-      company.setIsVerified({ isVerified });
+    if (name !== undefined) {
+      company.setName({ name });
+    }
+
+    if (description !== undefined) {
+      company.setDescription({ description });
     }
 
     if (phone !== undefined) {

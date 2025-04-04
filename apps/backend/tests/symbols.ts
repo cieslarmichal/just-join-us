@@ -5,7 +5,9 @@ export const testSymbols = {
   blacklistTokenTestUtils: Symbol('blacklistTokenTestUtils'),
   emailEventTestUtils: Symbol('emailEventTestUtils'),
   categoryTestUtils: Symbol('categoryTestUtils'),
-  trainingTestUtils: Symbol('trainingTestUtils'),
-  trainingEventTestUtils: Symbol('trainingEventTestUtils'),
+  skillTestUtils: Symbol('skillTestUtils'),
+  cityTestUtils: Symbol('cityTestUtils'),
+  locationTestUtils: Symbol('locationTestUtils'),
+  jobOfferTestUtils: Symbol('jobOfferTestUtils'),
   s3TestUtils: Symbol('s3TestService'),
 };

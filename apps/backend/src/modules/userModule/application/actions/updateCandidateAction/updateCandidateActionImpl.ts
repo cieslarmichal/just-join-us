@@ -18,15 +18,16 @@ export class UpdateCandidateActionImpl implements UpdateCandidateAction {
   }
 
   public async execute(payload: UpdateCandidateActionPayload): Promise<UpdateCandidateActionResult> {
-    const { id, firstName, lastName, birthDate, phone, isDeleted } = payload;
+    const { id, firstName, lastName, githubUrl, linkedinUrl, resumeUrl, isDeleted } = payload;
 
     this.loggerService.debug({
       message: 'Updating candidate...',
       id,
       firstName,
       lastName,
-      birthDate,
-      phone,
+      githubUrl,
+      linkedinUrl,
+      resumeUrl,
       isDeleted,
     });
 
@@ -47,12 +48,16 @@ export class UpdateCandidateActionImpl implements UpdateCandidateAction {
       candidate.setLastName({ lastName });
     }
 
-    if (birthDate !== undefined) {
-      candidate.setBirthDate({ birthDate });
+    if (githubUrl !== undefined) {
+      candidate.setGithubUrl({ githubUrl });
     }
 
-    if (phone !== undefined) {
-      candidate.setPhone({ phone });
+    if (linkedinUrl !== undefined) {
+      candidate.setLinkedinUrl({ linkedinUrl });
+    }
+
+    if (resumeUrl !== undefined) {
+      candidate.setResumeUrl({ resumeUrl });
     }
 
     if (isDeleted !== undefined) {

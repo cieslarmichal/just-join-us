@@ -48,8 +48,9 @@ describe('RegisterCandidateAction', () => {
       password: candidate.getPassword(),
       firstName: candidate.getFirstName(),
       lastName: candidate.getLastName(),
-      birthDate: candidate.getBirthDate(),
-      phone: candidate.getPhone(),
+      githubUrl: candidate.getGithubUrl(),
+      linkedinUrl: candidate.getLinkedinUrl(),
+      resumeUrl: candidate.getResumeUrl(),
     });
 
     const foundCandidate = await candidateTestUtils.findByEmail({ email: candidate.getEmail() });
@@ -62,8 +63,9 @@ describe('RegisterCandidateAction', () => {
       role: userRoles.candidate,
       firstName: candidate.getFirstName(),
       lastName: candidate.getLastName(),
-      birthDate: candidate.getBirthDate(),
-      phone: candidate.getPhone(),
+      githubUrl: candidate.getGithubUrl(),
+      linkedinUrl: candidate.getLinkedinUrl(),
+      resumeUrl: candidate.getResumeUrl(),
       createdAt: expect.any(Date),
     });
 
@@ -76,8 +78,9 @@ describe('RegisterCandidateAction', () => {
       role: userRoles.candidate,
       first_name: candidate.getFirstName(),
       last_name: candidate.getLastName(),
-      birth_date: candidate.getBirthDate(),
-      phone: candidate.getPhone(),
+      github_url: candidate.getGithubUrl(),
+      linkedin_url: candidate.getLinkedinUrl(),
+      resume_url: candidate.getResumeUrl(),
       created_at: expect.any(Date),
     });
   });
@@ -93,8 +96,9 @@ describe('RegisterCandidateAction', () => {
         password: candidate.getPassword(),
         firstName: candidate.getFirstName(),
         lastName: candidate.getLastName(),
-        birthDate: candidate.getBirthDate(),
-        phone: candidate.getPhone(),
+        githubUrl: candidate.getGithubUrl(),
+        linkedinUrl: candidate.getLinkedinUrl(),
+        resumeUrl: candidate.getResumeUrl(),
       });
     } catch (error) {
       expect(error).toBeInstanceOf(ResourceAlreadyExistsError);
@@ -119,8 +123,9 @@ describe('RegisterCandidateAction', () => {
         password: '123',
         firstName: candidate.getFirstName(),
         lastName: candidate.getLastName(),
-        birthDate: candidate.getBirthDate(),
-        phone: candidate.getPhone(),
+        githubUrl: candidate.getGithubUrl(),
+        linkedinUrl: candidate.getLinkedinUrl(),
+        resumeUrl: candidate.getResumeUrl(),
       });
     } catch (error) {
       expect(error).toBeInstanceOf(OperationNotValidError);

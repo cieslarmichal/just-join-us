@@ -9,7 +9,7 @@ export const companyNameSchema = Type.String({
   maxLength: 128,
 });
 
-export const taxIdSchema = Type.String({
+export const descriptionSchema = Type.String({
   minLength: 1,
   maxLength: 16,
 });
@@ -32,7 +32,7 @@ export const companySchema = Type.Object({
   role: Type.Union([...Object.values(userRoles).map((role) => Type.Literal(role as UserRole))]),
   createdAt: Type.String({ format: 'date-time' }),
   name: companyNameSchema,
-  taxId: taxIdSchema,
+  description: descriptionSchema,
   phone: companyPhoneSchema,
   isVerified: Type.Boolean(),
   logoUrl: logoUrlSchema,

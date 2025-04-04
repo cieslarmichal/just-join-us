@@ -6,8 +6,9 @@ export interface RegisterCandidateActionPayload {
   readonly password: string;
   readonly firstName: string;
   readonly lastName: string;
-  readonly phone: string;
-  readonly birthDate: Date;
+  readonly resumeUrl?: string | undefined;
+  readonly linkedinUrl?: string | undefined;
+  readonly githubUrl?: string | undefined;
 }
 
 export interface RegisterCandidateActionResult {

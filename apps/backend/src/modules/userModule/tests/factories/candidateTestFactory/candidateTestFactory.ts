@@ -15,8 +15,9 @@ export class CandidateTestFactory {
       createdAt: Generator.pastDate(),
       firstName: Generator.firstName(),
       lastName: Generator.lastName(),
-      birthDate: Generator.birthDate(),
-      phone: Generator.phone(),
+      githubUrl: Generator.url(),
+      linkedinUrl: Generator.url(),
+      resumeUrl: Generator.url(),
       ...input,
     });
   }
@@ -26,8 +27,9 @@ export class CandidateTestFactory {
       id: Generator.uuid(),
       first_name: Generator.firstName(),
       last_name: Generator.lastName(),
-      birth_date: Generator.birthDate(),
-      phone: Generator.phone(),
+      github_url: Generator.url(),
+      linkedin_url: Generator.url(),
+      resume_url: Generator.url(),
       ...input,
     };
   }

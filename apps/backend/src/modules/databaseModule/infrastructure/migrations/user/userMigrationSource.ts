@@ -27,6 +27,6 @@ export class UserMigrationSource implements MigrationSource {
   }
 
   public getMigrationTableName(): string {
-    return 'user_migrations';
+    return 'users_migrations';
   }
 }

@@ -2,13 +2,13 @@ import { type DatabaseTable } from '../../../types/databaseTable.ts';
 
 import { type CategoryRawEntity } from './categoryRawEntity.ts';
 
-const categoriesTableName = 'categories';
+const tableName = 'categories';
 
-export const categoriesTable: DatabaseTable<CategoryRawEntity, typeof categoriesTableName> = {
-  name: categoriesTableName,
-  allColumns: `${categoriesTableName}.*`,
+export const categoriesTable: DatabaseTable<CategoryRawEntity, typeof tableName> = {
+  name: tableName,
+  allColumns: `${tableName}.*`,
   columns: {
-    id: `${categoriesTableName}.id`,
-    name: `${categoriesTableName}.name`,
+    id: `${tableName}.id`,
+    name: `${tableName}.name`,
   },
 };
