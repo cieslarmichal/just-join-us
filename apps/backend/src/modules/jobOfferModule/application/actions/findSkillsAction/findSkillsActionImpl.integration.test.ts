@@ -5,7 +5,7 @@ import { TestContainer } from '../../../../../../tests/testContainer.ts';
 import { databaseSymbols } from '../../../../databaseModule/symbols.ts';
 import type { DatabaseClient } from '../../../../databaseModule/types/databaseClient.ts';
 import { symbols } from '../../../symbols.ts';
-import type { SkillTestUtils } from '../../../tests/utils/skillTestUtils/categoryTestUtils.ts';
+import type { SkillTestUtils } from '../../../tests/utils/skillTestUtils/skillTestUtils.ts';
 
 import { type FindSkillsAction } from './findSkillsAction.ts';
 

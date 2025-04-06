@@ -9,7 +9,7 @@ import type { DatabaseClient } from '../../../../databaseModule/types/databaseCl
 import { type SkillRepository } from '../../../domain/repositories/skillRepository/skillRepository.ts';
 import { symbols } from '../../../symbols.ts';
 import { SkillTestFactory } from '../../../tests/factories/skillTestFactory/skillTestFactory.ts';
-import type { SkillTestUtils } from '../../../tests/utils/skillTestUtils/categoryTestUtils.ts';
+import type { SkillTestUtils } from '../../../tests/utils/skillTestUtils/skillTestUtils.ts';
 
 describe('SkillRepositoryImpl', () => {
   let skillRepository: SkillRepository;

@@ -14,6 +14,11 @@ export const jobOffersTable: DatabaseTable<JobOfferRawEntity, typeof tableName> 
     is_hidden: `${tableName}.is_hidden`,
     category_id: `${tableName}.category_id`,
     company_id: `${tableName}.company_id`,
+    employment_type: `${tableName}.employment_type`,
+    working_time: `${tableName}.working_time`,
+    experience_level: `${tableName}.experience_level`,
+    min_salary: `${tableName}.min_salary`,
+    max_salary: `${tableName}.max_salary`,
     created_at: `${tableName}.created_at`,
   },
 };

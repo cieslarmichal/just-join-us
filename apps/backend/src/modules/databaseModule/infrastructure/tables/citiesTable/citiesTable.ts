@@ -2,16 +2,16 @@ import { type DatabaseTable } from '../../../types/databaseTable.ts';
 
 import { type CityRawEntity } from './cityRawEntity.ts';
 
-const citiesTableName = 'cities';
+const tableName = 'cities';
 
-export const citiesTable: DatabaseTable<CityRawEntity, typeof citiesTableName> = {
-  name: citiesTableName,
-  allColumns: `${citiesTableName}.*`,
+export const citiesTable: DatabaseTable<CityRawEntity, typeof tableName> = {
+  name: tableName,
+  allColumns: `${tableName}.*`,
   columns: {
-    id: `${citiesTableName}.id`,
-    name: `${citiesTableName}.name`,
-    province: `${citiesTableName}.province`,
-    latitude: `${citiesTableName}.latitude`,
-    longitude: `${citiesTableName}.longitude`,
+    id: `${tableName}.id`,
+    name: `${tableName}.name`,
+    province: `${tableName}.province`,
+    latitude: `${tableName}.latitude`,
+    longitude: `${tableName}.longitude`,
   },
 };

@@ -31,6 +31,14 @@ export class Generator {
     });
   }
 
+  public static minSalary(): number {
+    return Generator.number(8000, 16000);
+  }
+
+  public static maxSalary(): number {
+    return Generator.number(16000, 30000);
+  }
+
   public static uuid(): string {
     return uuidv7();
   }
@@ -61,6 +69,18 @@ export class Generator {
 
   public static jobOfferDescription(): string {
     return faker.lorem.sentences(5);
+  }
+
+  public static employmentType(): string {
+    return faker.helpers.arrayElement(['B2B', 'Permanent']);
+  }
+
+  public static workingTime(): string {
+    return faker.helpers.arrayElement(['Full-time', 'Part-time']);
+  }
+
+  public static experienceLevel(): string {
+    return faker.helpers.arrayElement(['Junior', 'Mid', 'Senior']);
   }
 
   public static city(): string {

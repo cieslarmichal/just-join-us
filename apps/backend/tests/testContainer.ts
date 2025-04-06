@@ -10,7 +10,7 @@ import { databaseSymbols } from '../src/modules/databaseModule/symbols.ts';
 import type { DatabaseClient } from '../src/modules/databaseModule/types/databaseClient.ts';
 import { CategoryTestUtils } from '../src/modules/jobOfferModule/tests/utils/categoryTestUtils/categoryTestUtils.ts';
 import { JobOfferTestUtils } from '../src/modules/jobOfferModule/tests/utils/jobOfferTestUtils/jobOfferTestUtils.ts';
-import { SkillTestUtils } from '../src/modules/jobOfferModule/tests/utils/skillTestUtils/categoryTestUtils.ts';
+import { SkillTestUtils } from '../src/modules/jobOfferModule/tests/utils/skillTestUtils/skillTestUtils.ts';
 import { CityTestUtils } from '../src/modules/locationModule/tests/utils/cityTestUtils/cityTestUtils.ts';
 import { LocationTestUtils } from '../src/modules/locationModule/tests/utils/locationTestUtils/locationTestUtils.ts';
 import { type EmailMessageBus } from '../src/modules/userModule/application/messageBuses/emailMessageBus/emailMessageBus.ts';

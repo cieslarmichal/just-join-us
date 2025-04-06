@@ -11,6 +11,11 @@ export class JobOfferTestFactory {
       isHidden: false,
       categoryId: Generator.uuid(),
       companyId: Generator.uuid(),
+      employmentType: Generator.employmentType(),
+      experienceLevel: Generator.experienceLevel(),
+      workingTime: Generator.workingTime(),
+      minSalary: Generator.minSalary(),
+      maxSalary: Generator.maxSalary(),
       createdAt: Generator.pastDate(),
       ...input,
     });
@@ -24,6 +29,11 @@ export class JobOfferTestFactory {
       is_hidden: false,
       category_id: Generator.uuid(),
       company_id: Generator.uuid(),
+      employment_type: Generator.employmentType(),
+      working_time: Generator.workingTime(),
+      experience_level: Generator.experienceLevel(),
+      min_salary: Generator.minSalary(),
+      max_salary: Generator.maxSalary(),
       created_at: Generator.pastDate(),
       ...input,
     };
