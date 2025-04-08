@@ -3,7 +3,6 @@ import type { City } from '../../../domain/entities/city/city.ts';
 
 export interface FindCitiesActionPayload {
   readonly name?: string | undefined;
-  readonly type?: string | undefined;
   readonly page: number;
   readonly pageSize: number;
 }

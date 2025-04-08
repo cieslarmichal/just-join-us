@@ -16,4 +16,5 @@ export const symbols = {
 export const locationSymbols = {
   locationHttpController: symbols.locationHttpController,
   cityHttpController: symbols.cityHttpController,
+  locationRepository: symbols.locationRepository,
 };

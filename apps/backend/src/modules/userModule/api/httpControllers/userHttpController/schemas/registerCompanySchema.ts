@@ -8,7 +8,7 @@ import {
   companyNameSchema,
   companyPhoneSchema,
   logoUrlSchema,
-  descriptionSchema,
+  companyDescriptionSchema,
 } from './companySchema.ts';
 import { emailSchema, passwordSchema } from './userSchema.ts';
 
@@ -16,7 +16,7 @@ const registerCompanyRequestBodySchema = Type.Object({
   email: emailSchema,
   password: passwordSchema,
   name: companyNameSchema,
-  description: descriptionSchema,
+  description: companyDescriptionSchema,
   phone: companyPhoneSchema,
   logoUrl: logoUrlSchema,
 });

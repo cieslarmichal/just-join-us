@@ -9,9 +9,9 @@ export const companyNameSchema = Type.String({
   maxLength: 128,
 });
 
-export const descriptionSchema = Type.String({
+export const companyDescriptionSchema = Type.String({
   minLength: 1,
-  maxLength: 16,
+  maxLength: 20000,
 });
 
 export const logoUrlSchema = Type.String({
@@ -32,9 +32,8 @@ export const companySchema = Type.Object({
   role: Type.Union([...Object.values(userRoles).map((role) => Type.Literal(role as UserRole))]),
   createdAt: Type.String({ format: 'date-time' }),
   name: companyNameSchema,
-  description: descriptionSchema,
+  description: companyDescriptionSchema,
   phone: companyPhoneSchema,
-  isVerified: Type.Boolean(),
   logoUrl: logoUrlSchema,
 });
 

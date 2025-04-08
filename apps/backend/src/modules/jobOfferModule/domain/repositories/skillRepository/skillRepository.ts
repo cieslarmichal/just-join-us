@@ -10,6 +10,7 @@ export interface FindSkillPayload {
 }
 
 export interface FindSkillsPayload {
+  readonly ids?: string[] | undefined;
   readonly name?: string | undefined;
   readonly page: number;
   readonly pageSize: number;

@@ -1,7 +1,9 @@
 import { OperationNotValidError } from '../../../../../common/errors/operationNotValidError.ts';
 import { type LoggerService } from '../../../../../common/logger/loggerService.ts';
+import type { LocationRepository } from '../../../../locationModule/domain/repositories/locationRepository/locationRepository.ts';
 import type { CategoryRepository } from '../../../domain/repositories/categoryRepository/categoryRepository.ts';
 import type { JobOfferRepository } from '../../../domain/repositories/jobOfferRepository/jobOfferRepository.ts';
+import type { SkillRepository } from '../../../domain/repositories/skillRepository/skillRepository.ts';
 
 import {
   type UpdateJobOfferEventActionResult,
@@ -12,20 +14,39 @@ import {
 export class UpdateJobOfferActionImpl implements UpdateJobOfferAction {
   private readonly jobOfferRepository: JobOfferRepository;
   private readonly categoryRepository: CategoryRepository;
+  private readonly skillRepository: SkillRepository;
+  private readonly locationRepository: LocationRepository;
   private readonly loggerService: LoggerService;
 
   public constructor(
     jobOfferRepository: JobOfferRepository,
     categoryRepository: CategoryRepository,
+    skillRepository: SkillRepository,
+    locationRepository: LocationRepository,
     loggerService: LoggerService,
   ) {
     this.jobOfferRepository = jobOfferRepository;
     this.categoryRepository = categoryRepository;
+    this.skillRepository = skillRepository;
+    this.locationRepository = locationRepository;
     this.loggerService = loggerService;
   }
 
   public async execute(payload: UpdateJobOfferActionPayload): Promise<UpdateJobOfferEventActionResult> {
-    const { id, name, description, categoryId, isHidden } = payload;
+    const {
+      id,
+      name,
+      description,
+      categoryId,
+      isHidden,
+      employmentType,
+      experienceLevel,
+      locationIds,
+      maxSalary,
+      minSalary,
+      skillIds,
+      workingTime,
+    } = payload;
 
     this.loggerService.debug({
       message: 'Updating JobOffer...',
@@ -68,6 +89,52 @@ export class UpdateJobOfferActionImpl implements UpdateJobOfferAction {
 
     if (isHidden !== undefined) {
       jobOffer.setIsHidden({ isHidden });
+    }
+
+    if (employmentType) {
+      jobOffer.setEmploymentType({ employmentType });
+    }
+
+    if (workingTime) {
+      jobOffer.setWorkingTime({ workingTime });
+    }
+
+    if (experienceLevel) {
+      jobOffer.setExperienceLevel({ experienceLevel });
+    }
+
+    if (minSalary) {
+      jobOffer.setMinSalary({ minSalary });
+    }
+
+    if (maxSalary) {
+      jobOffer.setMaxSalary({ maxSalary });
+    }
+
+    if (skillIds) {
+      const skills = await this.skillRepository.findSkills({ ids: skillIds, page: 1, pageSize: skillIds.length });
+
+      if (skills.length !== skillIds.length) {
+        throw new OperationNotValidError({
+          reason: 'Some skills not found.',
+          ids: skillIds,
+        });
+      }
+
+      jobOffer.setSkills({ skills });
+    }
+
+    if (locationIds) {
+      const locations = await this.locationRepository.findLocations({ ids: locationIds });
+
+      if (locations.length !== locationIds.length) {
+        throw new OperationNotValidError({
+          reason: 'Some locations not found.',
+          ids: locationIds,
+        });
+      }
+
+      jobOffer.setLocations({ locations });
     }
 
     await this.jobOfferRepository.updateJobOffer({ jobOffer });

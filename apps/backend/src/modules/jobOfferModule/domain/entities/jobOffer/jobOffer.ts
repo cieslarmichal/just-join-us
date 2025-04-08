@@ -1,4 +1,6 @@
+import type { Location } from '../../../../locationModule/domain/entities/location/location.ts';
 import type { Category } from '../category/category.ts';
+import type { Skill } from '../skill/skill.ts';
 
 interface JobOfferCompanyState {
   readonly name: string;
@@ -7,6 +9,17 @@ interface JobOfferCompanyState {
 
 interface JobOfferCategoryState {
   readonly name: string;
+}
+
+interface JobOfferSkillState {
+  readonly id: string;
+  readonly name: string;
+}
+
+interface JobOfferLocationState {
+  readonly id: string;
+  readonly isRemote: boolean;
+  readonly city?: string | undefined;
 }
 
 export interface JobOfferDraft {
@@ -24,6 +37,8 @@ export interface JobOfferDraft {
   readonly experienceLevel: string;
   readonly minSalary: number;
   readonly maxSalary: number;
+  readonly skills?: JobOfferSkillState[] | undefined;
+  readonly locations?: JobOfferLocationState[] | undefined;
 }
 
 export interface JobOfferState {
@@ -37,6 +52,8 @@ export interface JobOfferState {
   experienceLevel: string;
   minSalary: number;
   maxSalary: number;
+  skills?: JobOfferSkillState[] | undefined;
+  locations?: JobOfferLocationState[] | undefined;
   readonly companyId: string;
   readonly company?: JobOfferCompanyState;
   readonly createdAt: Date;
@@ -78,6 +95,14 @@ export interface SetMaxSalaryPayload {
   readonly maxSalary: number;
 }
 
+export interface SetSkillsPayload {
+  readonly skills: Skill[];
+}
+
+export interface SetLocationsPayload {
+  readonly locations: Location[];
+}
+
 export class JobOffer {
   private id: string;
   private state: JobOfferState;
@@ -98,6 +123,8 @@ export class JobOffer {
       employmentType,
       experienceLevel,
       workingTime,
+      locations,
+      skills,
     } = draft;
 
     this.id = id;
@@ -114,6 +141,8 @@ export class JobOffer {
       employmentType,
       workingTime,
       experienceLevel,
+      locations,
+      skills,
     };
 
     if (category) {
@@ -157,6 +186,14 @@ export class JobOffer {
 
   public getCompany(): JobOfferCompanyState | undefined {
     return this.state.company;
+  }
+
+  public getSkills(): JobOfferSkillState[] | undefined {
+    return this.state.skills;
+  }
+
+  public getLocations(): JobOfferLocationState[] | undefined {
+    return this.state.locations;
   }
 
   public getEmploymentType(): string {
@@ -222,5 +259,20 @@ export class JobOffer {
 
   public setMaxSalary(payload: SetMaxSalaryPayload): void {
     this.state.maxSalary = payload.maxSalary;
+  }
+
+  public setSkills(payload: SetSkillsPayload): void {
+    this.state.skills = payload.skills.map((skill) => ({
+      id: skill.getId(),
+      name: skill.getName(),
+    }));
+  }
+
+  public setLocations(payload: SetLocationsPayload): void {
+    this.state.locations = payload.locations.map((location) => ({
+      id: location.getId(),
+      isRemote: location.getIsRemote(),
+      city: location.getCityId(),
+    }));
   }
 }

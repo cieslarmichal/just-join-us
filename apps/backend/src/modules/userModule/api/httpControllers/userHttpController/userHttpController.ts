@@ -11,17 +11,18 @@ import { type FindUserAction } from '../../../application/actions/findUserAction
 import { type LoginUserAction } from '../../../application/actions/loginUserAction/loginUserAction.ts';
 import { type LogoutUserAction } from '../../../application/actions/logoutUserAction/logoutUserAction.ts';
 import { type RefreshUserTokensAction } from '../../../application/actions/refreshUserTokensAction/refreshUserTokensAction.ts';
-import { type RegisterCompanyAction } from '../../../application/actions/registerCompanyAction/registerCompanyAction.ts';
 import { type RegisterCandidateAction } from '../../../application/actions/registerCandidateAction/registerCandidateAction.ts';
+import { type RegisterCompanyAction } from '../../../application/actions/registerCompanyAction/registerCompanyAction.ts';
 import { type SendResetPasswordEmailAction } from '../../../application/actions/sendResetPasswordEmailAction/sendResetPasswordEmailAction.ts';
 import { type SendVerificationEmailAction } from '../../../application/actions/sendVerificationEmailAction/sendVerificationEmailAction.ts';
-import { type UpdateCompanyAction } from '../../../application/actions/updateCompanyAction/updateCompanyAction.ts';
 import { type UpdateCandidateAction } from '../../../application/actions/updateCandidateAction/updateCandidateAction.ts';
+import { type UpdateCompanyAction } from '../../../application/actions/updateCompanyAction/updateCompanyAction.ts';
 import { type VerifyUserEmailAction } from '../../../application/actions/verifyUserEmailAction/verifyUserEmailAction.ts';
-import { Company } from '../../../domain/entities/company/company.ts';
 import { Candidate } from '../../../domain/entities/candidate/candidate.ts';
+import { Company } from '../../../domain/entities/company/company.ts';
 import { type User } from '../../../domain/entities/user/user.ts';
 
+import { type CandidateDto } from './schemas/candidateSchema.ts';
 import {
   type ChangeUserPasswordBody,
   type ChangeUserPasswordResponseBody,
@@ -42,15 +43,15 @@ import {
   type RefreshUserTokensResponseBody,
 } from './schemas/refreshUserTokensSchema.ts';
 import {
-  registerCompanySchema,
-  type RegisterCompanyRequestBody,
-  type RegisterCompanyResponseBody,
-} from './schemas/registerCompanySchema.ts';
-import {
   registerCandidateSchema,
   type RegisterCandidateRequestBody,
   type RegisterCandidateResponseBody,
 } from './schemas/registerCandidateSchema.ts';
+import {
+  registerCompanySchema,
+  type RegisterCompanyRequestBody,
+  type RegisterCompanyResponseBody,
+} from './schemas/registerCompanySchema.ts';
 import {
   type ResetUserPasswordBody,
   type ResetUserPasswordResponseBody,
@@ -61,19 +62,18 @@ import {
   type SendVerificationEmailResponseBody,
   sendVerificationEmailSchema,
 } from './schemas/sendVerificationEmailSchema.ts';
-import { type CandidateDto } from './schemas/candidateSchema.ts';
-import {
-  type UpdateCompanyRequestBody,
-  type UpdateCompanyPathParams,
-  type UpdateCompanyResponseBody,
-  updateCompanySchema,
-} from './schemas/updateCompanySchema.ts';
 import {
   type UpdateCandidateRequestBody,
   type UpdateCandidatePathParams,
   type UpdateCandidateResponseBody,
   updateCandidateSchema,
 } from './schemas/updateCandidateSchema.ts';
+import {
+  type UpdateCompanyRequestBody,
+  type UpdateCompanyPathParams,
+  type UpdateCompanyResponseBody,
+  updateCompanySchema,
+} from './schemas/updateCompanySchema.ts';
 import { type UserDto } from './schemas/userSchema.ts';
 import {
   verifyUserEmailSchema,
@@ -219,15 +219,16 @@ export class UserHttpController implements HttpController {
   private async registerCandidate(
     request: HttpRequest<RegisterCandidateRequestBody>,
   ): Promise<HttpCreatedResponse<RegisterCandidateResponseBody>> {
-    const { email, password, firstName, lastName, birthDate, phone } = request.body;
+    const { email, password, firstName, lastName, githubUrl, linkedinUrl, resumeUrl } = request.body;
 
     const { candidate } = await this.registerCandidateAction.execute({
       email,
       password,
       firstName,
       lastName,
-      birthDate: new Date(birthDate),
-      phone,
+      githubUrl,
+      linkedinUrl,
+      resumeUrl,
     });
 
     return {
@@ -347,7 +348,7 @@ export class UserHttpController implements HttpController {
   ): Promise<HttpOkResponse<UpdateCandidateResponseBody>> {
     const { candidateId } = request.pathParams;
 
-    const { firstName, lastName, birthDate, phone, isDeleted } = request.body;
+    const { firstName, lastName, githubUrl, linkedinUrl, resumeUrl, isDeleted } = request.body;
 
     await this.accessControlService.verifyBearerToken({
       requestHeaders: request.headers,
@@ -358,8 +359,9 @@ export class UserHttpController implements HttpController {
       id: candidateId,
       firstName,
       lastName,
-      birthDate: birthDate ? new Date(birthDate) : undefined,
-      phone,
+      githubUrl,
+      linkedinUrl,
+      resumeUrl,
       isDeleted,
     });
 
@@ -471,44 +473,73 @@ export class UserHttpController implements HttpController {
       return this.mapCompanyToDto(user);
     }
 
+    const { email, isEmailVerified, createdAt, isDeleted, role } = user.getUserState();
+
     return {
       id: user.getId(),
-      email: user.getEmail(),
-      isEmailVerified: user.getIsEmailVerified(),
-      isDeleted: user.getIsDeleted(),
-      role: user.getRole(),
-      createdAt: user.getCreatedAt().toISOString(),
+      email,
+      isEmailVerified,
+      isDeleted,
+      role,
+      createdAt: createdAt.toISOString(),
     };
   }
 
   private mapCandidateToDto(candidate: Candidate): CandidateDto {
-    return {
+    const {
+      email,
+      isEmailVerified,
+      isDeleted,
+      role,
+      createdAt,
+      firstName,
+      lastName,
+      githubUrl,
+      linkedinUrl,
+      resumeUrl,
+    } = candidate.getState();
+
+    const candidateDto: CandidateDto = {
       id: candidate.getId(),
-      email: candidate.getEmail(),
-      isEmailVerified: candidate.getIsEmailVerified(),
-      isDeleted: candidate.getIsDeleted(),
-      role: candidate.getRole(),
-      createdAt: candidate.getCreatedAt().toISOString(),
-      firstName: candidate.getFirstName(),
-      lastName: candidate.getLastName(),
-      birthDate: candidate.getBirthDate().toISOString(),
-      phone: candidate.getPhone(),
+      email,
+      isEmailVerified,
+      isDeleted,
+      role,
+      createdAt: createdAt.toISOString(),
+      firstName,
+      lastName,
     };
+
+    if (githubUrl) {
+      candidateDto.githubUrl = githubUrl;
+    }
+
+    if (linkedinUrl) {
+      candidateDto.linkedinUrl = linkedinUrl;
+    }
+
+    if (resumeUrl) {
+      candidateDto.resumeUrl = resumeUrl;
+    }
+
+    return candidateDto;
   }
 
   private mapCompanyToDto(company: Company): CompanyDto {
+    const { email, isEmailVerified, isDeleted, createdAt, description, logoUrl, name, phone, role } =
+      company.getState();
+
     return {
       id: company.getId(),
-      email: company.getEmail(),
-      isEmailVerified: company.getIsEmailVerified(),
-      isDeleted: company.getIsDeleted(),
-      role: company.getRole(),
-      createdAt: company.getCreatedAt().toISOString(),
-      name: company.getName(),
-      description: company.getDescription(),
-      phone: company.getPhone(),
-      isVerified: company.getIsVerified(),
-      logoUrl: company.getLogoUrl(),
+      email,
+      isEmailVerified,
+      isDeleted,
+      role,
+      createdAt: createdAt.toISOString(),
+      name,
+      description,
+      phone,
+      logoUrl,
     };
   }
 }

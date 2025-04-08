@@ -14,22 +14,18 @@ export const lastNameSchema = Type.String({
   maxLength: 64,
 });
 
-export const candidatePhoneSchema = Type.String({
-  minLength: 1,
-  maxLength: 20,
-});
-
 export const candidateSchema = Type.Object({
   id: Type.String({ format: 'uuid' }),
   email: emailSchema,
   isEmailVerified: Type.Boolean(),
   isDeleted: Type.Boolean(),
-  role: Type.Union([...Object.values(userRoles).map((role) => Type.Literal(role as UserRole))]),
+  role: Type.Union(Object.values(userRoles).map((role) => Type.Literal(role as UserRole))),
   createdAt: Type.String({ format: 'date-time' }),
   firstName: firstNameSchema,
   lastName: lastNameSchema,
-  birthDate: Type.String({ format: 'date' }),
-  phone: candidatePhoneSchema,
+  resumeUrl: Type.Optional(Type.String({ minLength: 1 })),
+  githubUrl: Type.Optional(Type.String({ minLength: 1 })),
+  linkedinUrl: Type.Optional(Type.String({ minLength: 1 })),
 });
 
 export type CandidateDto = Static<typeof candidateSchema>;

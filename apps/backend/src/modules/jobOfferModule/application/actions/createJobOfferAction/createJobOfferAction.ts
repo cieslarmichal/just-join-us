@@ -6,6 +6,13 @@ export interface CreateJobOfferActionPayload {
   readonly description: string;
   readonly categoryId: string;
   readonly companyId: string;
+  readonly employmentType: string;
+  readonly workingTime: string;
+  readonly experienceLevel: string;
+  readonly minSalary: number;
+  readonly maxSalary: number;
+  readonly skillIds: string[];
+  readonly locationIds: string[];
 }
 
 export interface CreateJobOfferActionResult {

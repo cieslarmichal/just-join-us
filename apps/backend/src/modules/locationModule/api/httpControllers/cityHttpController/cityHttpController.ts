@@ -37,11 +37,10 @@ export class CityHttpController implements HttpController {
   private async findCities(
     request: HttpRequest<undefined, FindCitiesQueryParams>,
   ): Promise<HttpOkResponse<FindCitiesResponseBody>> {
-    const { name, type, page = 1, pageSize = 10 } = request.queryParams;
+    const { name, page = 1, pageSize = 10 } = request.queryParams;
 
     const { data, total } = await this.findCitiesAction.execute({
       name,
-      type,
       page,
       pageSize,
     });

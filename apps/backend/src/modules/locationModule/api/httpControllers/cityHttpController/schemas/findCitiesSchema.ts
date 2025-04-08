@@ -7,7 +7,6 @@ import { citySchema } from './citySchema.ts';
 
 export const findCitiesQueryParamsSchema = Type.Object({
   name: Type.Optional(Type.String({ minLength: 1 })),
-  type: Type.Optional(Type.String({ minLength: 1 })),
   page: Type.Optional(Type.Integer({ minimum: 1 })),
   pageSize: Type.Optional(Type.Integer({ minimum: 1 })),
 });

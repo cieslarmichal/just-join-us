@@ -15,8 +15,9 @@ export interface FindLocationPayload {
 }
 
 export interface FindLocationsPayload {
+  readonly ids?: string[] | undefined;
   readonly name?: string | undefined;
-  readonly companyId: string;
+  readonly companyId?: string | undefined;
   readonly isRemote?: boolean | undefined;
 }
 

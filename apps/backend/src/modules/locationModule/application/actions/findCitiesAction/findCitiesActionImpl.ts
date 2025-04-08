@@ -14,11 +14,11 @@ export class FindCitiesActionImpl implements FindCitiesAction {
   }
 
   public async execute(payload: FindCitiesActionPayload): Promise<FindCitiesActionResult> {
-    const { name, type, page, pageSize } = payload;
+    const { name, page, pageSize } = payload;
 
     const [categories, total] = await Promise.all([
-      this.cityRepository.findCities({ name, type, page, pageSize }),
-      this.cityRepository.countCities({ name, type }),
+      this.cityRepository.findCities({ name, page, pageSize }),
+      this.cityRepository.countCities({ name }),
     ]);
 
     return { data: categories, total };

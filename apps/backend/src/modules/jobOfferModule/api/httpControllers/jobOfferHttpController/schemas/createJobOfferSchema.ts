@@ -10,6 +10,13 @@ const createJobOfferRequestBodySchema = Type.Object({
   description: jobOfferDescriptionSchema,
   categoryId: Type.String({ format: 'uuid' }),
   companyId: Type.String({ format: 'uuid' }),
+  employmentType: Type.String({ minLength: 1 }),
+  workingTime: Type.String({ minLength: 1 }),
+  experienceLevel: Type.String({ minLength: 1 }),
+  minSalary: Type.Number({ minimum: 1 }),
+  maxSalary: Type.Number({ minimum: 1 }),
+  skillIds: Type.Array(Type.String({ format: 'uuid' })),
+  locationIds: Type.Array(Type.String({ format: 'uuid' })),
 });
 
 export type CreateJobOfferRequestBody = Static<typeof createJobOfferRequestBodySchema>;

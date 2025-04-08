@@ -6,11 +6,13 @@ import { TestContainer } from '../../../../../../tests/testContainer.ts';
 import { OperationNotValidError } from '../../../../../common/errors/operationNotValidError.ts';
 import { databaseSymbols } from '../../../../databaseModule/symbols.ts';
 import type { DatabaseClient } from '../../../../databaseModule/types/databaseClient.ts';
+import type { LocationTestUtils } from '../../../../locationModule/tests/utils/locationTestUtils/locationTestUtils.ts';
 import type { CompanyTestUtils } from '../../../../userModule/tests/utils/companyTestUtils/companyTestUtils.ts';
 import { JobOffer } from '../../../domain/entities/jobOffer/jobOffer.ts';
 import { symbols } from '../../../symbols.ts';
 import type { CategoryTestUtils } from '../../../tests/utils/categoryTestUtils/categoryTestUtils.ts';
 import type { JobOfferTestUtils } from '../../../tests/utils/jobOfferTestUtils/jobOfferTestUtils.ts';
+import type { SkillTestUtils } from '../../../tests/utils/skillTestUtils/skillTestUtils.ts';
 
 import { type UpdateJobOfferAction } from './updateJobOfferAction.ts';
 
@@ -21,6 +23,8 @@ describe('UpdateJobOfferActionImpl', () => {
 
   let companyTestUtils: CompanyTestUtils;
   let categoryTestUtils: CategoryTestUtils;
+  let locationTestUtils: LocationTestUtils;
+  let skillTestUtils: SkillTestUtils;
   let jobOfferTestUtils: JobOfferTestUtils;
 
   beforeEach(async () => {
@@ -31,17 +35,23 @@ describe('UpdateJobOfferActionImpl', () => {
     databaseClient = container.get<DatabaseClient>(databaseSymbols.databaseClient);
 
     jobOfferTestUtils = container.get<JobOfferTestUtils>(testSymbols.jobOfferTestUtils);
+    skillTestUtils = container.get<SkillTestUtils>(testSymbols.skillTestUtils);
+    locationTestUtils = container.get<LocationTestUtils>(testSymbols.locationTestUtils);
     companyTestUtils = container.get<CompanyTestUtils>(testSymbols.companyTestUtils);
     categoryTestUtils = container.get<CategoryTestUtils>(testSymbols.categoryTestUtils);
 
     await categoryTestUtils.truncate();
     await companyTestUtils.truncate();
+    await skillTestUtils.truncate();
+    await locationTestUtils.truncate();
     await jobOfferTestUtils.truncate();
   });
 
   afterEach(async () => {
     await categoryTestUtils.truncate();
     await companyTestUtils.truncate();
+    await skillTestUtils.truncate();
+    await locationTestUtils.truncate();
     await jobOfferTestUtils.truncate();
 
     await databaseClient.destroy();
@@ -50,8 +60,14 @@ describe('UpdateJobOfferActionImpl', () => {
   it('updates JobOffer data', async () => {
     const category = await categoryTestUtils.createAndPersist();
     const company = await companyTestUtils.createAndPersist();
+    const skill = await skillTestUtils.createAndPersist();
+    const location = await locationTestUtils.createAndPersist({ input: { company_id: company.id, is_remote: true } });
     const jobOfferRawEntity = await jobOfferTestUtils.createAndPersist({
-      input: { category_id: category.id, company_id: company.id },
+      input: {
+        jobOffer: { category_id: category.id, company_id: company.id },
+        skillIds: [skill.id],
+        locationIds: [location.id],
+      },
     });
 
     const jobOffer = new JobOffer({
@@ -62,12 +78,38 @@ describe('UpdateJobOfferActionImpl', () => {
       companyId: jobOfferRawEntity.company_id,
       isHidden: jobOfferRawEntity.is_hidden,
       createdAt: jobOfferRawEntity.created_at,
+      employmentType: jobOfferRawEntity.employment_type,
+      workingTime: jobOfferRawEntity.working_time,
+      experienceLevel: jobOfferRawEntity.experience_level,
+      minSalary: jobOfferRawEntity.min_salary,
+      maxSalary: jobOfferRawEntity.max_salary,
+      locations: [
+        {
+          id: location.id,
+          isRemote: location.is_remote,
+        },
+      ],
+      skills: [
+        {
+          id: skill.id,
+          name: skill.name,
+        },
+      ],
     });
 
     const updatedIsHidden = Generator.boolean();
     const updatedName = Generator.jobOfferName();
     const updatedDescription = Generator.jobOfferDescription();
     const updatedCategory = await categoryTestUtils.createAndPersist();
+    const updatedSkill = await skillTestUtils.createAndPersist();
+    const updatedLocation = await locationTestUtils.createAndPersist({
+      input: { company_id: company.id },
+    });
+    const updatedEmploymentType = Generator.employmentType();
+    const updatedWorkingTime = Generator.workingTime();
+    const updatedExperienceLevel = Generator.experienceLevel();
+    const updatedMinSalary = Generator.minSalary();
+    const updatedMaxSalary = Generator.maxSalary();
 
     const { jobOffer: updatedJobOffer } = await action.execute({
       id: jobOffer.getId(),
@@ -75,6 +117,13 @@ describe('UpdateJobOfferActionImpl', () => {
       description: updatedDescription,
       isHidden: updatedIsHidden,
       categoryId: updatedCategory.id,
+      employmentType: updatedEmploymentType,
+      workingTime: updatedWorkingTime,
+      experienceLevel: updatedExperienceLevel,
+      minSalary: updatedMinSalary,
+      maxSalary: updatedMaxSalary,
+      skillIds: [updatedSkill.id],
+      locationIds: [updatedLocation.id],
     });
 
     const foundJobOffer = await jobOfferTestUtils.findById({ id: jobOffer.getId() });
@@ -84,10 +133,32 @@ describe('UpdateJobOfferActionImpl', () => {
       description: updatedDescription,
       isHidden: updatedIsHidden,
       categoryId: updatedCategory.id,
-      companyId: jobOfferRawEntity.company_id,
-      createdAt: jobOfferRawEntity.created_at,
       category: { name: updatedCategory.name },
+      companyId: jobOfferRawEntity.company_id,
       company: { name: company.name, logoUrl: company.logo_url },
+      createdAt: jobOfferRawEntity.created_at,
+      employmentType: updatedEmploymentType,
+      experienceLevel: updatedExperienceLevel,
+      minSalary: updatedMinSalary,
+      maxSalary: updatedMaxSalary,
+      workingTime: updatedWorkingTime,
+      skills: [
+        {
+          id: updatedSkill.id,
+          name: updatedSkill.name,
+        },
+      ],
+      locations: [
+        {
+          id: updatedLocation.id,
+          isRemote: updatedLocation.is_remote,
+          city: updatedLocation.city_id,
+          address: updatedLocation.address,
+          latitude: updatedLocation.latitude,
+          longitude: updatedLocation.longitude,
+          name: updatedLocation.name,
+        },
+      ],
     });
 
     expect(foundJobOffer).toEqual({
@@ -98,6 +169,11 @@ describe('UpdateJobOfferActionImpl', () => {
       category_id: updatedCategory.id,
       company_id: jobOfferRawEntity.company_id,
       created_at: jobOfferRawEntity.created_at,
+      employment_type: updatedEmploymentType,
+      experience_level: updatedExperienceLevel,
+      min_salary: updatedMinSalary,
+      max_salary: updatedMaxSalary,
+      working_time: updatedWorkingTime,
     });
   });
 
@@ -128,8 +204,14 @@ describe('UpdateJobOfferActionImpl', () => {
   it('throws an error - when a Category with given id not found', async () => {
     const category = await categoryTestUtils.createAndPersist();
     const company = await companyTestUtils.createAndPersist();
+    const skill = await skillTestUtils.createAndPersist();
+    const location = await locationTestUtils.createAndPersist({ input: { company_id: company.id, is_remote: true } });
     const jobOfferRawEntity = await jobOfferTestUtils.createAndPersist({
-      input: { category_id: category.id, company_id: company.id },
+      input: {
+        jobOffer: { category_id: category.id, company_id: company.id },
+        skillIds: [skill.id],
+        locationIds: [location.id],
+      },
     });
 
     const categoryId = Generator.uuid();
@@ -145,6 +227,74 @@ describe('UpdateJobOfferActionImpl', () => {
       expect((error as OperationNotValidError).context).toMatchObject({
         reason: 'Category not found.',
         id: categoryId,
+      });
+
+      return;
+    }
+
+    expect.fail();
+  });
+
+  it('throws an error - when a Skill with given id not found', async () => {
+    const category = await categoryTestUtils.createAndPersist();
+    const company = await companyTestUtils.createAndPersist();
+    const skill = await skillTestUtils.createAndPersist();
+    const location = await locationTestUtils.createAndPersist({ input: { company_id: company.id, is_remote: true } });
+    const jobOfferRawEntity = await jobOfferTestUtils.createAndPersist({
+      input: {
+        jobOffer: { category_id: category.id, company_id: company.id },
+        skillIds: [skill.id],
+        locationIds: [location.id],
+      },
+    });
+
+    const skillId = Generator.uuid();
+
+    try {
+      await action.execute({
+        id: jobOfferRawEntity.id,
+        skillIds: [skillId],
+      });
+    } catch (error) {
+      expect(error).toBeInstanceOf(OperationNotValidError);
+
+      expect((error as OperationNotValidError).context).toMatchObject({
+        reason: 'Some skills not found.',
+        ids: [skillId],
+      });
+
+      return;
+    }
+
+    expect.fail();
+  });
+
+  it('throws an error - when a Location with given id not found', async () => {
+    const category = await categoryTestUtils.createAndPersist();
+    const company = await companyTestUtils.createAndPersist();
+    const skill = await skillTestUtils.createAndPersist();
+    const location = await locationTestUtils.createAndPersist({ input: { company_id: company.id, is_remote: true } });
+    const jobOfferRawEntity = await jobOfferTestUtils.createAndPersist({
+      input: {
+        jobOffer: { category_id: category.id, company_id: company.id },
+        skillIds: [skill.id],
+        locationIds: [location.id],
+      },
+    });
+
+    const locationId = Generator.uuid();
+
+    try {
+      await action.execute({
+        id: jobOfferRawEntity.id,
+        locationIds: [locationId],
+      });
+    } catch (error) {
+      expect(error).toBeInstanceOf(OperationNotValidError);
+
+      expect((error as OperationNotValidError).context).toMatchObject({
+        reason: 'Some locations not found.',
+        ids: [locationId],
       });
 
       return;

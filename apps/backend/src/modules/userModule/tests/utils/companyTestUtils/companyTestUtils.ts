@@ -63,7 +63,6 @@ export class CompanyTestUtils extends TestUtils {
         companiesTable.columns.phone,
         companiesTable.columns.description,
         companiesTable.columns.logo_url,
-        companiesTable.columns.is_verified,
       ])
       .join(usersTable.name, companiesTable.columns.id, '=', usersTable.columns.id)
       .where(usersTable.columns.id, id)
@@ -86,7 +85,6 @@ export class CompanyTestUtils extends TestUtils {
         companiesTable.columns.phone,
         companiesTable.columns.description,
         companiesTable.columns.logo_url,
-        companiesTable.columns.is_verified,
       ])
       .join(usersTable.name, companiesTable.columns.id, '=', usersTable.columns.id)
       .where(companiesTable.columns.name, name)

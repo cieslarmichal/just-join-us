@@ -94,13 +94,32 @@ export class JobOfferHttpController implements HttpController {
   ): Promise<HttpCreatedResponse<CreateJobOfferResponseBody>> {
     await this.accessControlService.verifyBearerToken({ requestHeaders: request.headers });
 
-    const { name, description, categoryId, companyId } = request.body;
+    const {
+      name,
+      description,
+      categoryId,
+      companyId,
+      employmentType,
+      experienceLevel,
+      locationIds,
+      maxSalary,
+      minSalary,
+      skillIds,
+      workingTime,
+    } = request.body;
 
     const { jobOffer } = await this.createJobOfferAction.execute({
       name,
       description,
       categoryId,
       companyId,
+      employmentType,
+      experienceLevel,
+      locationIds,
+      maxSalary,
+      minSalary,
+      skillIds,
+      workingTime,
     });
 
     return {
@@ -158,7 +177,19 @@ export class JobOfferHttpController implements HttpController {
 
     const { jobOfferId } = request.pathParams;
 
-    const { name, description, categoryId, isHidden } = request.body;
+    const {
+      name,
+      description,
+      categoryId,
+      isHidden,
+      employmentType,
+      experienceLevel,
+      locationIds,
+      maxSalary,
+      minSalary,
+      skillIds,
+      workingTime,
+    } = request.body;
 
     const { jobOffer } = await this.updateJobOfferAction.execute({
       id: jobOfferId,
@@ -166,6 +197,13 @@ export class JobOfferHttpController implements HttpController {
       description,
       categoryId,
       isHidden,
+      employmentType,
+      experienceLevel,
+      locationIds,
+      maxSalary,
+      minSalary,
+      skillIds,
+      workingTime,
     });
 
     return {
@@ -175,7 +213,23 @@ export class JobOfferHttpController implements HttpController {
   }
 
   private mapJobOfferToDto(jobOffer: JobOffer): JobOfferDto {
-    const { name, description, isHidden, categoryId, category, companyId, company, createdAt } = jobOffer.getState();
+    const {
+      name,
+      description,
+      isHidden,
+      categoryId,
+      category,
+      companyId,
+      company,
+      createdAt,
+      employmentType,
+      experienceLevel,
+      maxSalary,
+      minSalary,
+      workingTime,
+      locations,
+      skills,
+    } = jobOffer.getState();
 
     const jobOfferDto: JobOfferDto = {
       id: jobOffer.getId(),
@@ -185,6 +239,18 @@ export class JobOfferHttpController implements HttpController {
       categoryId,
       companyId,
       createdAt: createdAt.toISOString(),
+      employmentType,
+      experienceLevel,
+      minSalary,
+      maxSalary,
+      workingTime,
+      skills: skills || [],
+      locations:
+        locations?.map((location) => ({
+          id: location.id,
+          isRemote: location.isRemote,
+          ...(location.city ? { city: location.city } : {}),
+        })) || [],
     };
 
     if (category) {

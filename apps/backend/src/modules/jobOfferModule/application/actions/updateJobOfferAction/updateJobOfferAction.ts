@@ -7,6 +7,13 @@ export interface UpdateJobOfferActionPayload {
   readonly description?: string | undefined;
   readonly categoryId?: string | undefined;
   readonly isHidden?: boolean | undefined;
+  readonly employmentType?: string | undefined;
+  readonly workingTime?: string | undefined;
+  readonly experienceLevel?: string | undefined;
+  readonly minSalary?: number | undefined;
+  readonly maxSalary?: number | undefined;
+  readonly skillIds?: string[] | undefined;
+  readonly locationIds?: string[] | undefined;
 }
 
 export interface UpdateJobOfferEventActionResult {

@@ -5,6 +5,7 @@ import {
   logoUrlSchema,
 } from '../../../../../userModule/api/httpControllers/userHttpController/schemas/companySchema.ts';
 import { categoryNameSchema } from '../../categoryHttpController/schemas/categorySchema.ts';
+import { skillSchema } from '../../skillHttpController/schemas/skillSchema.ts';
 
 export const jobOfferNameSchema = Type.String({
   minLength: 3,
@@ -35,6 +36,21 @@ export const jobOfferSchema = Type.Object({
     }),
   ),
   createdAt: Type.String({ format: 'date-time' }),
+  employmentType: Type.String({ minLength: 1 }),
+  workingTime: Type.String({ minLength: 1 }),
+  experienceLevel: Type.String({ minLength: 1 }),
+  minSalary: Type.Number({ minimum: 1 }),
+  maxSalary: Type.Number({ minimum: 1 }),
+  skills: Type.Optional(Type.Array(skillSchema)),
+  locations: Type.Optional(
+    Type.Array(
+      Type.Object({
+        id: Type.String({ format: 'uuid' }),
+        isRemote: Type.Boolean(),
+        city: Type.Optional(Type.String()),
+      }),
+    ),
+  ),
 });
 
 export type JobOfferDto = Static<typeof jobOfferSchema>;

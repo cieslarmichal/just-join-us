@@ -29,6 +29,11 @@ export interface JobOfferRawEntityExtended {
   readonly company_id: string;
   readonly company_name: string;
   readonly company_logo_url: string;
-  readonly skills?: (string | null)[];
-  readonly locations?: (string | null)[];
+
+  readonly skill_ids?: (string | null)[];
+  readonly skill_names?: (string | null)[];
+
+  readonly location_ids?: (string | null)[];
+  readonly location_is_remote?: (boolean | null)[];
+  readonly location_cities?: (string | null)[];
 }

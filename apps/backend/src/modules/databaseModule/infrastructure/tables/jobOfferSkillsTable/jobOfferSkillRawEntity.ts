@@ -1,5 +1,5 @@
 export interface JobOfferSkillRawEntity {
   readonly id: string;
-  readonly skillId: string;
-  readonly jobOfferId: string;
+  readonly skill_id: string;
+  readonly job_offer_id: string;
 }

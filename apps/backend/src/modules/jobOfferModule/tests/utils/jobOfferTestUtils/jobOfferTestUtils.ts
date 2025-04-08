@@ -1,11 +1,21 @@
+import { Generator } from '../../../../../../tests/generator.ts';
 import { TestUtils } from '../../../../../../tests/testUtils.ts';
+import type { JobOfferLocationRawEntity } from '../../../../databaseModule/infrastructure/tables/jobOfferLocationsTable/jobOfferLocationRawEntity.ts';
+import { jobOfferLocationsTable } from '../../../../databaseModule/infrastructure/tables/jobOfferLocationsTable/jobOfferLocationsTable.ts';
+import type { JobOfferSkillRawEntity } from '../../../../databaseModule/infrastructure/tables/jobOfferSkillsTable/jobOfferSkillRawEntity.ts';
+import { jobOfferSkillsTable } from '../../../../databaseModule/infrastructure/tables/jobOfferSkillsTable/jobOfferSkillsTable.ts';
 import type { JobOfferRawEntity } from '../../../../databaseModule/infrastructure/tables/jobOffersTable/jobOfferRawEntity.ts';
 import { jobOffersTable } from '../../../../databaseModule/infrastructure/tables/jobOffersTable/jobOffersTable.ts';
 import type { DatabaseClient } from '../../../../databaseModule/types/databaseClient.ts';
+import type { Transaction } from '../../../../databaseModule/types/transaction.ts';
 import { JobOfferTestFactory } from '../../factories/jobOfferTestFactory/jobOfferTestFactory.ts';
 
 interface CreateAndPersistPayload {
-  readonly input?: Partial<JobOfferRawEntity>;
+  readonly input?: {
+    readonly jobOffer?: Partial<JobOfferRawEntity>;
+    readonly skillIds?: string[] | undefined;
+    readonly locationIds?: string[] | undefined;
+  };
 }
 
 interface FindByNamePayload {
@@ -27,9 +37,35 @@ export class JobOfferTestUtils extends TestUtils {
   public async createAndPersist(payload: CreateAndPersistPayload = {}): Promise<JobOfferRawEntity> {
     const { input } = payload;
 
-    const jobOffer = this.jobOfferTestFactory.createRaw(input);
+    const jobOffer = this.jobOfferTestFactory.createRaw(input?.jobOffer);
 
-    const rawEntities = await this.databaseClient<JobOfferRawEntity>(jobOffersTable.name).insert(jobOffer, '*');
+    let rawEntities: JobOfferRawEntity[] = [];
+
+    await this.databaseClient.transaction(async (transaction: Transaction) => {
+      rawEntities = await transaction<JobOfferRawEntity>(jobOffersTable.name).insert(jobOffer, '*');
+
+      if (input?.skillIds) {
+        await transaction.batchInsert<JobOfferSkillRawEntity>(
+          jobOfferSkillsTable.name,
+          input.skillIds.map((skillId) => ({
+            id: Generator.uuid(),
+            job_offer_id: jobOffer.id,
+            skill_id: skillId,
+          })),
+        );
+      }
+
+      if (input?.locationIds) {
+        await transaction.batchInsert<JobOfferLocationRawEntity>(
+          jobOfferLocationsTable.name,
+          input.locationIds.map((locationId) => ({
+            id: Generator.uuid(),
+            company_location_id: locationId,
+            job_offer_id: jobOffer.id,
+          })),
+        );
+      }
+    });
 
     const rawEntity = rawEntities[0] as JobOfferRawEntity;
 

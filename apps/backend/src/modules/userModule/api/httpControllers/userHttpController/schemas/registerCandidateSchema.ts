@@ -3,7 +3,7 @@ import { type Static, Type } from '@sinclair/typebox';
 import { type HttpRouteSchema } from '../../../../../../common/http/httpRoute.ts';
 import { httpStatusCodes } from '../../../../../../common/http/httpStatusCode.ts';
 
-import { firstNameSchema, lastNameSchema, candidateSchema, candidatePhoneSchema } from './candidateSchema.ts';
+import { firstNameSchema, lastNameSchema, candidateSchema } from './candidateSchema.ts';
 import { emailSchema, passwordSchema } from './userSchema.ts';
 
 const registerCandidateRequestBodySchema = Type.Object({
@@ -11,8 +11,9 @@ const registerCandidateRequestBodySchema = Type.Object({
   password: passwordSchema,
   firstName: firstNameSchema,
   lastName: lastNameSchema,
-  birthDate: Type.String({ format: 'date' }),
-  phone: candidatePhoneSchema,
+  resumeUrl: Type.Optional(Type.String({ minLength: 1 })),
+  githubUrl: Type.Optional(Type.String({ minLength: 1 })),
+  linkedinUrl: Type.Optional(Type.String({ minLength: 1 })),
 });
 
 export type RegisterCandidateRequestBody = Static<typeof registerCandidateRequestBodySchema>;

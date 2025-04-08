@@ -61,8 +61,9 @@ export class CandidateTestUtils extends TestUtils {
         usersTable.allColumns,
         candidatesTable.columns.first_name,
         candidatesTable.columns.last_name,
-        candidatesTable.columns.birth_date,
-        candidatesTable.columns.phone,
+        candidatesTable.columns.github_url,
+        candidatesTable.columns.linkedin_url,
+        candidatesTable.columns.resume_url,
       ])
       .join(usersTable.name, candidatesTable.columns.id, '=', usersTable.columns.id)
       .where(usersTable.columns.id, id)
@@ -85,8 +86,9 @@ export class CandidateTestUtils extends TestUtils {
         usersTable.allColumns,
         candidatesTable.columns.first_name,
         candidatesTable.columns.last_name,
-        candidatesTable.columns.birth_date,
-        candidatesTable.columns.phone,
+        candidatesTable.columns.github_url,
+        candidatesTable.columns.linkedin_url,
+        candidatesTable.columns.resume_url,
       ])
       .join(usersTable.name, candidatesTable.columns.id, '=', usersTable.columns.id)
       .where(usersTable.columns.email, email)

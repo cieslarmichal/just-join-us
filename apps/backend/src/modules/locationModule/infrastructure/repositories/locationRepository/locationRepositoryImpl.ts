@@ -123,7 +123,7 @@ export class LocationRepositoryImpl implements LocationRepository {
   }
 
   public async findLocations(payload: FindLocationsPayload): Promise<Location[]> {
-    const { name, companyId, isRemote } = payload;
+    const { name, companyId, isRemote, ids } = payload;
 
     let rawEntities: CompanyLocationRawEntity[];
 
@@ -141,6 +141,10 @@ export class LocationRepositoryImpl implements LocationRepository {
 
       if (name) {
         query.whereRaw(`${companiesLocationsTable.columns.name} ILIKE ?`, `%${name}%`);
+      }
+
+      if (ids?.length) {
+        query.whereIn(companiesLocationsTable.columns.id, ids);
       }
 
       if (companyId) {

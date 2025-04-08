@@ -9,7 +9,7 @@ export const jobOfferSkillsTable: DatabaseTable<JobOfferSkillRawEntity, typeof t
   allColumns: `${tableName}.*`,
   columns: {
     id: `${tableName}.id`,
-    jobOfferId: `${tableName}.jobOfferId`,
-    skillId: `${tableName}.skillId`,
+    job_offer_id: `${tableName}.job_offer_id`,
+    skill_id: `${tableName}.skill_id`,
   },
 };

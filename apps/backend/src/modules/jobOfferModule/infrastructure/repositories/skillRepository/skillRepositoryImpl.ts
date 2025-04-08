@@ -76,7 +76,7 @@ export class SkillRepositoryImpl implements SkillRepository {
   }
 
   public async findSkills(payload: FindSkillsPayload): Promise<Skill[]> {
-    const { name, page, pageSize } = payload;
+    const { name, page, pageSize, ids } = payload;
 
     let rawEntities: SkillRawEntity[];
 
@@ -85,6 +85,10 @@ export class SkillRepositoryImpl implements SkillRepository {
 
       if (name) {
         query.whereRaw(`${skillsTable.columns.name} ILIKE ?`, `%${name}%`);
+      }
+
+      if (ids?.length) {
+        query.whereIn(skillsTable.columns.id, ids);
       }
 
       rawEntities = await query
