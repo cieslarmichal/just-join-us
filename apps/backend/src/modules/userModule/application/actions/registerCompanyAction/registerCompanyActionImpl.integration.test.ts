@@ -63,7 +63,6 @@ describe('RegisterCompanyAction', () => {
       name: company.getName(),
       phone: company.getPhone(),
       description: company.getDescription(),
-      isVerified: false,
       createdAt: expect.any(Date),
       logoUrl: company.getLogoUrl(),
     });
@@ -78,7 +77,6 @@ describe('RegisterCompanyAction', () => {
       name: company.getName(),
       phone: company.getPhone(),
       description: company.getDescription(),
-      is_verified: false,
       logo_url: company.getLogoUrl(),
       created_at: expect.any(Date),
     });

@@ -65,7 +65,7 @@ export class RegisterCandidateActionImpl implements RegisterCandidateAction {
       data: {
         email,
         password: hashedPassword,
-        isEmailVerified: true,
+        isEmailVerified: false,
         isDeleted: false,
         role: userRoles.candidate,
         firstName,

@@ -27,7 +27,7 @@ import type { JobOfferHttpController } from '../modules/jobOfferModule/api/httpC
 import type { SkillHttpController } from '../modules/jobOfferModule/api/httpControllers/skillHttpController/skillHttpController.ts';
 import { jobOfferSymbols } from '../modules/jobOfferModule/symbols.ts';
 import type { CityHttpController } from '../modules/locationModule/api/httpControllers/cityHttpController/cityHttpController.ts';
-import type { LocationHttpController } from '../modules/locationModule/api/httpControllers/locationHttpController/locationHttpController.ts';
+import type { CompanyLocationHttpController } from '../modules/locationModule/api/httpControllers/companyLocationHttpController/companyLocationHttpController.ts';
 import { locationSymbols } from '../modules/locationModule/symbols.ts';
 import { type UserHttpController } from '../modules/userModule/api/httpControllers/userHttpController/userHttpController.ts';
 import { userSymbols } from '../modules/userModule/symbols.ts';
@@ -62,7 +62,7 @@ export class HttpServer {
       this.container.get<CategoryHttpController>(jobOfferSymbols.categoryHttpController),
       this.container.get<SkillHttpController>(jobOfferSymbols.skillHttpController),
       this.container.get<CityHttpController>(locationSymbols.cityHttpController),
-      this.container.get<LocationHttpController>(locationSymbols.locationHttpController),
+      this.container.get<CompanyLocationHttpController>(locationSymbols.companyLocationHttpController),
     ];
   }
 

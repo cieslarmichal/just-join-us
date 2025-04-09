@@ -3,18 +3,18 @@ export const symbols = {
   cityRepository: Symbol('cityRepository'),
   findCitiesAction: Symbol('findCitiesAction'),
 
-  locationMapper: Symbol('locationMapper'),
-  locationRepository: Symbol('locationRepository'),
-  createLocationAction: Symbol('createLocationAction'),
-  createRemoteLocationAction: Symbol('createRemoteLocationAction'),
-  updateLocationAction: Symbol('updateLocationAction'),
+  companyLocationMapper: Symbol('companyLocationMapper'),
+  companyLocationRepository: Symbol('companyLocationRepository'),
+  createCompanyLocationAction: Symbol('createCompanyLocationAction'),
+  createRemoteCompanyLocationAction: Symbol('createRemoteCompanyLocationAction'),
+  updateCompanyLocationAction: Symbol('updateCompanyLocationAction'),
 
-  locationHttpController: Symbol('locationHttpController'),
+  companyLocationHttpController: Symbol('companyLocationHttpController'),
   cityHttpController: Symbol('cityHttpController'),
 };
 
 export const locationSymbols = {
-  locationHttpController: symbols.locationHttpController,
+  companyLocationHttpController: symbols.companyLocationHttpController,
   cityHttpController: symbols.cityHttpController,
-  locationRepository: symbols.locationRepository,
+  companyLocationRepository: symbols.companyLocationRepository,
 };

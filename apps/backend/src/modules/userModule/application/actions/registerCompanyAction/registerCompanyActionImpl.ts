@@ -64,7 +64,7 @@ export class RegisterCompanyActionImpl implements RegisterCompanyAction {
       data: {
         email,
         password: hashedPassword,
-        isEmailVerified: true,
+        isEmailVerified: false,
         isDeleted: false,
         role: userRoles.company,
         name,

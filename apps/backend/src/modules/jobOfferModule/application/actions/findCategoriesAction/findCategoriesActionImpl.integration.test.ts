@@ -35,16 +35,16 @@ describe('FindCategoriesAction', () => {
   });
 
   it('finds all categories', async () => {
-    const category1 = await categoryTestUtils.createAndPersist({ input: { name: 'Java' } });
+    const category1 = await categoryTestUtils.createAndPersist({ input: { name: 'C++' } });
     const category2 = await categoryTestUtils.createAndPersist({ input: { name: 'Go' } });
-    const category3 = await categoryTestUtils.createAndPersist({ input: { name: 'C++' } });
+    const category3 = await categoryTestUtils.createAndPersist({ input: { name: 'Java' } });
 
     const { data: categories, total } = await action.execute({ page: 1, pageSize: 10 });
 
     expect(categories).toHaveLength(3);
     expect(categories[0]?.getId()).toBe(category1.id);
-    expect(categories[1]?.getId()).toBe(category3.id);
-    expect(categories[2]?.getId()).toBe(category2.id);
+    expect(categories[1]?.getId()).toBe(category2.id);
+    expect(categories[2]?.getId()).toBe(category3.id);
     expect(total).toBe(3);
   });
 

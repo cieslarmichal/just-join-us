@@ -14,21 +14,21 @@ export class M2CreateCompaniesLocationsTableMigration implements Migration {
 
       table.string('name', 64).notNullable();
 
-      table.string('address', 64).nullable();
+      table.boolean('is_remote').notNullable();
 
-      table.specificType('geolocation', 'geometry(point, 4326)').notNullable();
+      table.string('address', 64);
+
+      table.specificType('geolocation', 'geometry(point, 4326)');
 
       table.uuid('city_id').references('id').inTable('cities').onDelete('CASCADE');
 
       table.uuid('company_id').references('id').inTable('companies').onDelete('CASCADE');
 
-      table.boolean('is_remote').notNullable();
-
       table.unique(['company_id', 'name']);
     });
 
     await databaseClient.raw(
-      'CREATE INDEX IF NOT EXISTS location_events_geolocation_index ON location_events USING gist (geolocation);',
+      'CREATE INDEX IF NOT EXISTS companies_locations_geolocation_index ON companies_locations USING gist (geolocation);',
     );
   }
 

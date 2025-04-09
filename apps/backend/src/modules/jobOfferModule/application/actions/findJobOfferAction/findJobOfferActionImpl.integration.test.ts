@@ -6,7 +6,7 @@ import { TestContainer } from '../../../../../../tests/testContainer.ts';
 import { ResourceNotFoundError } from '../../../../../common/errors/resourceNotFoundError.ts';
 import { databaseSymbols } from '../../../../databaseModule/symbols.ts';
 import type { DatabaseClient } from '../../../../databaseModule/types/databaseClient.ts';
-import type { LocationTestUtils } from '../../../../locationModule/tests/utils/locationTestUtils/locationTestUtils.ts';
+import type { CompanyLocationTestUtils } from '../../../../locationModule/tests/utils/companyLocationTestUtils/companyLocationTestUtils.ts';
 import type { CompanyTestUtils } from '../../../../userModule/tests/utils/companyTestUtils/companyTestUtils.ts';
 import { symbols } from '../../../symbols.ts';
 import type { CategoryTestUtils } from '../../../tests/utils/categoryTestUtils/categoryTestUtils.ts';
@@ -22,7 +22,7 @@ describe('FindJobOfferAction', () => {
 
   let companyTestUtils: CompanyTestUtils;
   let categoryTestUtils: CategoryTestUtils;
-  let locationTestUtils: LocationTestUtils;
+  let companyLocationTestUtils: CompanyLocationTestUtils;
   let skillTestUtils: SkillTestUtils;
   let jobOfferTestUtils: JobOfferTestUtils;
 
@@ -35,14 +35,14 @@ describe('FindJobOfferAction', () => {
 
     jobOfferTestUtils = container.get<JobOfferTestUtils>(testSymbols.jobOfferTestUtils);
     skillTestUtils = container.get<SkillTestUtils>(testSymbols.skillTestUtils);
-    locationTestUtils = container.get<LocationTestUtils>(testSymbols.locationTestUtils);
+    companyLocationTestUtils = container.get<CompanyLocationTestUtils>(testSymbols.companyLocationTestUtils);
     companyTestUtils = container.get<CompanyTestUtils>(testSymbols.companyTestUtils);
     categoryTestUtils = container.get<CategoryTestUtils>(testSymbols.categoryTestUtils);
 
     await categoryTestUtils.truncate();
     await companyTestUtils.truncate();
     await skillTestUtils.truncate();
-    await locationTestUtils.truncate();
+    await companyLocationTestUtils.truncate();
     await jobOfferTestUtils.truncate();
   });
 
@@ -50,7 +50,7 @@ describe('FindJobOfferAction', () => {
     await categoryTestUtils.truncate();
     await companyTestUtils.truncate();
     await skillTestUtils.truncate();
-    await locationTestUtils.truncate();
+    await companyLocationTestUtils.truncate();
     await jobOfferTestUtils.truncate();
 
     await databaseClient.destroy();
@@ -74,7 +74,7 @@ describe('FindJobOfferAction', () => {
     const category = await categoryTestUtils.createAndPersist();
     const company = await companyTestUtils.createAndPersist();
     const skill = await skillTestUtils.createAndPersist();
-    const location = await locationTestUtils.createAndPersist({ input: { company_id: company.id, is_remote: true } });
+    const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
     const jobOffer = await jobOfferTestUtils.createAndPersist({
       input: {
         jobOffer: { category_id: category.id, company_id: company.id },

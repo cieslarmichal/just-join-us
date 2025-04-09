@@ -50,6 +50,8 @@ describe('UpdateCompanyActionImpl', () => {
       phone,
       isDeleted,
       logoUrl,
+      name,
+      description,
     });
 
     const updatedCompany = await companyTestUtils.findById({ id: company.id });

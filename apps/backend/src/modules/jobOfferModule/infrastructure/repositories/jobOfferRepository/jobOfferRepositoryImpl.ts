@@ -249,11 +249,11 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           `${categoriesTable.columns.name} as category_name`,
           `${companiesTable.columns.name} as company_name`,
           `${companiesTable.columns.logo_url} as company_logo_url`,
-          this.databaseClient.raw(`array_agg("skills"."id") as "skill_ids"`),
-          this.databaseClient.raw(`array_agg("skills"."name") as "skill_names"`),
-          this.databaseClient.raw(`array_agg("companies_locations"."id") as "location_ids"`),
-          this.databaseClient.raw(`array_agg("companies_locations"."is_remote") as "location_is_remote"`),
-          this.databaseClient.raw(`array_agg("companies_locations"."city_id") as "location_cities"`),
+          this.databaseClient.raw(`array_agg(DISTINCT "skills"."id") as "skill_ids"`),
+          this.databaseClient.raw(`array_agg(DISTINCT "skills"."name") as "skill_names"`),
+          this.databaseClient.raw(`array_agg(DISTINCT "companies_locations"."id") as "location_ids"`),
+          this.databaseClient.raw(`array_agg(DISTINCT "companies_locations"."is_remote") as "location_is_remote"`),
+          this.databaseClient.raw(`array_agg(DISTINCT "companies_locations"."city_id") as "location_cities"`),
         ])
         .join(categoriesTable.name, jobOffersTable.columns.category_id, '=', categoriesTable.columns.id)
         .join(companiesTable.name, jobOffersTable.columns.company_id, '=', companiesTable.columns.id)
@@ -270,6 +270,12 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           jobOfferLocationsTable.columns.company_location_id,
           '=',
           companiesLocationsTable.columns.id,
+        )
+        .groupBy(
+          jobOffersTable.columns.id,
+          categoriesTable.columns.name,
+          companiesTable.columns.name,
+          companiesTable.columns.logo_url,
         );
 
       if (id) {
@@ -334,11 +340,11 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           `${categoriesTable.columns.name} as category_name`,
           `${companiesTable.columns.name} as company_name`,
           `${companiesTable.columns.logo_url} as company_logo_url`,
-          this.databaseClient.raw(`array_agg("skills"."id") as "skill_ids"`),
-          this.databaseClient.raw(`array_agg("skills"."name") as "skill_names"`),
-          this.databaseClient.raw(`array_agg("companies_locations"."id") as "location_ids"`),
-          this.databaseClient.raw(`array_agg("companies_locations"."is_remote") as "location_is_remote"`),
-          this.databaseClient.raw(`array_agg("companies_locations"."city_id") as "location_cities"`),
+          this.databaseClient.raw(`array_agg(DISTINCT "skills"."id") as "skill_ids"`),
+          this.databaseClient.raw(`array_agg(DISTINCT "skills"."name") as "skill_names"`),
+          this.databaseClient.raw(`array_agg(DISTINCT "companies_locations"."id") as "location_ids"`),
+          this.databaseClient.raw(`array_agg(DISTINCT "companies_locations"."is_remote") as "location_is_remote"`),
+          this.databaseClient.raw(`array_agg(DISTINCT "companies_locations"."city_id") as "location_cities"`),
         ])
         .join(categoriesTable.name, jobOffersTable.columns.category_id, '=', categoriesTable.columns.id)
         .join(companiesTable.name, jobOffersTable.columns.company_id, '=', companiesTable.columns.id)
@@ -355,6 +361,12 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           jobOfferLocationsTable.columns.company_location_id,
           '=',
           companiesLocationsTable.columns.id,
+        )
+        .groupBy(
+          jobOffersTable.columns.id,
+          categoriesTable.columns.name,
+          companiesTable.columns.name,
+          companiesTable.columns.logo_url,
         );
 
       if (name) {

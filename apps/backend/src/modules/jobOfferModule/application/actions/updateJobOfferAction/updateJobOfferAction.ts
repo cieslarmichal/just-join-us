@@ -16,8 +16,8 @@ export interface UpdateJobOfferActionPayload {
   readonly locationIds?: string[] | undefined;
 }
 
-export interface UpdateJobOfferEventActionResult {
+export interface UpdateJobOfferActionResult {
   readonly jobOffer: JobOffer;
 }
 
-export type UpdateJobOfferAction = Action<UpdateJobOfferActionPayload, UpdateJobOfferEventActionResult>;
+export type UpdateJobOfferAction = Action<UpdateJobOfferActionPayload, UpdateJobOfferActionResult>;

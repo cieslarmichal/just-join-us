@@ -7,7 +7,7 @@ export const testSymbols = {
   categoryTestUtils: Symbol('categoryTestUtils'),
   skillTestUtils: Symbol('skillTestUtils'),
   cityTestUtils: Symbol('cityTestUtils'),
-  locationTestUtils: Symbol('locationTestUtils'),
+  companyLocationTestUtils: Symbol('companyLocationTestUtils'),
   jobOfferTestUtils: Symbol('jobOfferTestUtils'),
   s3TestUtils: Symbol('s3TestService'),
 };

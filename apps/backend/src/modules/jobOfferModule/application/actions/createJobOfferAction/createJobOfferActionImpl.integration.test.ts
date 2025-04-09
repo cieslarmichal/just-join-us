@@ -5,7 +5,7 @@ import { testSymbols } from '../../../../../../tests/symbols.ts';
 import { TestContainer } from '../../../../../../tests/testContainer.ts';
 import { databaseSymbols } from '../../../../databaseModule/symbols.ts';
 import type { DatabaseClient } from '../../../../databaseModule/types/databaseClient.ts';
-import type { LocationTestUtils } from '../../../../locationModule/tests/utils/locationTestUtils/locationTestUtils.ts';
+import type { CompanyLocationTestUtils } from '../../../../locationModule/tests/utils/companyLocationTestUtils/companyLocationTestUtils.ts';
 import type { CompanyTestUtils } from '../../../../userModule/tests/utils/companyTestUtils/companyTestUtils.ts';
 import { symbols } from '../../../symbols.ts';
 import type { CategoryTestUtils } from '../../../tests/utils/categoryTestUtils/categoryTestUtils.ts';
@@ -21,7 +21,7 @@ describe('CreateJobOfferAction', () => {
 
   let companyTestUtils: CompanyTestUtils;
   let categoryTestUtils: CategoryTestUtils;
-  let locationTestUtils: LocationTestUtils;
+  let companyLocationTestUtils: CompanyLocationTestUtils;
   let skillTestUtils: SkillTestUtils;
   let jobOfferTestUtils: JobOfferTestUtils;
 
@@ -34,14 +34,14 @@ describe('CreateJobOfferAction', () => {
 
     jobOfferTestUtils = container.get<JobOfferTestUtils>(testSymbols.jobOfferTestUtils);
     skillTestUtils = container.get<SkillTestUtils>(testSymbols.skillTestUtils);
-    locationTestUtils = container.get<LocationTestUtils>(testSymbols.locationTestUtils);
+    companyLocationTestUtils = container.get<CompanyLocationTestUtils>(testSymbols.companyLocationTestUtils);
     companyTestUtils = container.get<CompanyTestUtils>(testSymbols.companyTestUtils);
     categoryTestUtils = container.get<CategoryTestUtils>(testSymbols.categoryTestUtils);
 
     await categoryTestUtils.truncate();
     await companyTestUtils.truncate();
     await skillTestUtils.truncate();
-    await locationTestUtils.truncate();
+    await companyLocationTestUtils.truncate();
     await jobOfferTestUtils.truncate();
   });
 
@@ -49,7 +49,7 @@ describe('CreateJobOfferAction', () => {
     await categoryTestUtils.truncate();
     await companyTestUtils.truncate();
     await skillTestUtils.truncate();
-    await locationTestUtils.truncate();
+    await companyLocationTestUtils.truncate();
     await jobOfferTestUtils.truncate();
 
     await databaseClient.destroy();
@@ -61,7 +61,7 @@ describe('CreateJobOfferAction', () => {
     const skill1 = await skillTestUtils.createAndPersist();
     const skill2 = await skillTestUtils.createAndPersist();
     const skill3 = await skillTestUtils.createAndPersist();
-    const location = await locationTestUtils.createAndPersist({ input: { company_id: company.id, is_remote: true } });
+    const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
     const name = Generator.jobOfferName();
     const description = Generator.jobOfferDescription();
     const employmentType = Generator.employmentType();
@@ -98,6 +98,13 @@ describe('CreateJobOfferAction', () => {
       minSalary,
       maxSalary,
       workingTime,
+      company: {
+        name: company.name,
+        logoUrl: company.logo_url,
+      },
+      category: {
+        name: category.name,
+      },
       skills: expect.any(Array),
       locations: expect.any(Array),
     });

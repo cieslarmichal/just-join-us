@@ -6,7 +6,7 @@ import { TestContainer } from '../../../../../../tests/testContainer.ts';
 import { RepositoryError } from '../../../../../common/errors/repositoryError.ts';
 import { databaseSymbols } from '../../../../databaseModule/symbols.ts';
 import type { DatabaseClient } from '../../../../databaseModule/types/databaseClient.ts';
-import type { LocationTestUtils } from '../../../../locationModule/tests/utils/locationTestUtils/locationTestUtils.ts';
+import type { CompanyLocationTestUtils } from '../../../../locationModule/tests/utils/companyLocationTestUtils/companyLocationTestUtils.ts';
 import type { CompanyTestUtils } from '../../../../userModule/tests/utils/companyTestUtils/companyTestUtils.ts';
 import { Category } from '../../../domain/entities/category/category.ts';
 import { type JobOfferRepository } from '../../../domain/repositories/jobOfferRepository/jobOfferRepository.ts';
@@ -23,7 +23,7 @@ describe('JobOfferRepositoryImpl', () => {
 
   let categoryTestUtils: CategoryTestUtils;
   let companyTestUtils: CompanyTestUtils;
-  let locationTestUtils: LocationTestUtils;
+  let companyLocationTestUtils: CompanyLocationTestUtils;
   let skillTestUtils: SkillTestUtils;
   let jobOfferTestUtils: JobOfferTestUtils;
 
@@ -38,13 +38,13 @@ describe('JobOfferRepositoryImpl', () => {
 
     categoryTestUtils = container.get<CategoryTestUtils>(testSymbols.categoryTestUtils);
     companyTestUtils = container.get<CompanyTestUtils>(testSymbols.companyTestUtils);
-    locationTestUtils = container.get<LocationTestUtils>(testSymbols.locationTestUtils);
+    companyLocationTestUtils = container.get<CompanyLocationTestUtils>(testSymbols.companyLocationTestUtils);
     skillTestUtils = container.get<SkillTestUtils>(testSymbols.skillTestUtils);
     jobOfferTestUtils = container.get<JobOfferTestUtils>(testSymbols.jobOfferTestUtils);
 
     await categoryTestUtils.truncate();
     await companyTestUtils.truncate();
-    await locationTestUtils.truncate();
+    await companyLocationTestUtils.truncate();
     await skillTestUtils.truncate();
     await jobOfferTestUtils.truncate();
   });
@@ -52,7 +52,7 @@ describe('JobOfferRepositoryImpl', () => {
   afterEach(async () => {
     await categoryTestUtils.truncate();
     await companyTestUtils.truncate();
-    await locationTestUtils.truncate();
+    await companyLocationTestUtils.truncate();
     await skillTestUtils.truncate();
     await jobOfferTestUtils.truncate();
 
@@ -64,7 +64,7 @@ describe('JobOfferRepositoryImpl', () => {
       const category = await categoryTestUtils.createAndPersist();
       const company = await companyTestUtils.createAndPersist();
       const skill = await skillTestUtils.createAndPersist();
-      const location = await locationTestUtils.createAndPersist({ input: { company_id: company.id, is_remote: true } });
+      const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
 
       const { name, description, isHidden, employmentType, experienceLevel, minSalary, maxSalary, workingTime } =
         jobOfferTestFactory.create().getState();
@@ -116,8 +116,8 @@ describe('JobOfferRepositoryImpl', () => {
         workingTime,
         locations: [{ id: location.id, isRemote: true }],
         skills: [{ id: skill.id, name: skill.name }],
-        category: { id: category.id, name: category.name },
-        company: { id: company.id, name: company.name, logoUrl: company.logo_url },
+        category: { name: category.name },
+        company: { name: company.name, logoUrl: company.logo_url },
         createdAt: expect.any(Date),
       });
     });
@@ -126,7 +126,7 @@ describe('JobOfferRepositoryImpl', () => {
       const category = await categoryTestUtils.createAndPersist();
       const company = await companyTestUtils.createAndPersist();
       const skill = await skillTestUtils.createAndPersist();
-      const location = await locationTestUtils.createAndPersist({ input: { company_id: company.id, is_remote: true } });
+      const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
 
       const existingJobOffer = await jobOfferTestUtils.createAndPersist({
         input: { jobOffer: { category_id: category.id, company_id: company.id } },
@@ -162,7 +162,7 @@ describe('JobOfferRepositoryImpl', () => {
       const category = await categoryTestUtils.createAndPersist();
       const company = await companyTestUtils.createAndPersist();
       const skill = await skillTestUtils.createAndPersist();
-      const location = await locationTestUtils.createAndPersist({ input: { company_id: company.id, is_remote: true } });
+      const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
 
       const existingJobOffer = await jobOfferTestUtils.createAndPersist({
         input: { jobOffer: { category_id: category.id, company_id: company.id } },
@@ -211,9 +211,8 @@ describe('JobOfferRepositoryImpl', () => {
         workingTime: existingJobOffer.working_time,
         locations: [{ id: location.id, isRemote: true }],
         skills: [{ id: skill.id, name: skill.name }],
-        category: { id: category2.id, name: category2.name },
+        category: { name: category2.name },
         company: {
-          id: existingJobOffer.company_id,
           name: company.name,
           logoUrl: company.logo_url,
         },
@@ -241,7 +240,7 @@ describe('JobOfferRepositoryImpl', () => {
       const category = await categoryTestUtils.createAndPersist();
       const company = await companyTestUtils.createAndPersist();
       const skill = await skillTestUtils.createAndPersist();
-      const location = await locationTestUtils.createAndPersist({ input: { company_id: company.id, is_remote: true } });
+      const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
       const jobOffer = await jobOfferTestUtils.createAndPersist({
         input: {
           jobOffer: { category_id: category.id, company_id: company.id },
@@ -293,7 +292,7 @@ describe('JobOfferRepositoryImpl', () => {
       const category = await categoryTestUtils.createAndPersist();
       const company = await companyTestUtils.createAndPersist();
       const skill = await skillTestUtils.createAndPersist();
-      const location = await locationTestUtils.createAndPersist({ input: { company_id: company.id, is_remote: true } });
+      const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
 
       const jobOffer1 = await jobOfferTestUtils.createAndPersist({
         input: {
@@ -374,7 +373,7 @@ describe('JobOfferRepositoryImpl', () => {
       const category = await categoryTestUtils.createAndPersist();
       const company = await companyTestUtils.createAndPersist();
       const skill = await skillTestUtils.createAndPersist();
-      const location = await locationTestUtils.createAndPersist({ input: { company_id: company.id, is_remote: true } });
+      const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
 
       const jobOffer1 = await jobOfferTestUtils.createAndPersist({
         input: {
@@ -457,7 +456,7 @@ describe('JobOfferRepositoryImpl', () => {
       const category = await categoryTestUtils.createAndPersist();
       const company = await companyTestUtils.createAndPersist();
       const skill = await skillTestUtils.createAndPersist();
-      const location = await locationTestUtils.createAndPersist({ input: { company_id: company.id, is_remote: true } });
+      const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
 
       await jobOfferTestUtils.createAndPersist({
         input: {
@@ -484,7 +483,7 @@ describe('JobOfferRepositoryImpl', () => {
       const category = await categoryTestUtils.createAndPersist();
       const company = await companyTestUtils.createAndPersist();
       const skill = await skillTestUtils.createAndPersist();
-      const location = await locationTestUtils.createAndPersist({ input: { company_id: company.id, is_remote: true } });
+      const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
 
       await jobOfferTestUtils.createAndPersist({
         input: {

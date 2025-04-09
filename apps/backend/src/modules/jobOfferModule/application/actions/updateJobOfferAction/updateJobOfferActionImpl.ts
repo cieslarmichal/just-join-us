@@ -1,12 +1,12 @@
 import { OperationNotValidError } from '../../../../../common/errors/operationNotValidError.ts';
 import { type LoggerService } from '../../../../../common/logger/loggerService.ts';
-import type { LocationRepository } from '../../../../locationModule/domain/repositories/locationRepository/locationRepository.ts';
+import type { CompanyLocationRepository } from '../../../../locationModule/domain/repositories/companyLocationRepository/companyLocationRepository.ts';
 import type { CategoryRepository } from '../../../domain/repositories/categoryRepository/categoryRepository.ts';
 import type { JobOfferRepository } from '../../../domain/repositories/jobOfferRepository/jobOfferRepository.ts';
 import type { SkillRepository } from '../../../domain/repositories/skillRepository/skillRepository.ts';
 
 import {
-  type UpdateJobOfferEventActionResult,
+  type UpdateJobOfferActionResult,
   type UpdateJobOfferAction,
   type UpdateJobOfferActionPayload,
 } from './updateJobOfferAction.ts';
@@ -15,24 +15,24 @@ export class UpdateJobOfferActionImpl implements UpdateJobOfferAction {
   private readonly jobOfferRepository: JobOfferRepository;
   private readonly categoryRepository: CategoryRepository;
   private readonly skillRepository: SkillRepository;
-  private readonly locationRepository: LocationRepository;
+  private readonly companyLocationRepository: CompanyLocationRepository;
   private readonly loggerService: LoggerService;
 
   public constructor(
     jobOfferRepository: JobOfferRepository,
     categoryRepository: CategoryRepository,
     skillRepository: SkillRepository,
-    locationRepository: LocationRepository,
+    companyLocationRepository: CompanyLocationRepository,
     loggerService: LoggerService,
   ) {
     this.jobOfferRepository = jobOfferRepository;
     this.categoryRepository = categoryRepository;
     this.skillRepository = skillRepository;
-    this.locationRepository = locationRepository;
+    this.companyLocationRepository = companyLocationRepository;
     this.loggerService = loggerService;
   }
 
-  public async execute(payload: UpdateJobOfferActionPayload): Promise<UpdateJobOfferEventActionResult> {
+  public async execute(payload: UpdateJobOfferActionPayload): Promise<UpdateJobOfferActionResult> {
     const {
       id,
       name,
@@ -125,7 +125,7 @@ export class UpdateJobOfferActionImpl implements UpdateJobOfferAction {
     }
 
     if (locationIds) {
-      const locations = await this.locationRepository.findLocations({ ids: locationIds });
+      const locations = await this.companyLocationRepository.findCompanyLocations({ ids: locationIds });
 
       if (locations.length !== locationIds.length) {
         throw new OperationNotValidError({

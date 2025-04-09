@@ -16,7 +16,7 @@ export class M3CreateJobOffersTableMigration implements Migration {
 
       table.string('employment_type', 20).notNullable();
 
-      table.string('wortking_time', 20).notNullable();
+      table.string('working_time', 20).notNullable();
 
       table.string('experience_level', 20).notNullable();
 
@@ -36,7 +36,7 @@ export class M3CreateJobOffersTableMigration implements Migration {
     await databaseClient.raw('CREATE EXTENSION IF NOT EXISTS pg_trgm;');
 
     await databaseClient.raw(
-      'CREATE INDEX IF NOT EXISTS job_offers_name_gin_index ON jobOffers USING gin (name gin_trgm_ops);',
+      'CREATE INDEX IF NOT EXISTS job_offers_name_gin_index ON job_offers USING gin (name gin_trgm_ops);',
     );
 
     await databaseClient.schema.createTable('job_offers_skills', (table) => {
@@ -52,7 +52,12 @@ export class M3CreateJobOffersTableMigration implements Migration {
 
       table.uuid('job_offer_id').notNullable().references('id').inTable('job_offers').onDelete('CASCADE');
 
-      table.uuid('location_id').notNullable().references('id').inTable('locations').onDelete('CASCADE');
+      table
+        .uuid('company_location_id')
+        .notNullable()
+        .references('id')
+        .inTable('companies_locations')
+        .onDelete('CASCADE');
     });
   }
 

@@ -7,7 +7,7 @@ import { type AccessControlService } from '../authModule/application/services/ac
 import { authSymbols } from '../authModule/symbols.ts';
 import { databaseSymbols } from '../databaseModule/symbols.ts';
 import type { DatabaseClient } from '../databaseModule/types/databaseClient.ts';
-import type { LocationRepository } from '../locationModule/domain/repositories/locationRepository/locationRepository.ts';
+import type { CompanyLocationRepository } from '../locationModule/domain/repositories/companyLocationRepository/companyLocationRepository.ts';
 import { locationSymbols } from '../locationModule/symbols.ts';
 import type { CompanyRepository } from '../userModule/domain/repositories/companyRepository/companyRepository.ts';
 import { userSymbols } from '../userModule/symbols.ts';
@@ -94,7 +94,7 @@ export class JobOfferModule implements DependencyInjectionModule {
           container.get<CompanyRepository>(userSymbols.companyRepository),
           container.get<CategoryRepository>(symbols.categoryRepository),
           container.get<SkillRepository>(symbols.skillRepository),
-          container.get<LocationRepository>(locationSymbols.locationRepository),
+          container.get<CompanyLocationRepository>(locationSymbols.companyLocationRepository),
           container.get<LoggerService>(applicationSymbols.loggerService),
         ),
     );
@@ -116,7 +116,7 @@ export class JobOfferModule implements DependencyInjectionModule {
           container.get<JobOfferRepository>(symbols.jobOfferRepository),
           container.get<CategoryRepository>(symbols.categoryRepository),
           container.get<SkillRepository>(symbols.skillRepository),
-          container.get<LocationRepository>(locationSymbols.locationRepository),
+          container.get<CompanyLocationRepository>(locationSymbols.companyLocationRepository),
           container.get<LoggerService>(applicationSymbols.loggerService),
         ),
     );

@@ -90,7 +90,7 @@ describe('SkillRepositoryImpl', () => {
       const skill = await skillTestUtils.createAndPersist({ input: { name: 'Docker' } });
       await skillTestUtils.createAndPersist({ input: { name: 'Kubernetes' } });
 
-      const foundSkills = await skillRepository.findSkills({ name: 'kub', page: 1, pageSize: 10 });
+      const foundSkills = await skillRepository.findSkills({ name: 'doc', page: 1, pageSize: 10 });
 
       expect(foundSkills).toHaveLength(1);
       expect(foundSkills[0]?.getId()).toEqual(skill.id);

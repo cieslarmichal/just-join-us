@@ -12,7 +12,7 @@ import { CategoryTestUtils } from '../src/modules/jobOfferModule/tests/utils/cat
 import { JobOfferTestUtils } from '../src/modules/jobOfferModule/tests/utils/jobOfferTestUtils/jobOfferTestUtils.ts';
 import { SkillTestUtils } from '../src/modules/jobOfferModule/tests/utils/skillTestUtils/skillTestUtils.ts';
 import { CityTestUtils } from '../src/modules/locationModule/tests/utils/cityTestUtils/cityTestUtils.ts';
-import { LocationTestUtils } from '../src/modules/locationModule/tests/utils/locationTestUtils/locationTestUtils.ts';
+import { CompanyLocationTestUtils } from '../src/modules/locationModule/tests/utils/companyLocationTestUtils/companyLocationTestUtils.ts';
 import { type EmailMessageBus } from '../src/modules/userModule/application/messageBuses/emailMessageBus/emailMessageBus.ts';
 import { userSymbols } from '../src/modules/userModule/symbols.ts';
 import { BlacklistTokenTestUtils } from '../src/modules/userModule/tests/utils/blacklistTokenTestUtils/blacklistTokenTestUtils.ts';
@@ -72,9 +72,9 @@ export class TestContainer {
       () => new CityTestUtils(container.get<DatabaseClient>(databaseSymbols.databaseClient)),
     );
 
-    container.bind<LocationTestUtils>(
-      testSymbols.locationTestUtils,
-      () => new LocationTestUtils(container.get<DatabaseClient>(databaseSymbols.databaseClient)),
+    container.bind<CompanyLocationTestUtils>(
+      testSymbols.companyLocationTestUtils,
+      () => new CompanyLocationTestUtils(container.get<DatabaseClient>(databaseSymbols.databaseClient)),
     );
 
     await container.overrideBinding<LoggerService>(

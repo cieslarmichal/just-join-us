@@ -1,4 +1,4 @@
-import type { Location } from '../../../../locationModule/domain/entities/location/location.ts';
+import type { CompanyLocation } from '../../../../locationModule/domain/entities/companyLocation/companyLocation.ts';
 import type { Category } from '../category/category.ts';
 import type { Skill } from '../skill/skill.ts';
 
@@ -100,7 +100,7 @@ export interface SetSkillsPayload {
 }
 
 export interface SetLocationsPayload {
-  readonly locations: Location[];
+  readonly locations: CompanyLocation[];
 }
 
 export class JobOffer {

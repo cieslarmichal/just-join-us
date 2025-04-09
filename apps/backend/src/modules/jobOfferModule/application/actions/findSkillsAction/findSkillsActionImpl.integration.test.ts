@@ -35,16 +35,16 @@ describe('FindSkillsAction', () => {
   });
 
   it('finds all skills', async () => {
-    const skill1 = await skillTestUtils.createAndPersist({ input: { name: 'Java' } });
+    const skill1 = await skillTestUtils.createAndPersist({ input: { name: 'C++' } });
     const skill2 = await skillTestUtils.createAndPersist({ input: { name: 'Go' } });
-    const skill3 = await skillTestUtils.createAndPersist({ input: { name: 'C++' } });
+    const skill3 = await skillTestUtils.createAndPersist({ input: { name: 'Javascript' } });
 
     const { data: skills, total } = await action.execute({ page: 1, pageSize: 10 });
 
     expect(skills).toHaveLength(3);
     expect(skills[0]?.getId()).toBe(skill1.id);
-    expect(skills[1]?.getId()).toBe(skill3.id);
-    expect(skills[2]?.getId()).toBe(skill2.id);
+    expect(skills[1]?.getId()).toBe(skill2.id);
+    expect(skills[2]?.getId()).toBe(skill3.id);
     expect(total).toBe(3);
   });
 

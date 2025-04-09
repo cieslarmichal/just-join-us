@@ -11,21 +11,21 @@ import type { CompanyRepository } from '../userModule/domain/repositories/compan
 import { userSymbols } from '../userModule/symbols.ts';
 
 import { CityHttpController } from './api/httpControllers/cityHttpController/cityHttpController.ts';
-import { LocationHttpController } from './api/httpControllers/locationHttpController/locationHttpController.ts';
-import type { CreateLocationAction } from './application/actions/createLocationAction/createLocationAction.ts';
-import { CreateLocationActionImpl } from './application/actions/createLocationAction/createLocationActionImpl.ts';
-import type { CreateRemoteLocationAction } from './application/actions/createRemoteLocationAction/createRemoteLocationAction.ts';
-import { CreateRemoteLocationActionImpl } from './application/actions/createRemoteLocationAction/createRemoteLocationActionImpl.ts';
+import { CompanyLocationHttpController } from './api/httpControllers/companyLocationHttpController/companyLocationHttpController.ts';
+import type { CreateCompanyLocationAction } from './application/actions/createCompanyLocationAction/createCompanyLocationAction.ts';
+import { CreateCompanyLocationActionImpl } from './application/actions/createCompanyLocationAction/createCompanyLocationActionImpl.ts';
+import type { CreateRemoteCompanyLocationAction } from './application/actions/createRemoteCompanyLocationAction/createRemoteCompanyLocationAction.ts';
+import { CreateRemoteCompanyLocationActionImpl } from './application/actions/createRemoteCompanyLocationAction/createRemoteCompanyLocationActionImpl.ts';
 import type { FindCitiesAction } from './application/actions/findCitiesAction/findCitiesAction.ts';
 import { FindCitiesActionImpl } from './application/actions/findCitiesAction/findCitiesActionImpl.ts';
-import type { UpdateLocationAction } from './application/actions/updateLocationAction/updateLocationAction.ts';
-import { UpdateLocationActionImpl } from './application/actions/updateLocationAction/updateLocationActionImpl.ts';
+import type { UpdateCompanyLocationAction } from './application/actions/updateCompanyLocationAction/updateCompanyLocationAction.ts';
+import { UpdateCompanyLocationActionImpl } from './application/actions/updateCompanyLocationAction/updateCompanyLocationActionImpl.ts';
 import type { CityRepository } from './domain/repositories/cityRepository/cityRepository.ts';
-import type { LocationRepository } from './domain/repositories/locationRepository/locationRepository.ts';
+import type { CompanyLocationRepository } from './domain/repositories/companyLocationRepository/companyLocationRepository.ts';
 import { CityMapper } from './infrastructure/repositories/cityRepository/cityMapper/cityMapper.ts';
 import { CityRepositoryImpl } from './infrastructure/repositories/cityRepository/cityRepositoryImpl.ts';
-import { LocationMapper } from './infrastructure/repositories/locationRepository/locationMapper/locationMapper.ts';
-import { LocationRepositoryImpl } from './infrastructure/repositories/locationRepository/locationRepositoryImpl.ts';
+import { CompanyLocationMapper } from './infrastructure/repositories/companyLocationRepository/companyLocationMapper/companyLocationMapper.ts';
+import { CompanyLocationRepositoryImpl } from './infrastructure/repositories/companyLocationRepository/companyLocationRepositoryImpl.ts';
 import { symbols } from './symbols.ts';
 
 export class LocationModule implements DependencyInjectionModule {
@@ -46,56 +46,56 @@ export class LocationModule implements DependencyInjectionModule {
       () => new FindCitiesActionImpl(container.get<CityRepository>(symbols.cityRepository)),
     );
 
-    container.bind<LocationMapper>(symbols.locationMapper, () => new LocationMapper());
+    container.bind<CompanyLocationMapper>(symbols.companyLocationMapper, () => new CompanyLocationMapper());
 
-    container.bind<LocationRepository>(
-      symbols.locationRepository,
+    container.bind<CompanyLocationRepository>(
+      symbols.companyLocationRepository,
       () =>
-        new LocationRepositoryImpl(
+        new CompanyLocationRepositoryImpl(
           container.get<DatabaseClient>(databaseSymbols.databaseClient),
-          container.get<LocationMapper>(symbols.locationMapper),
+          container.get<CompanyLocationMapper>(symbols.companyLocationMapper),
           container.get<UuidService>(applicationSymbols.uuidService),
         ),
     );
 
-    container.bind<CreateLocationAction>(
-      symbols.createLocationAction,
+    container.bind<CreateCompanyLocationAction>(
+      symbols.createCompanyLocationAction,
       () =>
-        new CreateLocationActionImpl(
-          container.get<LocationRepository>(symbols.locationRepository),
+        new CreateCompanyLocationActionImpl(
+          container.get<CompanyLocationRepository>(symbols.companyLocationRepository),
           container.get<CompanyRepository>(userSymbols.companyRepository),
           container.get<CityRepository>(symbols.cityRepository),
           container.get<LoggerService>(applicationSymbols.loggerService),
         ),
     );
 
-    container.bind<CreateRemoteLocationAction>(
-      symbols.createRemoteLocationAction,
+    container.bind<CreateRemoteCompanyLocationAction>(
+      symbols.createRemoteCompanyLocationAction,
       () =>
-        new CreateRemoteLocationActionImpl(
-          container.get<LocationRepository>(symbols.locationRepository),
+        new CreateRemoteCompanyLocationActionImpl(
+          container.get<CompanyLocationRepository>(symbols.companyLocationRepository),
           container.get<CompanyRepository>(userSymbols.companyRepository),
           container.get<LoggerService>(applicationSymbols.loggerService),
         ),
     );
 
-    container.bind<UpdateLocationAction>(
-      symbols.updateLocationAction,
+    container.bind<UpdateCompanyLocationAction>(
+      symbols.updateCompanyLocationAction,
       () =>
-        new UpdateLocationActionImpl(
-          container.get<LocationRepository>(symbols.locationRepository),
+        new UpdateCompanyLocationActionImpl(
+          container.get<CompanyLocationRepository>(symbols.companyLocationRepository),
           container.get<CityRepository>(symbols.cityRepository),
           container.get<LoggerService>(applicationSymbols.loggerService),
         ),
     );
 
-    container.bind<LocationHttpController>(
-      symbols.locationHttpController,
+    container.bind<CompanyLocationHttpController>(
+      symbols.companyLocationHttpController,
       () =>
-        new LocationHttpController(
-          container.get<CreateLocationAction>(symbols.createLocationAction),
-          container.get<CreateRemoteLocationAction>(symbols.createRemoteLocationAction),
-          container.get<UpdateLocationAction>(symbols.updateLocationAction),
+        new CompanyLocationHttpController(
+          container.get<CreateCompanyLocationAction>(symbols.createCompanyLocationAction),
+          container.get<CreateRemoteCompanyLocationAction>(symbols.createRemoteCompanyLocationAction),
+          container.get<UpdateCompanyLocationAction>(symbols.updateCompanyLocationAction),
           container.get<AccessControlService>(authSymbols.accessControlService),
         ),
     );
