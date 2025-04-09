@@ -28,7 +28,8 @@
     "npm": ">=11"
   },
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "tools/*"
   ],
   "packageManager": "npm@11.2.0"
 }

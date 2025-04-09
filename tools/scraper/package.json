@@ -1,0 +1,15 @@
+{
+  "name": "scraper",
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file=.env src/index.ts",
+    "build": "tsc --build",
+    "build:dev": "tsc --build",
+    "lint": "eslint . -c ../../eslint.config.mjs",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "dependencies": {
+    "knex": "3.1.0",
+    "uuid": "11.0.3"
+  }
+}
