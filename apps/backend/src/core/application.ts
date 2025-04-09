@@ -8,6 +8,9 @@ import { applicationSymbols } from '../modules/applicationModule/symbols.ts';
 import { AuthModule } from '../modules/authModule/authModule.ts';
 import { DatabaseModule } from '../modules/databaseModule/databaseModule.ts';
 import type { DatabaseManager } from '../modules/databaseModule/infrastructure/databaseManager.ts';
+import { categoriesTable } from '../modules/databaseModule/infrastructure/tables/categoriesTable/categoriesTable.ts';
+import type { SkillRawEntity } from '../modules/databaseModule/infrastructure/tables/skillsTable/skillRawEntity.ts';
+import { skillsTable } from '../modules/databaseModule/infrastructure/tables/skillsTable/skillsTable.ts';
 import type { UserRawEntity } from '../modules/databaseModule/infrastructure/tables/usersTable/userRawEntity.ts';
 import { usersTable } from '../modules/databaseModule/infrastructure/tables/usersTable/usersTable.ts';
 import { databaseSymbols } from '../modules/databaseModule/symbols.ts';
@@ -60,6 +63,8 @@ export class Application {
     await databaseManager.setupDatabase();
 
     await this.createAdminUser(Application.container);
+    await this.createSkills(Application.container);
+    await this.createCategories(Application.container);
   }
 
   private static async createAdminUser(container: DependencyInjectionContainer): Promise<void> {
@@ -89,5 +94,43 @@ export class Application {
       is_deleted: false,
       role: userRoles.admin,
     });
+  }
+
+  private static async createSkills(container: DependencyInjectionContainer): Promise<void> {
+    const databaseClient = container.get<DatabaseClient>(databaseSymbols.databaseClient);
+    const uuidService = container.get<UuidService>(applicationSymbols.uuidService);
+    const { skills } = container.get<Config>(applicationSymbols.config);
+
+    const existingSkills = await databaseClient(skillsTable.name).select('*');
+
+    if (existingSkills.length > 0) {
+      return;
+    }
+
+    await databaseClient<SkillRawEntity>(skillsTable.name).insert(
+      skills.map((skillName) => ({
+        id: uuidService.generateUuid(),
+        name: skillName,
+      })),
+    );
+  }
+
+  private static async createCategories(container: DependencyInjectionContainer): Promise<void> {
+    const databaseClient = container.get<DatabaseClient>(databaseSymbols.databaseClient);
+    const uuidService = container.get<UuidService>(applicationSymbols.uuidService);
+    const { categories } = container.get<Config>(applicationSymbols.config);
+
+    const existingCategories = await databaseClient(categoriesTable.name).select('*');
+
+    if (existingCategories.length > 0) {
+      return;
+    }
+
+    await databaseClient<SkillRawEntity>(categoriesTable.name).insert(
+      categories.map((categoryName) => ({
+        id: uuidService.generateUuid(),
+        name: categoryName,
+      })),
+    );
   }
 }
