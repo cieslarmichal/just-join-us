@@ -4,7 +4,6 @@ import { type HttpRequest } from '../../../../../common/http/httpRequest.ts';
 import { type HttpOkResponse } from '../../../../../common/http/httpResponse.ts';
 import { HttpRoute } from '../../../../../common/http/httpRoute.ts';
 import { httpStatusCodes } from '../../../../../common/http/httpStatusCode.ts';
-import { type AccessControlService } from '../../../../authModule/application/services/accessControlService/accessControlService.ts';
 import type { FindCategoriesAction } from '../../../application/actions/findCategoriesAction/findCategoriesAction.ts';
 import type { Category } from '../../../domain/entities/category/category.ts';
 
@@ -18,11 +17,9 @@ import {
 export class CategoryHttpController implements HttpController {
   public readonly tags = ['Category'];
   private readonly findCategoriesAction: FindCategoriesAction;
-  private readonly accessControlService: AccessControlService;
 
-  public constructor(findCategoriesAction: FindCategoriesAction, accessControlService: AccessControlService) {
+  public constructor(findCategoriesAction: FindCategoriesAction) {
     this.findCategoriesAction = findCategoriesAction;
-    this.accessControlService = accessControlService;
   }
 
   public getHttpRoutes(): HttpRoute[] {
@@ -40,8 +37,6 @@ export class CategoryHttpController implements HttpController {
   private async findCategories(
     request: HttpRequest<undefined, FindCategoriesQueryParams>,
   ): Promise<HttpOkResponse<FindCategoriesResponseBody>> {
-    await this.accessControlService.verifyBearerToken({ requestHeaders: request.headers });
-
     const { name, page = 1, pageSize = 10 } = request.queryParams;
 
     const { data, total } = await this.findCategoriesAction.execute({

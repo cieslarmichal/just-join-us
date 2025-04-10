@@ -1,13 +1,17 @@
 export interface JobOffer {
   readonly id: string;
   readonly name: string;
-  readonly companyName: string;
-  readonly companyLogoUrl: string;
   readonly description: string;
-  readonly category: string;
-  readonly location: string;
-  readonly latitude: number;
-  readonly longitude: number;
-  readonly salaryMin: number;
-  readonly salaryMax: number;
+  readonly categoryId: string;
+  readonly isHidden: boolean;
+  readonly employmentType: string;
+  readonly workingTime: string;
+  readonly experienceLevel: string;
+  readonly minSalary: number;
+  readonly maxSalary: number;
+  readonly skills: { id: string; name: string }[];
+  readonly locations: { id: string; isRemote: boolean; city?: string | undefined }[];
+  readonly companyId: string;
+  readonly company?: { name: string; logoUrl: string };
+  readonly createdAt: Date;
 }

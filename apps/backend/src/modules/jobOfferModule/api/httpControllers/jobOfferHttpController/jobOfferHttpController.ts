@@ -60,28 +60,28 @@ export class JobOfferHttpController implements HttpController {
     return [
       new HttpRoute({
         method: httpMethodNames.post,
-        path: '/jobOffers',
+        path: '/job-offers',
         handler: this.createJobOffer.bind(this),
         schema: createJobOfferSchema,
         description: 'Create JobOffer',
       }),
       new HttpRoute({
         method: httpMethodNames.get,
-        path: '/jobOffers',
+        path: '/job-offers',
         handler: this.findJobOffers.bind(this),
         schema: findJobOffersSchema,
         description: 'Find JobOffers',
       }),
       new HttpRoute({
         method: httpMethodNames.get,
-        path: '/jobOffers/:jobOfferId',
+        path: '/job-offers/:jobOfferId',
         handler: this.findJobOffer.bind(this),
         schema: findJobOfferSchema,
         description: 'Find JobOffer by id',
       }),
       new HttpRoute({
         method: httpMethodNames.patch,
-        path: '/jobOffers/:jobOfferId',
+        path: '/job-offers/:jobOfferId',
         handler: this.updateJobOffer.bind(this),
         schema: updateJobOfferSchema,
         description: 'Update JobOffer',
@@ -131,8 +131,6 @@ export class JobOfferHttpController implements HttpController {
   private async findJobOffers(
     request: HttpRequest<undefined, FindJobOffersQueryParams>,
   ): Promise<HttpOkResponse<FindJobOffersResponseBody>> {
-    await this.accessControlService.verifyBearerToken({ requestHeaders: request.headers });
-
     const { name, companyId, page = 1, pageSize = 10 } = request.queryParams;
 
     const { data, total } = await this.findJobOffersAction.execute({
@@ -158,8 +156,6 @@ export class JobOfferHttpController implements HttpController {
   private async findJobOffer(
     request: HttpRequest<undefined, undefined, FindJobOfferPathParams>,
   ): Promise<HttpOkResponse<FindJobOfferResponseBody>> {
-    await this.accessControlService.verifyBearerToken({ requestHeaders: request.headers });
-
     const { jobOfferId } = request.pathParams;
 
     const { jobOffer } = await this.findJobOfferAction.execute({ id: jobOfferId });

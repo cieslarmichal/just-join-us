@@ -176,7 +176,7 @@ export default function RegisterForm() {
         <div className="flex justify-center w-full">
           <Button
             type="submit"
-            className="w-full px-6 py-6 sm:px-10 rounded-2xl bg-pink-700 font-medium text-base"
+            className="w-full px-6 py-6 sm:px-10 rounded-2xl bg-pink-600 font-medium text-base"
           >
             Sing up
           </Button>

@@ -9,6 +9,7 @@ const __dirname = path.dirname(__filename);
 
 interface InputCity {
   readonly Name: string;
+  readonly Type: string;
   readonly Province: string;
   readonly Latitude: number;
   readonly Longitude: number;
@@ -38,20 +39,29 @@ const citiesTable = 'cities';
 
 const batchSize = 100;
 
+let savedCities = 0;
+
 async function insertCities(): Promise<void> {
   try {
     for (let i = 0; i < cities.length; i += batchSize) {
-      const batch = cities.slice(i, i + batchSize).map((city) => ({
-        id: uuid(),
-        name: city.Name,
-        province: city.Province,
-        latitude: city.Latitude,
-        longitude: city.Longitude,
-      }));
+      const batch = cities
+        .slice(i, i + batchSize)
+        .filter((city) => city.Type === 'city')
+        .map((city) => ({
+          id: uuid(),
+          name: city.Name,
+          province: city.Province,
+          latitude: city.Latitude,
+          longitude: city.Longitude,
+        }));
 
-      await databaseClient(citiesTable).insert(batch);
+      if (batch.length) {
+        await databaseClient(citiesTable).insert(batch);
 
-      console.log(`Saved ${(batchSize * i).toString()} cities.`);
+        savedCities += batch.length;
+      }
+
+      console.log(`Saved ${savedCities.toString()} cities.`);
     }
 
     console.log('All cities have been saved successfully.');

@@ -5,7 +5,7 @@ import { type JobOffer } from '../../api/types/jobOffer';
 import JobOffersList from '../../components/JobOffersList';
 import JobOffersMap from '../../components/JobOffersMap';
 import SearchInput from '../../components/SearchInput';
-import LocationFilter from '../../components/LocationFilter';
+import LocationFilter from '../../components/CityFilter';
 import CategoryFilterButton from '../../components/CategoryFilterButton';
 import SortButton from '../../components/SortButton';
 
@@ -16,14 +16,13 @@ export default function SearchPage() {
   const [filters, setFilters] = useState({
     company: searchParams.get('company') || '',
     category: searchParams.get('category') || '',
-    location: searchParams.get('location') || '',
-    radius: searchParams.get('location') || '',
+    city: searchParams.get('city') || '',
     page: searchParams.get('page') || 1,
   });
 
   const fetchJobOffers = async () => {
     try {
-      const results = await searchJobOffers(searchQuery || '');
+      const results = await searchJobOffers({});
       setJobOffers(results);
     } catch (error) {
       console.error('Failed to fetch job offers', error);
@@ -43,8 +42,8 @@ export default function SearchPage() {
             setSearchQuery={setSearchQuery}
           />
           <LocationFilter
-            initialLocation={filters.location}
-            setLocation={(location) => setFilters({ ...filters, location })}
+            initialCity={filters.city}
+            setCity={(city) => setFilters({ ...filters, city })}
           />
         </div>
         <div className="flex items-center justify-center gap-4 ml-4">

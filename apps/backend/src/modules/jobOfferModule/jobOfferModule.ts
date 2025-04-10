@@ -135,20 +135,12 @@ export class JobOfferModule implements DependencyInjectionModule {
 
     container.bind<CategoryHttpController>(
       symbols.categoryHttpController,
-      () =>
-        new CategoryHttpController(
-          container.get<FindCategoriesAction>(symbols.findCategoriesAction),
-          container.get<AccessControlService>(authSymbols.accessControlService),
-        ),
+      () => new CategoryHttpController(container.get<FindCategoriesAction>(symbols.findCategoriesAction)),
     );
 
     container.bind<SkillHttpController>(
       symbols.skillHttpController,
-      () =>
-        new SkillHttpController(
-          container.get<FindSkillsAction>(symbols.findSkillsAction),
-          container.get<AccessControlService>(authSymbols.accessControlService),
-        ),
+      () => new SkillHttpController(container.get<FindSkillsAction>(symbols.findSkillsAction)),
     );
   }
 }
