@@ -5,7 +5,7 @@ import { type JobOffer } from '../../api/types/jobOffer';
 import JobOffersList from '../../components/JobOffersList';
 import JobOffersMap from '../../components/JobOffersMap';
 import SearchInput from '../../components/SearchInput';
-import LocationFilter from '../../components/CityFilter';
+import CityFilter from '../../components/CityFilter';
 import CategoryFilterButton from '../../components/CategoryFilterButton';
 import SortButton from '../../components/SortButton';
 
@@ -16,7 +16,6 @@ export default function SearchPage() {
   const [filters, setFilters] = useState({
     company: searchParams.get('company') || '',
     category: searchParams.get('category') || '',
-    city: searchParams.get('city') || '',
     page: searchParams.get('page') || 1,
   });
 
@@ -41,10 +40,7 @@ export default function SearchPage() {
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
           />
-          <LocationFilter
-            initialCity={filters.city}
-            setCity={(city) => setFilters({ ...filters, city })}
-          />
+          <CityFilter />
         </div>
         <div className="flex items-center justify-center gap-4 ml-4">
           <div className="flex flex-wrap gap-2">

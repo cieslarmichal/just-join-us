@@ -5,41 +5,55 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { searchCities } from '../api/queries/searchCities';
 import { useDebounce } from '../hooks/useDebounce';
 import { City } from '../api/types/city';
+import { useSearchParams } from 'react-router-dom';
+import { IoCloseCircleOutline } from 'react-icons/io5';
 
-interface Props {
-  readonly initialCity: string;
-  readonly setCity: (location: string) => void;
-}
+export default function CityFilter() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  // TODO: add slug to backend and translate back to name
+  const [city, setCity] = useState<string>(searchParams.get('city') || '');
 
-export default function LocationFilter({ initialCity, setCity }: Props) {
-  const [cities, setCities] = useState<City[]>([]);
+  const [suggestedCities, setSuggestedCities] = useState<City[]>([]);
 
-  const debouncedCity = useDebounce(initialCity, 500);
+  const [suggestionSelected, setSuggestionSelected] = useState<boolean>(city !== '');
 
-  const fetchCities = async () => {
-    if (debouncedCity === '') {
-      setCities([]);
+  const debouncedCity = useDebounce(city, 500);
+
+  const fetchSuggestedCities = async () => {
+    if (debouncedCity === '' || city === '') {
+      setSuggestedCities([]);
       return;
     }
 
     try {
       const results = await searchCities(debouncedCity);
-      setCities(results);
+      setSuggestedCities(results);
     } catch (error) {
-      console.error('Failed to fetch cities', error);
+      console.error('Failed to fetch suggested cities', error);
     }
   };
 
-  console.log({ debouncedCity });
-
   useEffect(() => {
-    fetchCities();
-  }, [debouncedCity]);
+    if (suggestionSelected) {
+      return;
+    }
+
+    fetchSuggestedCities();
+  }, [debouncedCity, suggestionSelected]);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { value } = event.target;
 
     setCity(value);
+
+    setSuggestionSelected(false);
+  };
+
+  const handleApplyClick = () => {
+    setSearchParams((currentSearchParams) => ({
+      ...currentSearchParams,
+      city,
+    }));
   };
 
   return (
@@ -48,6 +62,7 @@ export default function LocationFilter({ initialCity, setCity }: Props) {
         <div className="h-10 flex items-center gap-2 border border-gray-300 hover:border-gray-500 rounded-3xl px-8 py-2 cursor-pointer text-sm font-semibold">
           <CiLocationOn className="w-5 h-5" />
           Location
+          {/* add arrow up when popover selected */}
           <IoIosArrowDown className="w-4 h-4" />
         </div>
       </PopoverTrigger>
@@ -55,17 +70,26 @@ export default function LocationFilter({ initialCity, setCity }: Props) {
         <div className="flex flex-col relative w-full">
           <div className="text-xl font-semibold text-gray-500">Location</div>
           <div className="flex flex-col gap-y-4 mt-6">
-            <input
-              type="text"
-              id="location"
-              name="location"
-              value={initialCity}
-              onChange={handleFilterChange}
-              className="border border-gray-300 rounded-md p-3 w-full text-sm"
-              placeholder="Where do you want to work?"
-            />
+            <div className="relative">
+              <input
+                type="text"
+                id="location"
+                name="location"
+                value={city}
+                onChange={handleFilterChange}
+                className="border border-gray-300 rounded-md p-3 w-full text-sm"
+                placeholder="Where do you want to work?"
+              />
+              <IoCloseCircleOutline
+                className="absolute right-4 top-2.5 w-6 h-6 cursor-pointer text-gray-800"
+                onClick={() => {
+                  setCity('');
+                  setSuggestedCities([]);
+                  setSuggestionSelected(false);
+                }}
+              />
+            </div>
 
-            {/* Most Popular Cities Section */}
             <div className="mt-4">
               <h3 className="text-sm font-semibold text-gray-700 mb-2">Most Popular Cities</h3>
               <div className="flex flex-wrap gap-2">
@@ -75,7 +99,8 @@ export default function LocationFilter({ initialCity, setCity }: Props) {
                     className="px-3 py-1 text-sm border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100"
                     onClick={() => {
                       setCity(city);
-                      setCities([]);
+                      setSuggestedCities([]);
+                      setSuggestionSelected(true);
                     }}
                   >
                     {city}
@@ -84,16 +109,16 @@ export default function LocationFilter({ initialCity, setCity }: Props) {
               </div>
             </div>
 
-            {/* Dropdown for City Search Results */}
-            {cities.length > 0 && (
+            {suggestedCities.length > 0 && (
               <div className="absolute z-10 bg-white border border-gray-300 rounded-md mt-11 w-full max-h-40 overflow-y-auto">
-                {cities.map((city) => (
+                {suggestedCities.map((city) => (
                   <div
                     key={city.id}
                     className="p-2 text-sm cursor-pointer hover:bg-gray-200"
                     onClick={() => {
                       setCity(city.name);
-                      setCities([]);
+                      setSuggestedCities([]);
+                      setSuggestionSelected(true);
                     }}
                   >
                     {city.name}
@@ -102,12 +127,9 @@ export default function LocationFilter({ initialCity, setCity }: Props) {
               </div>
             )}
           </div>
-          {/* Show Offers Button */}
           <button
-            className="bg-pink-600 text-white px-6 py-2 rounded-xl text-sm font-semibold hover:bg-pink-600 mt-4"
-            onClick={() => {
-              console.log('Show Offers clicked');
-            }}
+            className="bg-pink-600 text-white px-6 py-2 rounded-xl text-sm font-semibold hover:bg-pink-600 mt-4 cursor-pointer"
+            onClick={handleApplyClick}
           >
             Show Offers
           </button>
