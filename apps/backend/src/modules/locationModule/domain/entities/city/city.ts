@@ -1,6 +1,7 @@
 export interface CityDraft {
   readonly id: string;
   readonly name: string;
+  readonly slug: string;
   readonly province: string;
   readonly latitude: number;
   readonly longitude: number;
@@ -8,6 +9,7 @@ export interface CityDraft {
 
 export interface CityState {
   readonly name: string;
+  readonly slug: string;
   readonly province: string;
   readonly latitude: number;
   readonly longitude: number;
@@ -18,11 +20,11 @@ export class City {
   private state: CityState;
 
   public constructor(draft: CityDraft) {
-    const { id, name, province, latitude, longitude } = draft;
+    const { id, name, slug, province, latitude, longitude } = draft;
 
     this.id = id;
 
-    this.state = { name, province, latitude, longitude };
+    this.state = { name, slug, province, latitude, longitude };
   }
 
   public getId(): string {
@@ -31,6 +33,10 @@ export class City {
 
   public getName(): string {
     return this.state.name;
+  }
+
+  public getSlug(): string {
+    return this.state.slug;
   }
 
   public getProvince(): string {

@@ -41,6 +41,27 @@ const batchSize = 100;
 
 let savedCities = 0;
 
+function createSlug(city: string, province: string): string {
+  const polishCharactersMapping: Record<string, string> = {
+    ą: 'a',
+    ć: 'c',
+    ę: 'e',
+    ł: 'l',
+    ń: 'n',
+    ó: 'o',
+    ś: 's',
+    ź: 'z',
+    ż: 'z',
+  };
+
+  const slug = `${city} ${province}`
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[ąćęłńóśźż]/g, (char) => polishCharactersMapping[char] || char);
+
+  return slug;
+}
+
 async function insertCities(): Promise<void> {
   try {
     for (let i = 0; i < cities.length; i += batchSize) {
@@ -50,6 +71,7 @@ async function insertCities(): Promise<void> {
         .map((city) => ({
           id: uuid(),
           name: city.Name,
+          slug: createSlug(city.Name, city.Province),
           province: city.Province,
           latitude: city.Latitude,
           longitude: city.Longitude,

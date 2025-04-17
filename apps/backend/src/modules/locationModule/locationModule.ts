@@ -18,6 +18,8 @@ import type { CreateRemoteCompanyLocationAction } from './application/actions/cr
 import { CreateRemoteCompanyLocationActionImpl } from './application/actions/createRemoteCompanyLocationAction/createRemoteCompanyLocationActionImpl.ts';
 import type { FindCitiesAction } from './application/actions/findCitiesAction/findCitiesAction.ts';
 import { FindCitiesActionImpl } from './application/actions/findCitiesAction/findCitiesActionImpl.ts';
+import type { FindCityAction } from './application/actions/findCityAction/findCityAction.ts';
+import { FindCityActionImpl } from './application/actions/findCityAction/findCityActionImpl.ts';
 import type { UpdateCompanyLocationAction } from './application/actions/updateCompanyLocationAction/updateCompanyLocationAction.ts';
 import { UpdateCompanyLocationActionImpl } from './application/actions/updateCompanyLocationAction/updateCompanyLocationActionImpl.ts';
 import type { CityRepository } from './domain/repositories/cityRepository/cityRepository.ts';
@@ -44,6 +46,11 @@ export class LocationModule implements DependencyInjectionModule {
     container.bind<FindCitiesAction>(
       symbols.findCitiesAction,
       () => new FindCitiesActionImpl(container.get<CityRepository>(symbols.cityRepository)),
+    );
+
+    container.bind<FindCityAction>(
+      symbols.findCityAction,
+      () => new FindCityActionImpl(container.get<CityRepository>(symbols.cityRepository)),
     );
 
     container.bind<CompanyLocationMapper>(symbols.companyLocationMapper, () => new CompanyLocationMapper());
@@ -102,7 +109,11 @@ export class LocationModule implements DependencyInjectionModule {
 
     container.bind<CityHttpController>(
       symbols.cityHttpController,
-      () => new CityHttpController(container.get<FindCitiesAction>(symbols.findCitiesAction)),
+      () =>
+        new CityHttpController(
+          container.get<FindCitiesAction>(symbols.findCitiesAction),
+          container.get<FindCityAction>(symbols.findCityAction),
+        ),
     );
   }
 }

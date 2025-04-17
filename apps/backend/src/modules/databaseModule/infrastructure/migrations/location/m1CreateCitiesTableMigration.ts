@@ -14,6 +14,8 @@ export class M1CreateCitiesTableMigration implements Migration {
 
       table.string('name', 64).notNullable();
 
+      table.string('slug', 64).notNullable().unique();
+
       table.string('province', 32).notNullable();
 
       table.float('latitude').notNullable();

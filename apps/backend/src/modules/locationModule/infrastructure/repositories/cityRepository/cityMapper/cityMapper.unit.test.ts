@@ -22,6 +22,7 @@ describe('CityMapper', () => {
 
     expect(city.getState()).toEqual({
       name: cityEntity.name,
+      slug: cityEntity.slug,
       province: cityEntity.province,
       latitude: cityEntity.latitude,
       longitude: cityEntity.longitude,

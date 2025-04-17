@@ -22,12 +22,26 @@ export class CityRepositoryImpl implements CityRepository {
   }
 
   public async findCity(payload: FindCityPayload): Promise<City | null> {
-    const { id } = payload;
+    const { id, slug } = payload;
 
     let rawEntity: CityRawEntity | undefined;
 
     try {
-      rawEntity = await this.databaseClient<CityRawEntity>(citiesTable.name).select('*').where({ id }).first();
+      const query = this.databaseClient<CityRawEntity>(citiesTable.name).select('*');
+
+      if (id) {
+        query.where({ id });
+      } else if (slug) {
+        query.where({ slug });
+      } else {
+        throw new RepositoryError({
+          entity: 'City',
+          operation: 'find',
+          message: 'Either id or slug must be provided',
+        });
+      }
+
+      rawEntity = await query.first();
     } catch (error) {
       throw new RepositoryError({
         entity: 'City',

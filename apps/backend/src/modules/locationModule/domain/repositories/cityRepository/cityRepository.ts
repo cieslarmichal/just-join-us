@@ -1,7 +1,8 @@
 import type { City } from '../../entities/city/city.ts';
 
 export interface FindCityPayload {
-  readonly id: string;
+  readonly id?: string;
+  readonly slug?: string;
 }
 
 export interface FindCitiesPayload {

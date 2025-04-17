@@ -2,6 +2,7 @@ export const symbols = {
   cityMapper: Symbol('cityMapper'),
   cityRepository: Symbol('cityRepository'),
   findCitiesAction: Symbol('findCitiesAction'),
+  findCityAction: Symbol('findCityAction'),
 
   companyLocationMapper: Symbol('companyLocationMapper'),
   companyLocationRepository: Symbol('companyLocationRepository'),

@@ -43,6 +43,14 @@ describe('CityRepositoryImpl', () => {
       expect(foundCity).not.toBeNull();
     });
 
+    it('finds a City by slug', async () => {
+      const city = await cityTestUtils.createAndPersist();
+
+      const foundCity = await cityRepository.findCity({ slug: city.slug });
+
+      expect(foundCity).not.toBeNull();
+    });
+
     it('returns null if a City with given id does not exist', async () => {
       const id = Generator.uuid();
 
