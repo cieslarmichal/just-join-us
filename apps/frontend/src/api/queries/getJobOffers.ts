@@ -1,13 +1,13 @@
-import { config } from '../../config';
-import { JobOffer } from '../types/jobOffer';
+import { config } from '../../config.ts';
+import { JobOffer } from '../types/jobOffer.ts';
 
-interface SearchJobOffersOptions {
+interface GetJobOffersOptions {
   readonly name?: string | undefined;
   readonly cityId?: string | undefined;
   readonly categoryId?: string | undefined;
 }
 
-export const searchJobOffers = async (options: SearchJobOffersOptions): Promise<JobOffer[]> => {
+export const getJobOffers = async (options: GetJobOffersOptions): Promise<JobOffer[]> => {
   const { name, cityId, categoryId } = options;
 
   let url = `${config.backendUrl}/job-offers`;

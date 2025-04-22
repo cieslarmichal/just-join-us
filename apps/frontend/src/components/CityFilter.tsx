@@ -1,8 +1,8 @@
 import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { CiLocationOn } from 'react-icons/ci';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
-import { searchCities } from '../api/queries/searchCities';
+import { getCities } from '../api/queries/getCities';
 import { useDebounce } from '../hooks/useDebounce';
 import { City } from '../api/types/city';
 import { useSearchParams } from 'react-router-dom';
@@ -24,29 +24,30 @@ const mostPopularCities = [
 ];
 
 export default function CityFilter() {
+  // TODO: modify slug to include province only if city is not unique
   const [searchParams, setSearchParams] = useSearchParams();
-  // TODO: add slug to backend and translate back to name
   const searchParamsCity = searchParams.get('city');
   const [cityInput, setCityInput] = useState<string>(searchParamsCity || '');
   const [suggestedCities, setSuggestedCities] = useState<City[]>([]);
   const [selectedCity, setSelectedCity] = useState<SelectedCity | null>(null);
   const [suggestionSelected, setSuggestionSelected] = useState<boolean>(cityInput !== '');
   const debouncedCityInput = useDebounce(cityInput, 500);
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false); // State to control Popover open/close
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [suggestionsOpen, setSuggestionsOpen] = useState(false);
 
-  const fetchSuggestedCities = async () => {
+  const fetchSuggestedCities = useCallback(async () => {
     if (debouncedCityInput === '' || cityInput === '') {
       setSuggestedCities([]);
       return;
     }
 
     try {
-      const results = await searchCities(debouncedCityInput);
+      const results = await getCities(debouncedCityInput);
       setSuggestedCities(results);
     } catch (error) {
       console.error('Failed to fetch suggested cities', error);
     }
-  };
+  }, [debouncedCityInput, cityInput]);
 
   useEffect(() => {
     if (suggestionSelected) {
@@ -54,7 +55,7 @@ export default function CityFilter() {
     }
 
     fetchSuggestedCities();
-  }, [debouncedCityInput, suggestionSelected]);
+  }, [debouncedCityInput, suggestionSelected, fetchSuggestedCities]);
 
   const fetchCityBySlug = async (slug: string) => {
     const foundCity = await getCity(slug);
@@ -63,6 +64,7 @@ export default function CityFilter() {
       setCityInput(foundCity.name);
       setSelectedCity(foundCity);
       setSuggestionSelected(true);
+      setSuggestedCities([]);
     }
   };
 
@@ -76,8 +78,8 @@ export default function CityFilter() {
     const { value } = event.target;
 
     setCityInput(value);
-
     setSuggestionSelected(false);
+    setSuggestionsOpen(true);
   };
 
   const handleApplyClick = () => {
@@ -85,13 +87,21 @@ export default function CityFilter() {
       ...currentSearchParams,
       city: selectedCity?.slug,
     }));
-    setIsPopoverOpen(false); // Close the Popover
+    setIsPopoverOpen(false);
+  };
+
+  const handlePopoverOpenChange = (open: boolean) => {
+    setIsPopoverOpen(open);
+
+    if (!open && searchParamsCity) {
+      fetchCityBySlug(searchParamsCity);
+    }
   };
 
   return (
     <Popover
       open={isPopoverOpen}
-      onOpenChange={setIsPopoverOpen}
+      onOpenChange={handlePopoverOpenChange}
     >
       <PopoverTrigger asChild>
         <div className="h-10 flex items-center gap-2 border border-gray-300 hover:border-gray-500 rounded-3xl px-8 py-2 cursor-pointer text-sm font-semibold">
@@ -112,6 +122,14 @@ export default function CityFilter() {
                 onChange={handleInputChange}
                 className="border border-gray-300 rounded-md p-3 w-full text-sm"
                 placeholder="Where do you want to work?"
+                onBlur={() => {
+                  setTimeout(() => {
+                    setSuggestionsOpen(false);
+                  }, 200);
+                }}
+                onFocus={() => {
+                  setSuggestionsOpen(true);
+                }}
               />
               {cityInput.length > 0 && (
                 <IoCloseCircleOutline
@@ -120,6 +138,7 @@ export default function CityFilter() {
                     setCityInput('');
                     setSuggestedCities([]);
                     setSuggestionSelected(false);
+                    setSuggestionsOpen(false);
                     setSelectedCity(null);
                   }}
                 />
@@ -137,6 +156,7 @@ export default function CityFilter() {
                       setCityInput(city.name);
                       setSuggestedCities([]);
                       setSuggestionSelected(true);
+                      setSuggestionsOpen(false);
                       setSelectedCity(city);
                     }}
                   >
@@ -146,8 +166,8 @@ export default function CityFilter() {
               </div>
             </div>
 
-            {suggestedCities.length > 0 && (
-              <div className="absolute z-10 bg-white border border-gray-300 rounded-md mt-11 w-full max-h-40 overflow-y-auto">
+            {suggestionsOpen && suggestedCities.length > 0 && (
+              <div className="absolute z-10 bg-white border border-gray-300 rounded-md mt-12 w-full max-h-60 overflow-y-auto shadow-lg">
                 {suggestedCities.map((city) => (
                   <div
                     key={city.id}
@@ -156,6 +176,7 @@ export default function CityFilter() {
                       setCityInput(city.name);
                       setSuggestedCities([]);
                       setSuggestionSelected(true);
+                      setSuggestionsOpen(false);
                       setSelectedCity(city);
                     }}
                   >

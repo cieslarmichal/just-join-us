@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { searchJobOffers } from '../../api/queries/searchJobOffers';
+import { getJobOffers } from '../../api/queries/getJobOffers';
 import { type JobOffer } from '../../api/types/jobOffer';
 import JobOffersList from '../../components/JobOffersList';
 import JobOffersMap from '../../components/JobOffersMap';
@@ -8,6 +8,7 @@ import SearchInput from '../../components/SearchInput';
 import CityFilter from '../../components/CityFilter';
 import CategoryFilterButton from '../../components/CategoryFilterButton';
 import SortButton from '../../components/SortButton';
+import Categories from '../../components/Categories';
 
 export default function SearchPage() {
   const [jobOffers, setJobOffers] = useState<JobOffer[]>([]);
@@ -21,7 +22,7 @@ export default function SearchPage() {
 
   const fetchJobOffers = async () => {
     try {
-      const results = await searchJobOffers({});
+      const results = await getJobOffers({});
       setJobOffers(results);
     } catch (error) {
       console.error('Failed to fetch job offers', error);
@@ -42,41 +43,14 @@ export default function SearchPage() {
           />
           <CityFilter />
         </div>
-        <div className="flex items-center justify-center gap-4 ml-4">
-          <div className="flex flex-wrap gap-2">
-            <CategoryFilterButton
-              category="JS"
-              color="text-blue-500"
-            />
-            <CategoryFilterButton
-              category="Python"
-              color="text-red-500"
-            />
-            <CategoryFilterButton
-              category="Java"
-              color="text-orange-500"
-            />
-            <CategoryFilterButton
-              category="AI/ML"
-              color="text-green-500"
-            />
-            <CategoryFilterButton
-              category="Data"
-              color="text-purple-500"
-            />
-            <CategoryFilterButton
-              category="Game"
-              color="text-teal-500"
-            />
-          </div>
-        </div>
+        <Categories />
         <div className="ml-auto"></div>
       </div>
 
       <div className="grid grid-cols-2 mt-1 gap-4 h-full">
         <div className="flex flex-col">
           <div className="flex justify-between items-center">
-            <h2 className="text-gray-600 font-medium text-base">Work: All offers - 133 offers</h2>
+            <h2 className="text-gray-600 font-medium text-base">{`Work: All offers - ${jobOffers.length} offers`}</h2>
             <SortButton />
           </div>
           <JobOffersList jobOffers={jobOffers} />

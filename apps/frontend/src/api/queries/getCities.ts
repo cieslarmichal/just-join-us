@@ -1,7 +1,7 @@
-import { config } from '../../config';
-import { City } from '../types/city';
+import { config } from '../../config.ts';
+import { City } from '../types/city.ts';
 
-export const searchCities = async (city: string): Promise<City[]> => {
+export const getCities = async (city: string): Promise<City[]> => {
   const response = await fetch(`${config.backendUrl}/cities?name=${city}&pageSize=5`, {
     method: 'GET',
     headers: {
