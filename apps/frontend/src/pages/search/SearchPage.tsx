@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getJobOffers } from '../../api/queries/getJobOffers';
 import { type JobOffer } from '../../api/types/jobOffer';
@@ -6,41 +6,38 @@ import JobOffersList from '../../components/JobOffersList';
 import JobOffersMap from '../../components/JobOffersMap';
 import SearchInput from '../../components/SearchInput';
 import CityFilter from '../../components/CityFilter';
-import CategoryFilterButton from '../../components/CategoryFilterButton';
 import SortButton from '../../components/SortButton';
 import Categories from '../../components/Categories';
 
 export default function SearchPage() {
   const [jobOffers, setJobOffers] = useState<JobOffer[]>([]);
   const [searchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('name') || '');
-  const [filters, setFilters] = useState({
-    company: searchParams.get('company') || '',
-    category: searchParams.get('category') || '',
-    page: searchParams.get('page') || 1,
-  });
 
-  const fetchJobOffers = async () => {
+  const fetchJobOffers = useCallback(async () => {
     try {
-      const results = await getJobOffers({});
+      const results = await getJobOffers({
+        name: searchParams.get('query') || undefined,
+        city: searchParams.get('city') || undefined,
+        category: searchParams.get('category') || undefined,
+        sort: searchParams.get('sort') || undefined,
+        page: Number(searchParams.get('page')) || 1,
+        pageSize: 20,
+      });
       setJobOffers(results);
     } catch (error) {
       console.error('Failed to fetch job offers', error);
     }
-  };
+  }, [searchParams]);
 
   useEffect(() => {
     fetchJobOffers();
-  }, [filters]);
+  }, [searchParams, fetchJobOffers]);
 
   return (
     <div className="sm:px-4 md:px-6">
       <div className="flex items-center my-3 md:my-5">
         <div className="flex items-center justify-center gap-4">
-          <SearchInput
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-          />
+          <SearchInput />
           <CityFilter />
         </div>
         <Categories />

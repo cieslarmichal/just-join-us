@@ -9,7 +9,7 @@ export default function Categories() {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParamsCategory = searchParams.get('category');
   const activeCategory = useMemo(
-    () => categories.find((category) => category.id === searchParamsCategory),
+    () => categories.find((category) => category.slug === searchParamsCategory),
     [categories, searchParamsCategory],
   );
 
@@ -30,39 +30,37 @@ export default function Categories() {
 
   const renderedCategories = categories.map((category) => (
     <CategoryFilterButton
-      key={category.id}
+      key={category.slug}
       category={category.name}
-      color={activeCategory?.id === category.id ? 'bg-blue-500' : 'bg-gray-200'}
+      color={activeCategory?.slug === category.slug ? 'bg-blue-500' : 'bg-gray-200'}
       onClick={() => {
-        if (activeCategory?.id === category.id) {
+        if (activeCategory?.slug === category.slug) {
           searchParams.delete('category');
         } else {
-          searchParams.set('category', category.id);
+          searchParams.set('category', category.slug);
         }
         setSearchParams(searchParams);
       }}
-      isActive={activeCategory?.id === category.id}
+      isActive={activeCategory?.slug === category.slug}
     />
   ));
 
   return (
     <div className="relative mx-auto w-[calc(100%-430px)]">
-      {/* Horizontal Scrolling Container */}
       <div
         className="flex overflow-x-hidden gap-4 px-4 py-2"
         style={{ scrollBehavior: 'smooth' }}
-        ref={scrollContainerRef} // Attach the ref here
+        ref={scrollContainerRef}
       >
         {renderedCategories}
       </div>
 
-      {/* Left Navigation Button */}
       <button
         className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full shadow-md hover:bg-gray-300"
         onClick={() => {
           if (scrollContainerRef.current) {
             const container = scrollContainerRef.current;
-            const scrollAmount = container.offsetWidth; // Scroll by the width of the container
+            const scrollAmount = container.offsetWidth;
             container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
           }
         }}
@@ -70,13 +68,12 @@ export default function Categories() {
         &lt;
       </button>
 
-      {/* Right Navigation Button */}
       <button
         className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full shadow-md hover:bg-gray-300"
         onClick={() => {
           if (scrollContainerRef.current) {
             const container = scrollContainerRef.current;
-            const scrollAmount = container.offsetWidth; // Scroll by the width of the container
+            const scrollAmount = container.offsetWidth;
             container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
           }
         }}

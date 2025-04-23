@@ -3,28 +3,41 @@ import { JobOffer } from '../types/jobOffer.ts';
 
 interface GetJobOffersOptions {
   readonly name?: string | undefined;
-  readonly cityId?: string | undefined;
-  readonly categoryId?: string | undefined;
+  readonly city?: string | undefined;
+  readonly category?: string | undefined;
+  readonly sort?: string | undefined;
+  readonly page: number;
+  readonly pageSize: number;
 }
 
 export const getJobOffers = async (options: GetJobOffersOptions): Promise<JobOffer[]> => {
-  const { name, cityId, categoryId } = options;
+  const { name, city, category, page, pageSize, sort } = options;
 
-  let url = `${config.backendUrl}/job-offers`;
+  let url = `${config.backendUrl}/job-offers?page=${page}&pageSize=${pageSize}`;
+
+  const params: string[] = [];
+
+  if (category) {
+    params.push(`category=${category}`);
+  }
 
   if (name) {
-    url += `?name=${name}`;
+    params.push(`name=${name}`);
   }
 
-  if (cityId) {
-    url += `&cityId=${cityId}`;
+  if (city) {
+    params.push(`city=${city}`);
   }
 
-  if (categoryId) {
-    url += `&categoryId=${categoryId}`;
+  if (sort) {
+    params.push(`sort=${sort}`);
   }
 
-  const response = await fetch(`${url}?pageSize=10`, {
+  if (params.length > 0) {
+    url += `&${params.join('&')}`;
+  }
+
+  const response = await fetch(url, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
