@@ -46,6 +46,7 @@ function generateSlug(name: string, province?: string): string {
     ń: 'n',
     ó: 'o',
     ś: 's',
+    ż: 'z',
     ź: 'z',
   };
 
@@ -69,7 +70,6 @@ async function insertCities(): Promise<void> {
       id: uuid(),
       name: city.Name,
       slug: generateSlug(city.Name),
-      type: city.Type,
       province: city.Province,
       latitude: city.Latitude,
       longitude: city.Longitude,
@@ -91,4 +91,10 @@ async function insertCities(): Promise<void> {
   console.log('All cities have been saved successfully.');
 }
 
-await insertCities();
+try {
+  await insertCities();
+} catch (error) {
+  console.error('Error inserting cities:', error);
+} finally {
+  await databaseClient.destroy();
+}
