@@ -123,21 +123,21 @@ const categories = [
 const categoriesTable = 'categories';
 
 async function insertCategories(): Promise<void> {
-  try {
-    await databaseClient(categoriesTable).insert(
-      categories.map((category) => ({
-        id: uuid(),
-        name: category.name,
-        slug: category.slug,
-      })),
-    );
+  await databaseClient(categoriesTable).insert(
+    categories.map((category) => ({
+      id: uuid(),
+      name: category.name,
+      slug: category.slug,
+    })),
+  );
 
-    console.log('All categories have been saved successfully.');
-  } catch (error) {
-    console.error('Error inserting categories:', error);
-  } finally {
-    await databaseClient.destroy();
-  }
+  console.log('All categories have been saved successfully.');
 }
 
-await insertCategories();
+try {
+  await insertCategories();
+} catch (error) {
+  console.error('Error inserting categories:', error);
+} finally {
+  await databaseClient.destroy();
+}

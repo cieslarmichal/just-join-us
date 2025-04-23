@@ -263,21 +263,21 @@ const skills = [
 const skillsTable = 'skills';
 
 async function insertSkills(): Promise<void> {
-  try {
-    await databaseClient(skillsTable).insert(
-      skills.map((category) => ({
-        id: uuid(),
-        name: category.name,
-        slug: category.slug,
-      })),
-    );
+  await databaseClient(skillsTable).insert(
+    skills.map((category) => ({
+      id: uuid(),
+      name: category.name,
+      slug: category.slug,
+    })),
+  );
 
-    console.log('All skills have been saved successfully.');
-  } catch (error) {
-    console.error('Error inserting skills:', error);
-  } finally {
-    await databaseClient.destroy();
-  }
+  console.log('All skills have been saved successfully.');
 }
 
-await insertSkills();
+try {
+  await insertSkills();
+} catch (error) {
+  console.error('Error inserting skills:', error);
+} finally {
+  await databaseClient.destroy();
+}
