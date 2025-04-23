@@ -14,11 +14,42 @@ export class FindJobOffersActionImpl implements FindJobOffersAction {
   }
 
   public async execute(payload: FindJobOffersActionPayload): Promise<FindJobOffersActionResult> {
-    const { name, companyId, page, pageSize } = payload;
+    const {
+      name,
+      category,
+      employmentType,
+      experienceLevel,
+      maxSalary,
+      minSalary,
+      workingTime,
+      companyId,
+      page,
+      pageSize,
+    } = payload;
 
     const [jobOffers, total] = await Promise.all([
-      this.jobOfferRepository.findJobOffers({ companyId, name, page, pageSize }),
-      this.jobOfferRepository.countJobOffers({ companyId, name }),
+      this.jobOfferRepository.findJobOffers({
+        companyId,
+        category,
+        employmentType,
+        experienceLevel,
+        maxSalary,
+        minSalary,
+        workingTime,
+        name,
+        page,
+        pageSize,
+      }),
+      this.jobOfferRepository.countJobOffers({
+        category,
+        employmentType,
+        experienceLevel,
+        maxSalary,
+        minSalary,
+        workingTime,
+        companyId,
+        name,
+      }),
     ]);
 
     return { data: jobOffers, total };

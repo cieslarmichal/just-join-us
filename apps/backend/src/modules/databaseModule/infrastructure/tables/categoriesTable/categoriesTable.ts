@@ -10,5 +10,6 @@ export const categoriesTable: DatabaseTable<CategoryRawEntity, typeof tableName>
   columns: {
     id: `${tableName}.id`,
     name: `${tableName}.name`,
+    slug: `${tableName}.slug`,
   },
 };

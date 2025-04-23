@@ -17,7 +17,7 @@ export interface FindJobOfferPayload {
 export interface FindJobOffersPayload {
   readonly name?: string | undefined;
   readonly companyId?: string | undefined;
-  readonly categoryId?: string | undefined;
+  readonly category?: string | undefined;
   readonly employmentType?: string | undefined;
   readonly workingTime?: string | undefined;
   readonly experienceLevel?: string | undefined;
@@ -30,7 +30,7 @@ export interface FindJobOffersPayload {
 export interface CountJobOffersPayload {
   readonly name?: string | undefined;
   readonly companyId?: string | undefined;
-  readonly categoryId?: string | undefined;
+  readonly category?: string | undefined;
   readonly employmentType?: string | undefined;
   readonly workingTime?: string | undefined;
   readonly experienceLevel?: string | undefined;

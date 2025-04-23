@@ -62,6 +62,7 @@ export class CategoryHttpController implements HttpController {
     return {
       id: category.getId(),
       name: category.getName(),
+      slug: category.getSlug(),
     };
   }
 }

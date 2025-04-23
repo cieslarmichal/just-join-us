@@ -5,7 +5,7 @@ import {
   logoUrlSchema,
 } from '../../../../../userModule/api/httpControllers/userHttpController/schemas/companySchema.ts';
 import { categoryNameSchema } from '../../categoryHttpController/schemas/categorySchema.ts';
-import { skillSchema } from '../../skillHttpController/schemas/skillSchema.ts';
+import { skillNameSchema } from '../../skillHttpController/schemas/skillSchema.ts';
 
 export const jobOfferNameSchema = Type.String({
   minLength: 3,
@@ -41,7 +41,13 @@ export const jobOfferSchema = Type.Object({
   experienceLevel: Type.String({ minLength: 1 }),
   minSalary: Type.Number({ minimum: 1 }),
   maxSalary: Type.Number({ minimum: 1 }),
-  skills: Type.Optional(Type.Array(skillSchema)),
+  skills: Type.Optional(
+    Type.Array(
+      Type.Object({
+        name: skillNameSchema,
+      }),
+    ),
+  ),
   locations: Type.Optional(
     Type.Array(
       Type.Object({

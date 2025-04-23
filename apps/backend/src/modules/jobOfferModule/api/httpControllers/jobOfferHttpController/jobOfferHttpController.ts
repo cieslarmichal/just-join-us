@@ -131,10 +131,27 @@ export class JobOfferHttpController implements HttpController {
   private async findJobOffers(
     request: HttpRequest<undefined, FindJobOffersQueryParams>,
   ): Promise<HttpOkResponse<FindJobOffersResponseBody>> {
-    const { name, companyId, page = 1, pageSize = 10 } = request.queryParams;
+    const {
+      name,
+      category,
+      employmentType,
+      experienceLevel,
+      minSalary,
+      maxSalary,
+      workingTime,
+      companyId,
+      page = 1,
+      pageSize = 10,
+    } = request.queryParams;
 
     const { data, total } = await this.findJobOffersAction.execute({
       name,
+      category,
+      employmentType,
+      experienceLevel,
+      minSalary,
+      maxSalary,
+      workingTime,
       companyId,
       page,
       pageSize,

@@ -4,17 +4,25 @@ import { type CategoryDraft, Category } from '../../../domain/entities/category/
 
 export class CategoryTestFactory {
   public create(input: Partial<CategoryDraft> = {}): Category {
+    const name = Generator.categoryName();
+    const slug = name.replace(/\s+/g, '-').toLowerCase();
+
     return new Category({
       id: Generator.uuid(),
-      name: Generator.categoryName(),
+      name,
+      slug,
       ...input,
     });
   }
 
   public createRaw(input: Partial<CategoryRawEntity> = {}): CategoryRawEntity {
+    const name = Generator.categoryName();
+    const slug = name.replace(/\s+/g, '-').toLowerCase();
+
     return {
       id: Generator.uuid(),
-      name: Generator.categoryName(),
+      name,
+      slug,
       ...input,
     };
   }

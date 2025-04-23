@@ -1,10 +1,12 @@
 export interface CategoryDraft {
   readonly id: string;
   readonly name: string;
+  readonly slug: string;
 }
 
 export interface CategoryState {
   readonly name: string;
+  readonly slug: string;
 }
 
 export class Category {
@@ -12,11 +14,11 @@ export class Category {
   private state: CategoryState;
 
   public constructor(draft: CategoryDraft) {
-    const { id, name } = draft;
+    const { id, name, slug } = draft;
 
     this.id = id;
 
-    this.state = { name };
+    this.state = { name, slug };
   }
 
   public getId(): string {
@@ -25,6 +27,10 @@ export class Category {
 
   public getName(): string {
     return this.state.name;
+  }
+
+  public getSlug(): string {
+    return this.state.slug;
   }
 
   public getState(): CategoryState {

@@ -8,6 +8,7 @@ export const skillNameSchema = Type.String({
 export const skillSchema = Type.Object({
   id: Type.String({ format: 'uuid' }),
   name: skillNameSchema,
+  slug: skillNameSchema,
 });
 
 export type SkillDto = Static<typeof skillSchema>;

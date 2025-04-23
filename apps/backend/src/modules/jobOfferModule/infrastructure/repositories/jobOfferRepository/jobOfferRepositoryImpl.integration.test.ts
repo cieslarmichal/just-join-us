@@ -188,7 +188,9 @@ describe('JobOfferRepositoryImpl', () => {
       const updatedName = Generator.jobOfferName();
       const updatedDescription = Generator.jobOfferDescription();
       const updatedIsHidden = Generator.boolean();
-      jobOffer.setCategory({ category: new Category({ id: category2.id, name: category2.name }) });
+      jobOffer.setCategory({
+        category: new Category({ id: category2.id, name: category2.name, slug: category2.slug }),
+      });
       jobOffer.setName({ name: updatedName });
       jobOffer.setDescription({ description: updatedDescription });
       jobOffer.setIsHidden({ isHidden: updatedIsHidden });
@@ -391,7 +393,7 @@ describe('JobOfferRepositoryImpl', () => {
         },
       });
 
-      const foundJobOffers = await jobOfferRepository.findJobOffers({ categoryId: category.id, page: 1, pageSize: 10 });
+      const foundJobOffers = await jobOfferRepository.findJobOffers({ category: category.slug, page: 1, pageSize: 10 });
 
       expect(foundJobOffers).toHaveLength(2);
       expect(foundJobOffers[0]?.getState()).toEqual({
@@ -501,7 +503,7 @@ describe('JobOfferRepositoryImpl', () => {
         },
       });
 
-      const count = await jobOfferRepository.countJobOffers({ categoryId: category.id });
+      const count = await jobOfferRepository.countJobOffers({ category: category.slug });
 
       expect(count).toBe(2);
     });

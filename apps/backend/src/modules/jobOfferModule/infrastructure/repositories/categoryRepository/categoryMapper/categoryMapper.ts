@@ -3,11 +3,12 @@ import { Category } from '../../../../domain/entities/category/category.ts';
 
 export class CategoryMapper {
   public mapToDomain(entity: CategoryRawEntity): Category {
-    const { id, name } = entity;
+    const { id, name, slug } = entity;
 
     return new Category({
       id,
       name,
+      slug,
     });
   }
 }

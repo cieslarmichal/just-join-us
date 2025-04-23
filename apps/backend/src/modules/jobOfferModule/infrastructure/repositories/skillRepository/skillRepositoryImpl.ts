@@ -27,7 +27,7 @@ export class SkillRepositoryImpl implements SkillRepository {
 
   public async createSkill(payload: CreateSkillPayload): Promise<Skill> {
     const {
-      data: { name },
+      data: { name, slug },
     } = payload;
 
     let rawEntities: SkillRawEntity[];
@@ -37,6 +37,7 @@ export class SkillRepositoryImpl implements SkillRepository {
         {
           id: this.uuidService.generateUuid(),
           name,
+          slug,
         },
         '*',
       );

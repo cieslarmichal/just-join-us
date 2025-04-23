@@ -22,6 +22,7 @@ describe('CategoryMapper', () => {
 
     expect(category.getState()).toEqual({
       name: categoryEntity.name,
+      slug: categoryEntity.slug,
     });
   });
 });

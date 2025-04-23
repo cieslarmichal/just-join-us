@@ -11,6 +11,8 @@ export class M1CreateCategoriesTableMigration implements Migration {
       table.uuid('id').notNullable().primary();
 
       table.string('name', 32).notNullable().unique();
+
+      table.string('slug', 32).notNullable().unique();
     });
   }
 

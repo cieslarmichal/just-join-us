@@ -8,6 +8,7 @@ export const categoryNameSchema = Type.String({
 export const categorySchema = Type.Object({
   id: Type.String({ format: 'uuid' }),
   name: categoryNameSchema,
+  slug: categoryNameSchema,
 });
 
 export type CategoryDto = Static<typeof categorySchema>;

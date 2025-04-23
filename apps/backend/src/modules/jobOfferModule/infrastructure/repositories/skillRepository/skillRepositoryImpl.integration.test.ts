@@ -40,9 +40,9 @@ describe('SkillRepositoryImpl', () => {
 
   describe('Create', () => {
     it('creates a Skill', async () => {
-      const { name } = skillTestFactory.createRaw();
+      const { name, slug } = skillTestFactory.createRaw();
 
-      const createdSkill = await skillRepository.createSkill({ data: { name } });
+      const createdSkill = await skillRepository.createSkill({ data: { name, slug } });
 
       const foundSkill = await skillTestUtils.findByName({ name });
 
@@ -51,6 +51,7 @@ describe('SkillRepositoryImpl', () => {
       expect(foundSkill).toEqual({
         id: createdSkill.getId(),
         name,
+        slug,
       });
     });
 
@@ -58,7 +59,7 @@ describe('SkillRepositoryImpl', () => {
       const existingSkill = await skillTestUtils.createAndPersist();
 
       try {
-        await skillRepository.createSkill({ data: { name: existingSkill.name } });
+        await skillRepository.createSkill({ data: { name: existingSkill.name, slug: existingSkill.slug } });
       } catch (error) {
         expect(error).toBeInstanceOf(RepositoryError);
 

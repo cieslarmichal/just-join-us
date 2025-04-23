@@ -40,9 +40,9 @@ describe('CategoryRepositoryImpl', () => {
 
   describe('Create', () => {
     it('creates a Category', async () => {
-      const { name } = categoryTestFactory.createRaw();
+      const { name, slug } = categoryTestFactory.createRaw();
 
-      const createdCategory = await categoryRepository.createCategory({ data: { name } });
+      const createdCategory = await categoryRepository.createCategory({ data: { name, slug } });
 
       const foundCategory = await categoryTestUtils.findByName({ name });
 
@@ -51,6 +51,7 @@ describe('CategoryRepositoryImpl', () => {
       expect(foundCategory).toEqual({
         id: createdCategory.getId(),
         name,
+        slug,
       });
     });
 
@@ -58,7 +59,7 @@ describe('CategoryRepositoryImpl', () => {
       const existingCategory = await categoryTestUtils.createAndPersist();
 
       try {
-        await categoryRepository.createCategory({ data: { name: existingCategory.name } });
+        await categoryRepository.createCategory({ data: { name: existingCategory.name, slug: existingCategory.slug } });
       } catch (error) {
         expect(error).toBeInstanceOf(RepositoryError);
 

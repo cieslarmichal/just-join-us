@@ -2,7 +2,9 @@
   "name": "scraper",
   "type": "module",
   "scripts": {
-    "start": "node --env-file=.env src/index.ts",
+    "start:cities": "node --env-file=.env src/cities.ts",
+    "start:categories": "node --env-file=.env src/categories.ts",
+    "start:skills": "node --env-file=.env src/skills.ts",
     "build": "tsc --build",
     "build:dev": "tsc --build",
     "lint": "eslint . -c ../../eslint.config.mjs",

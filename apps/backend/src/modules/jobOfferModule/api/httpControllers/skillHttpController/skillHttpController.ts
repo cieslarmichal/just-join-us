@@ -62,6 +62,7 @@ export class SkillHttpController implements HttpController {
     return {
       id: skill.getId(),
       name: skill.getName(),
+      slug: skill.getSlug(),
     };
   }
 }

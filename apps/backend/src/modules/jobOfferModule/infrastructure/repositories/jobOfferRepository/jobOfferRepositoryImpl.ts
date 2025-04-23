@@ -310,7 +310,7 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
     const {
       name,
       companyId,
-      categoryId,
+      category,
       employmentType,
       experienceLevel,
       minSalary,
@@ -377,8 +377,8 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
         query.where(jobOffersTable.columns.company_id, '=', companyId);
       }
 
-      if (categoryId) {
-        query.where(jobOffersTable.columns.category_id, '=', categoryId);
+      if (category) {
+        query.where(categoriesTable.columns.slug, '=', category);
       }
 
       if (employmentType) {
@@ -417,7 +417,7 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
   }
 
   public async countJobOffers(payload: CountJobOffersPayload): Promise<number> {
-    const { name, companyId, categoryId, employmentType, experienceLevel, maxSalary, minSalary, workingTime } = payload;
+    const { name, companyId, category, employmentType, experienceLevel, maxSalary, minSalary, workingTime } = payload;
 
     try {
       const query = this.databaseClient<JobOfferRawEntity>(jobOffersTable.name);
@@ -430,8 +430,10 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
         query.where(jobOffersTable.columns.company_id, '=', companyId);
       }
 
-      if (categoryId) {
-        query.where(jobOffersTable.columns.category_id, '=', categoryId);
+      if (category) {
+        query
+          .join(categoriesTable.name, jobOffersTable.columns.category_id, '=', categoriesTable.columns.id)
+          .where(categoriesTable.columns.slug, '=', category);
       }
 
       if (employmentType) {

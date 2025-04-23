@@ -27,7 +27,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
 
   public async createCategory(payload: CreateCategoryPayload): Promise<Category> {
     const {
-      data: { name },
+      data: { name, slug },
     } = payload;
 
     let rawEntities: CategoryRawEntity[];
@@ -37,6 +37,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
         {
           id: this.uuidService.generateUuid(),
           name,
+          slug,
         },
         '*',
       );

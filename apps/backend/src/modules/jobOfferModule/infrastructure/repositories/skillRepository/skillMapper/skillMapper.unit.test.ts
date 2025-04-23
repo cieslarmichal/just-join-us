@@ -22,6 +22,7 @@ describe('SkillMapper', () => {
 
     expect(skill.getState()).toEqual({
       name: skillEntity.name,
+      slug: skillEntity.slug,
     });
   });
 });

@@ -8,7 +8,7 @@ import { jobOfferSchema } from './jobOfferSchema.ts';
 export const findJobOffersQueryParamsSchema = Type.Object({
   name: Type.Optional(Type.String({ minLength: 1 })),
   companyId: Type.Optional(Type.String({ format: 'uuid' })),
-  categoryId: Type.Optional(Type.String({ format: 'uuid' })),
+  category: Type.Optional(Type.String({ minLength: 1 })),
   employmentType: Type.Optional(Type.String({ minLength: 1 })),
   workingTime: Type.Optional(Type.String({ minLength: 1 })),
   experienceLevel: Type.Optional(Type.String({ minLength: 1 })),

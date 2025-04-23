@@ -1,10 +1,12 @@
 export interface SkillDraft {
   readonly id: string;
   readonly name: string;
+  readonly slug: string;
 }
 
 export interface SkillState {
   readonly name: string;
+  readonly slug: string;
 }
 
 export class Skill {
@@ -12,11 +14,11 @@ export class Skill {
   private state: SkillState;
 
   public constructor(draft: SkillDraft) {
-    const { id, name } = draft;
+    const { id, name, slug } = draft;
 
     this.id = id;
 
-    this.state = { name };
+    this.state = { name, slug };
   }
 
   public getId(): string {
@@ -25,6 +27,10 @@ export class Skill {
 
   public getName(): string {
     return this.state.name;
+  }
+
+  public getSlug(): string {
+    return this.state.slug;
   }
 
   public getState(): SkillState {
