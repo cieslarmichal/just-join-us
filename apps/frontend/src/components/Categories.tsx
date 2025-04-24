@@ -14,6 +14,8 @@ export default function Categories() {
   );
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const [isLeftButtonVisible, setIsLeftButtonVisible] = useState(false);
+  const [isRightButtonVisible, setIsRightButtonVisible] = useState(false);
 
   const fetchCategories = async () => {
     try {
@@ -28,11 +30,30 @@ export default function Categories() {
     fetchCategories();
   }, []);
 
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      console.log({ left: scrollContainerRef.current.scrollLeft });
+      console.log({ width: scrollContainerRef.current.clientWidth });
+      console.log({ scrollWidth: scrollContainerRef.current.scrollWidth });
+      const container = scrollContainerRef.current;
+      setIsLeftButtonVisible(container.scrollLeft > 0); // Show left button only if scrolled
+      setIsRightButtonVisible(container.scrollLeft + container.clientWidth < container.scrollWidth - 5); // Show right button only if not at the end
+    }
+  };
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      handleScroll(); // Initialize button visibility
+      container.addEventListener('scroll', handleScroll);
+      return () => container.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
+
   const renderedCategories = categories.map((category) => (
     <CategoryFilterButton
       key={category.slug}
       category={category.name}
-      color={activeCategory?.slug === category.slug ? 'bg-blue-500' : 'bg-gray-200'}
       onClick={() => {
         if (activeCategory?.slug === category.slug) {
           searchParams.delete('category');
@@ -46,40 +67,44 @@ export default function Categories() {
   ));
 
   return (
-    <div className="relative mx-auto w-[calc(100%-430px)]">
+    <div className="relative w-[calc(100%-490px)] ml-10">
       <div
-        className="flex overflow-x-hidden gap-4 px-4 py-2"
+        className="flex overflow-x-hidden gap-3 py-2"
         style={{ scrollBehavior: 'smooth' }}
         ref={scrollContainerRef}
       >
         {renderedCategories}
       </div>
 
-      <button
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full shadow-md hover:bg-gray-300"
-        onClick={() => {
-          if (scrollContainerRef.current) {
-            const container = scrollContainerRef.current;
-            const scrollAmount = container.offsetWidth;
-            container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-          }
-        }}
-      >
-        &lt;
-      </button>
+      {isLeftButtonVisible && (
+        <button
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-7 bg-gray-200 px-1.5 py-0.5 rounded-full shadow-md hover:bg-gray-300 cursor-pointer"
+          onClick={() => {
+            if (scrollContainerRef.current) {
+              const container = scrollContainerRef.current;
+              const scrollAmount = container.offsetWidth / 2;
+              container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            }
+          }}
+        >
+          &lt;
+        </button>
+      )}
 
-      <button
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full shadow-md hover:bg-gray-300"
-        onClick={() => {
-          if (scrollContainerRef.current) {
-            const container = scrollContainerRef.current;
-            const scrollAmount = container.offsetWidth;
-            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-          }
-        }}
-      >
-        &gt;
-      </button>
+      {isRightButtonVisible && (
+        <button
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-8 bg-gray-200 px-1.5 py-0.5 rounded-full shadow-md hover:bg-gray-300 cursor-pointer"
+          onClick={() => {
+            if (scrollContainerRef.current) {
+              const container = scrollContainerRef.current;
+              const scrollAmount = container.offsetWidth / 2;
+              container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+          }}
+        >
+          &gt;
+        </button>
+      )}
     </div>
   );
 }

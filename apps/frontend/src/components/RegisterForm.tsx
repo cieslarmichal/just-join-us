@@ -178,7 +178,7 @@ export default function RegisterForm() {
             type="submit"
             className="w-full px-6 py-6 sm:px-10 rounded-2xl bg-pink-600 font-medium text-base"
           >
-            Sing up
+            Sign up
           </Button>
         </div>
       </form>
