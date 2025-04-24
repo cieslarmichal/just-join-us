@@ -36,19 +36,25 @@ export default function Categories() {
       console.log({ width: scrollContainerRef.current.clientWidth });
       console.log({ scrollWidth: scrollContainerRef.current.scrollWidth });
       const container = scrollContainerRef.current;
-      setIsLeftButtonVisible(container.scrollLeft > 0); // Show left button only if scrolled
-      setIsRightButtonVisible(container.scrollLeft + container.clientWidth < container.scrollWidth - 5); // Show right button only if not at the end
+      setIsLeftButtonVisible(container.scrollLeft > 0);
+      setIsRightButtonVisible(container.scrollLeft + container.clientWidth <= container.scrollWidth - 5);
     }
   };
 
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (container) {
-      handleScroll(); // Initialize button visibility
-      container.addEventListener('scroll', handleScroll);
-      return () => container.removeEventListener('scroll', handleScroll);
+      const timeout = setTimeout(() => {
+        handleScroll();
+        container.addEventListener('scroll', handleScroll);
+      }, 0);
+
+      return () => {
+        clearTimeout(timeout);
+        container.removeEventListener('scroll', handleScroll);
+      };
     }
-  }, []);
+  }, [categories]);
 
   const renderedCategories = categories.map((category) => (
     <CategoryFilterButton
