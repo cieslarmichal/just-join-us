@@ -15,6 +15,7 @@ export type VerifyEmailEmailTemplate = {
 
 export type ResetPasswordEmailTemplate = {
   data: {
+    name: string;
     resetPasswordLink: string;
   };
   name: typeof emailTemplateName.resetPassword;

@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { getJobOffers } from '../../api/queries/getJobOffers';
-import { type JobOffer } from '../../api/types/jobOffer';
-import JobOffersList from '../../components/JobOffersList';
-import JobOffersMap from '../../components/JobOffersMap';
-import SearchInput from '../../components/SearchInput';
-import CityFilter from '../../components/CityFilter';
-import SortButton from '../../components/SortButton';
-import Categories from '../../components/Categories';
+import { getJobOffers } from '../api/queries/getJobOffers.ts';
+import { type JobOffer } from '../api/types/jobOffer.ts';
+import JobOffersList from '../components/JobOffersList.tsx';
+import JobOffersMap from '../components/JobOffersMap.tsx';
+import SearchInput from '../components/SearchInput.tsx';
+import CityFilter from '../components/CityFilter.tsx';
+import SortButton from '../components/SortButton.tsx';
+import Categories from '../components/Categories.tsx';
 
 export default function SearchPage() {
   const [jobOffers, setJobOffers] = useState<JobOffer[]>([]);

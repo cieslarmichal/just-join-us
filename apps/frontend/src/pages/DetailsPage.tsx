@@ -1,9 +1,9 @@
 // import { useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
 
-import type { DetailsLoaderResult } from './detailsLoader';
-import Breadcrumbs from '../../components/Breadcrumbs';
-import JobOfferDetails from '../../components/JobOfferDetails';
+import Breadcrumbs from '../components/Breadcrumbs.tsx';
+import JobOfferDetails from '../components/JobOfferDetails.tsx';
+import { DetailsLoaderResult } from './detailsLoader.ts';
 
 export default function DetailsPage() {
   const { jobOffer } = useLoaderData<DetailsLoaderResult>();

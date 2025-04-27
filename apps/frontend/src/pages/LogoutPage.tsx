@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext } from '../context/AuthContext.tsx';
 import { useNavigate } from 'react-router-dom';
 
 export default function LogoutPage() {

@@ -1,16 +1,17 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { detailsLoader } from './pages/details/detailsLoader';
-import DetailsPage from './pages/details/DetailsPage';
+import DetailsPage from './pages/DetailsPage';
 import Root from './pages/Root';
-import SearchPage from './pages/search/SearchPage';
-import RegisterPage from './pages/register/RegisterPage';
-import LoginPage from './pages/login/LoginPage';
+import SearchPage from './pages/SearchPage';
+import LoginPage from './pages/LoginPage';
 import PrivateRoute from './auth/privateRoute';
-import LogoutPage from './pages/logout/LogoutPage';
+import LogoutPage from './pages/LogoutPage';
 import { StrictMode } from 'react';
 import { AuthContextProvider } from './context/AuthContextProvider';
 import { CookiesProvider } from 'react-cookie';
+import { detailsLoader } from './pages/detailsLoader';
+import NewPasswordPage from './pages/NewPasswordPage';
+import VerifyEmailPage from './pages/VerifyEmailPage';
 
 const router = createBrowserRouter([
   {
@@ -31,8 +32,12 @@ const router = createBrowserRouter([
         element: <LoginPage />,
       },
       {
-        path: '/register',
-        element: <RegisterPage />,
+        path: '/new-password',
+        element: <NewPasswordPage />,
+      },
+      {
+        path: '/verify-email',
+        element: <VerifyEmailPage />,
       },
       {
         path: '/logout',

@@ -185,6 +185,8 @@ export class UserModule implements DependencyInjectionModule {
         new SendResetPasswordEmailActionImpl(
           container.get<TokenService>(authSymbols.tokenService),
           container.get<UserRepository>(symbols.userRepository),
+          container.get<CandidateRepository>(symbols.candidateRepository),
+          container.get<CompanyRepository>(symbols.companyRepository),
           container.get<LoggerService>(applicationSymbols.loggerService),
           container.get<Config>(applicationSymbols.config),
           container.get<EmailMessageBus>(symbols.emailMessageBus),
@@ -238,6 +240,8 @@ export class UserModule implements DependencyInjectionModule {
         new SendVerificationEmailActionImpl(
           container.get<TokenService>(authSymbols.tokenService),
           container.get<UserRepository>(symbols.userRepository),
+          container.get<CandidateRepository>(symbols.candidateRepository),
+          container.get<CompanyRepository>(symbols.companyRepository),
           container.get<LoggerService>(applicationSymbols.loggerService),
           container.get<Config>(applicationSymbols.config),
           container.get<EmailMessageBus>(symbols.emailMessageBus),

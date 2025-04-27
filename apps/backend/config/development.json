@@ -8,6 +8,9 @@
     "username": "postgres",
     "password": "postgres"
   },
+  "sendGrid": {
+    "senderEmail": "michal.andrzej.cieslar@gmail.com"
+  },
   "token": {
     "secret": "12321313423565365654546654121890008"
   }

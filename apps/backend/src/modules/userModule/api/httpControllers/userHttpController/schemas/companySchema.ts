@@ -10,7 +10,6 @@ export const companyNameSchema = Type.String({
 });
 
 export const companyDescriptionSchema = Type.String({
-  minLength: 1,
   maxLength: 20000,
 });
 

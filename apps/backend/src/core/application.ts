@@ -20,6 +20,7 @@ import { UserModule } from '../modules/userModule/userModule.ts';
 
 import { type Config } from './config.ts';
 import { HttpServer } from './httpServer.ts';
+import { QueueRouter } from './queueRouter.ts';
 
 export class Application {
   private static container: DependencyInjectionContainer;
@@ -47,7 +48,11 @@ export class Application {
 
     Application.server = new HttpServer(Application.container);
 
+    const queueRouter = new QueueRouter(Application.container);
+
     await Application.server.start();
+
+    await queueRouter.start();
   }
 
   public static async stop(): Promise<void> {

@@ -1,10 +1,13 @@
-import { OperationNotValidError } from '../../../../../common/errors/operationNotValidError.ts';
 import { type LoggerService } from '../../../../../common/logger/loggerService.ts';
 import { tokenTypes } from '../../../../../common/types/tokenType.ts';
 import { type Config } from '../../../../../core/config.ts';
 import { type TokenService } from '../../../../authModule/application/services/tokenService/tokenService.ts';
+import { Candidate } from '../../../domain/entities/candidate/candidate.ts';
+import type { Company } from '../../../domain/entities/company/company.ts';
 import { EmailEventDraft } from '../../../domain/entities/emailEvent/emailEvent.ts';
 import { emailEventTypes } from '../../../domain/entities/emailEvent/types/emailEventType.ts';
+import type { CandidateRepository } from '../../../domain/repositories/candidateRepository/candidateRepository.ts';
+import type { CompanyRepository } from '../../../domain/repositories/companyRepository/companyRepository.ts';
 import { type UserRepository } from '../../../domain/repositories/userRepository/userRepository.ts';
 import { type EmailMessageBus } from '../../messageBuses/emailMessageBus/emailMessageBus.ts';
 
@@ -13,6 +16,8 @@ import { type ExecutePayload, type SendVerificationEmailAction } from './sendVer
 export class SendVerificationEmailActionImpl implements SendVerificationEmailAction {
   private readonly tokenService: TokenService;
   private readonly userRepository: UserRepository;
+  private readonly candidateRepository: CandidateRepository;
+  private readonly companyRepository: CompanyRepository;
   private readonly loggerService: LoggerService;
   private readonly config: Config;
   private readonly emailMessageBus: EmailMessageBus;
@@ -20,12 +25,16 @@ export class SendVerificationEmailActionImpl implements SendVerificationEmailAct
   public constructor(
     tokenService: TokenService,
     userRepository: UserRepository,
+    candidateRepository: CandidateRepository,
+    companyRepository: CompanyRepository,
     loggerService: LoggerService,
     config: Config,
     emailMessageBus: EmailMessageBus,
   ) {
     this.tokenService = tokenService;
     this.userRepository = userRepository;
+    this.candidateRepository = candidateRepository;
+    this.companyRepository = companyRepository;
     this.loggerService = loggerService;
     this.config = config;
     this.emailMessageBus = emailMessageBus;
@@ -36,20 +45,35 @@ export class SendVerificationEmailActionImpl implements SendVerificationEmailAct
 
     const email = emailInput.toLowerCase();
 
-    const user = await this.userRepository.findUser({ email });
+    const user = await this.getUser(email);
 
     if (!user) {
-      throw new OperationNotValidError({
-        reason: 'User not found.',
+      this.loggerService.debug({
+        message: 'User not found.',
         email,
       });
+
+      return;
     }
 
     if (user.getIsEmailVerified()) {
-      throw new OperationNotValidError({
-        reason: 'User email is already verified.',
-        email,
+      this.loggerService.debug({
+        message: 'User email already verified.',
+        userId: user.getId(),
+        email: user.getEmail(),
       });
+
+      return;
+    }
+
+    if (user.getIsDeleted()) {
+      this.loggerService.debug({
+        message: 'User is blocked.',
+        userId: user.getId(),
+        email: user.getEmail(),
+      });
+
+      return;
     }
 
     this.loggerService.debug({
@@ -66,17 +90,39 @@ export class SendVerificationEmailActionImpl implements SendVerificationEmailAct
       expiresIn: this.config.token.emailVerification.expiresIn,
     });
 
-    const emailVerificationLink = `${this.config.frontendUrl}/verifyEmail?token=${emailVerificationToken}`;
+    const emailVerificationLink = `${this.config.frontendUrl}/verify-email?token=${emailVerificationToken}`;
 
     await this.emailMessageBus.sendEvent(
       new EmailEventDraft({
         eventName: emailEventTypes.verifyEmail,
         payload: {
-          name: user.getEmail(),
+          name: user instanceof Candidate ? `${user.getFirstName()} ${user.getLastName()}` : user.getName(),
           recipientEmail: user.getEmail(),
           emailVerificationLink,
         },
       }),
     );
+  }
+
+  public async getUser(email: string): Promise<Candidate | Company | null> {
+    const user = await this.userRepository.findUser({ email });
+
+    if (!user) {
+      return null;
+    }
+
+    const role = user.getRole();
+
+    if (role === 'candidate') {
+      const candidate = await this.candidateRepository.findCandidate({ email });
+
+      return candidate as Candidate;
+    } else if (role === 'company') {
+      const company = await this.companyRepository.findCompany({ email });
+
+      return company as Company;
+    }
+
+    return null;
   }
 }

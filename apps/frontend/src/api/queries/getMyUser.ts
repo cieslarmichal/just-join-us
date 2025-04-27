@@ -6,7 +6,7 @@ type GetMyUserRequest = {
 };
 
 export const getMyUser = async (input: GetMyUserRequest): Promise<User> => {
-  const response = await fetch(`${config.api.baseUrl}/users/me`, {
+  const response = await fetch(`${config.backendUrl}/users/me`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

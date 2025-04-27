@@ -13,18 +13,7 @@ interface Props {
 }
 
 export default function JobOfferDetails({ jobOffer }: Props) {
-  const {
-    name,
-    description: rawDescription,
-    category,
-    companyName,
-    location,
-    latitude,
-    longitude,
-    companyLogoUrl,
-    salaryMin,
-    salaryMax,
-  } = jobOffer;
+  const { name, description: rawDescription, company, maxSalary, minSalary, categoryId, locations } = jobOffer;
 
   const description = useMemo(() => DOMPurify.sanitize(rawDescription), [rawDescription]);
 
@@ -33,15 +22,15 @@ export default function JobOfferDetails({ jobOffer }: Props) {
       <div className="flex justify-between items-start">
         <div className="flex items-center gap:8 md:gap-16 mb-3 md:mb-5">
           <img
-            src={companyLogoUrl}
-            alt={companyName}
+            src={company?.logoUrl}
+            alt={company?.name}
             className="w-30 md:w-40 object-contain"
           />
           <h1 className="text-xl md:text-3xl font-bold">{name}</h1>
         </div>
         <div className="inline-flex items-center px-6 py-0.5">
           <div className="whitespace-nowrap text-xl font-bold">
-            {salaryMin} - {salaryMax} PLN
+            {minSalary} - {maxSalary} PLN
           </div>
         </div>
       </div>
@@ -49,9 +38,21 @@ export default function JobOfferDetails({ jobOffer }: Props) {
       <div className="flex flex-col md:flex-row items-start gap-8 mt-8">
         <div className="flex-1 space-y-4 w-full">
           <div className="flex gap-12 mb-10">
-            <JobOfferDetailsSection sectionName='Company' sectionValue={companyName} Icon={HiOutlineBuildingOffice2}/>
-            <JobOfferDetailsSection sectionName="Location" sectionValue={location} Icon={CiLocationOn} />
-            <JobOfferDetailsSection sectionName="Category" sectionValue={category} Icon={HiOutlineBuildingOffice2} />
+            <JobOfferDetailsSection
+              sectionName="Company"
+              sectionValue={company?.name as string}
+              Icon={HiOutlineBuildingOffice2}
+            />
+            <JobOfferDetailsSection
+              sectionName="Location"
+              sectionValue={locations[0].city || ''}
+              Icon={CiLocationOn}
+            />
+            <JobOfferDetailsSection
+              sectionName="Category"
+              sectionValue={categoryId}
+              Icon={HiOutlineBuildingOffice2}
+            />
           </div>
           <h2 className="text-2xl font-medium">Job description</h2>
           <div
@@ -61,8 +62,9 @@ export default function JobOfferDetails({ jobOffer }: Props) {
         </div>
         <div className="flex-[0.9] flex-col justify-center items-center">
           <MapPicker
-            latitude={latitude}
-            longitude={longitude}
+            // TODO: add actual location
+            latitude={52.321641}
+            longitude={21.00618}
             readOnly
             className="w-full h-50 md:h-96"
             zoom={14}

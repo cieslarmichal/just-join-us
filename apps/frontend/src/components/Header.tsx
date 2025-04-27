@@ -28,25 +28,26 @@ export default function Header() {
           </div>
 
           <div className="flex items-center">
-            <nav className="hidden md:flex items-center space-x-4">
+            <nav className="hidden md:flex items-center space-x-4 mr-2">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
-                  className="hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-600 font-medium"
+                  className="hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium"
                 >
                   {item.name}
                 </Link>
               ))}
             </nav>
+            <div className="w-[2px] h-6 bg-pink-500/20 mx-2" />
             {userData ? (
               <>
-                <Button
-                  className="px-3 sm:px-6 rounded-lg whitespace-nowrap font-medium bg-white text-black hover:bg-gray-100"
-                  onClick={() => navigate('/profiles/id')}
+                <Link
+                  className="px-3 py-2 rounded-lg whitespace-nowrap font-medium bg-white text-black hover:bg-gray-100"
+                  to={'/profiles/:id'}
                 >
                   My profile
-                </Button>
+                </Link>
                 <Button
                   className="px-3 sm:px-6 rounded-lg whitespace-nowrap font-medium bg-white text-black hover:bg-gray-100"
                   onClick={() => navigate('/logout')}
@@ -58,14 +59,14 @@ export default function Header() {
               <>
                 <Link
                   className="hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium mr-2"
-                  to={'/login'}
+                  to={'/login?tab=login'}
                 >
                   Sign in
                 </Link>
 
                 <Button
                   className="px-3 sm:px-6 rounded-lg whitespace-nowrap bg-pink-600 font-medium"
-                  onClick={() => navigate('/register')}
+                  onClick={() => navigate('/login?tab=register')}
                 >
                   Sign up
                 </Button>

@@ -27,6 +27,7 @@ export default function LoginForm() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
+    mode: 'onTouched',
     defaultValues: {
       email: '',
       password: '',
@@ -45,60 +46,81 @@ export default function LoginForm() {
       const redirectPath = '/';
 
       navigate(redirectPath);
-    } catch (error) {
-      console.error('Failed to login user', error);
+    } catch {
+      form.setError('root', {
+        message: 'Invalid email or password',
+      });
     }
   }
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-5"
-      >
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="name@domain.com"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <div>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-6"
+        >
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="name@domain.com"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <div className="flex justify-center w-full">
-          <Button
-            type="submit"
-            className="w-full px-6 py-6 sm:px-10 rounded-2xl bg-pink-600 text-base font-medium"
+          <div className="flex justify-center w-full mt-8">
+            <Button
+              type="submit"
+              className={`w-full px-6 py-6 sm:px-10 rounded-2xl font-medium ${
+                form.formState.isValid
+                  ? 'bg-pink-600'
+                  : 'bg-gray-400 text-black cursor-not-allowed border-black border-1'
+              }`}
+              disabled={!form.formState.isValid}
+            >
+              Sign in
+            </Button>
+          </div>
+        </form>
+        <div className="text-center mt-1">
+          <button
+            type="button"
+            onClick={() => navigate('/login?tab=reset-password')}
+            className="text-xs text-gray-500 hover:underline cursor-pointer"
           >
-            Sign in
-          </Button>
+            Forgot password?
+          </button>
         </div>
-      </form>
-    </Form>
+      </Form>
+      {form.formState.errors.root && (
+        <div className="text-red-600 text-sm mt-2">{form.formState.errors.root.message}</div>
+      )}
+    </div>
   );
 }
