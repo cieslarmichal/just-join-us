@@ -29,23 +29,23 @@ export default function VerifyEmailPage() {
           <div className="rounded-xl border py-7 px-12 bg-white shadow-lg">
             {emailVerified ? (
               <div className="flex flex-col gap-5">
-                <p className="text-lg text-gray-700 font-semibold">Adres e-mail został potwierdzony.</p>
+                <p className="text-lg text-gray-700 font-semibold">E-mail address confirmed.</p>
                 <button
                   className="mt-4 px-6 py-2 bg-pink-600 text-white rounded-2xl font-medium cursor-pointer"
                   onClick={() => navigate('/login')}
                 >
-                  Powrót do logowania
+                  Back to login
                 </button>
               </div>
             ) : (
               <>
                 {error ? (
                   <div className="flex flex-col gap-2">
-                    <p className="text-lg text-gray-700 font-semibold">Link wygasł.</p>
-                    <p className="text-lg text-gray-700 font-semibold">Skontaktuj się z administratorem.</p>
+                    <p className="text-lg text-gray-700 font-semibold">Link expired.</p>
+                    <p className="text-lg text-gray-700 font-semibold">Contact with system administrator.</p>
                   </div>
                 ) : (
-                  <p className="text-lg text-gray-700 font-semibold">Weryfikacja adresu e-mail...</p>
+                  <p className="text-lg text-gray-700 font-semibold">Verifying e-mail address...</p>
                 )}
               </>
             )}

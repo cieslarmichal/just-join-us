@@ -45,17 +45,17 @@ export default function Header() {
             {userData ? (
               <>
                 <Link
-                  className="px-3 py-2 rounded-lg whitespace-nowrap font-medium bg-white text-black hover:bg-gray-100"
+                  className="hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium mr-2"
                   to={'/profiles/:id'}
                 >
                   My profile
                 </Link>
-                <Button
-                  className="px-3 sm:px-6 rounded-lg whitespace-nowrap font-medium bg-white text-black hover:bg-gray-100"
-                  onClick={() => navigate('/logout')}
+                <Link
+                  className="hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium"
+                  to={'/logout'}
                 >
                   Logout
-                </Button>
+                </Link>
               </>
             ) : (
               <>

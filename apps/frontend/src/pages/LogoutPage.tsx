@@ -13,5 +13,5 @@ export default function LogoutPage() {
     navigate('/');
   }, [updateUserData, navigate]);
 
-  return <div>Wylogowanie...</div>;
+  return <div>Logging out...</div>;
 }
