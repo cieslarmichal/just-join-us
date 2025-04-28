@@ -7,8 +7,8 @@ import type { HttpService } from '../httpService/httpService.ts';
 import type { EmailService, EmailTemplateName, SendEmailPayload } from './emailService.ts';
 
 const sendGridTemplateIds: Record<EmailTemplateName, string> = {
-  resetPassword: 'd-eef3b04a8e254db68d6ad5fe2a6ec1fe',
-  verifyEmail: 'd-0ba737dc1c6a4105bd13dfc7db601a95',
+  resetPassword: 'd-8c576f003d5c4380aa275a2a6bb4cefb',
+  verifyEmail: 'd-bb1da3e98804442db343cf72fab23f0a',
 };
 
 export class EmailServiceImpl implements EmailService {
