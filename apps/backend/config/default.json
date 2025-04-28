@@ -7,8 +7,8 @@
     "accessKeyId": null,
     "secretAccessKey": null,
     "region": "eu-central-1",
-    "bucketName": "justjoinus-images-dev",
-    "cloudfrontUrl": "https://d3v9lq8x5hzvan.cloudfront.net"
+    "bucketName": "temp-techjump",
+    "cloudfrontUrl": "https://dqtcrbkctg7oe.cloudfront.net"
   },
   "database": {
     "host": null,
@@ -17,7 +17,7 @@
     "password": null,
     "name": "postgres"
   },
-  "frontendUrl": "https://justjoinus-frontend.fly.dev",
+  "frontendUrl": "http://localhost:5173",
   "hashSaltRounds": 10,
   "logLevel": "debug",
   "sendGrid": {
