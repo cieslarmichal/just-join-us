@@ -18,10 +18,10 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  to="/job-offers"
+                  to="/"
                   className="hover:underline text-gray-400"
                 >
-                  Offers
+                  Job Offers
                 </Link>
               </li>
             </ul>
@@ -57,7 +57,7 @@ export default function Footer() {
                   to="/about"
                   className="hover:underline text-gray-400"
                 >
-                  Aboout Us
+                  About Us
                 </Link>
               </li>
               <li>
