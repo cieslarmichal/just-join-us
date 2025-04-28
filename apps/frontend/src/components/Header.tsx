@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from './ui/Button';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
@@ -10,8 +10,8 @@ const navItems = [
 
 export default function Header() {
   const { userData } = useContext(AuthContext);
-
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <header className="bg-background shadow-sm sticky top-0 z-50">
@@ -33,7 +33,9 @@ export default function Header() {
                 <Link
                   key={item.href}
                   to={item.href}
-                  className="hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium"
+                  className={`relative hover:bg-gray-100 px-3 py-2 rounded-lg text-sm font-medium ${
+                    location.pathname === item.href ? 'text-pink-600' : 'text-gray-700'
+                  }`}
                 >
                   {item.name}
                 </Link>

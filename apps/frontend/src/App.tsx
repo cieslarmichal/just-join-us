@@ -12,6 +12,7 @@ import { CookiesProvider } from 'react-cookie';
 import { detailsLoader } from './pages/detailsLoader';
 import NewPasswordPage from './pages/NewPasswordPage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
+import AboutPage from './pages/AboutPage';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
         path: '/job-offers/:id',
         element: <DetailsPage />,
         loader: detailsLoader,
+      },
+      {
+        path: '/about',
+        element: <AboutPage />,
       },
       {
         path: '/login',

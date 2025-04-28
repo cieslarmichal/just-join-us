@@ -3,7 +3,7 @@ import { FaFacebookF, FaInstagram, FaYoutube, FaTiktok } from 'react-icons/fa';
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-white py-10 px-4 sm:px-6 lg:px-10">
+    <footer className="bg-black text-white py-14 px-4 sm:px-6 lg:px-10">
       <div className="flex">
         <Link
           to="/"
@@ -14,12 +14,12 @@ export default function Footer() {
 
         <div className="flex flex-col sm:flex-row justify-between w-full px-40">
           <div className="text-sm">
-            <h3 className="text-xl font-semibold mb-4 text-gray-400">Products</h3>
+            <h3 className="text-xl font-semibold mb-4">Products</h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   to="/job-offers"
-                  className="hover:underline"
+                  className="hover:underline text-gray-400"
                 >
                   Offers
                 </Link>
@@ -28,12 +28,12 @@ export default function Footer() {
           </div>
 
           <div className="text-sm">
-            <h3 className="text-xl font-semibold mb-4 text-gray-400">Resources</h3>
+            <h3 className="text-xl font-semibold mb-4">Resources</h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   to="/terms"
-                  className="hover:underline"
+                  className="hover:underline text-gray-400"
                 >
                   Terms
                 </Link>
@@ -41,7 +41,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/privacy"
-                  className="hover:underline"
+                  className="hover:underline text-gray-400"
                 >
                   Privacy Policy
                 </Link>
@@ -50,12 +50,12 @@ export default function Footer() {
           </div>
 
           <div className="text-sm">
-            <h3 className="text-xl font-semibold mb-4 text-gray-400">About Us</h3>
+            <h3 className="text-xl font-semibold mb-4">About Us</h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   to="/about"
-                  className="hover:underline"
+                  className="hover:underline text-gray-400"
                 >
                   Aboout Us
                 </Link>
@@ -63,7 +63,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/career"
-                  className="hover:underline"
+                  className="hover:underline text-gray-400"
                 >
                   Career
                 </Link>
@@ -72,7 +72,7 @@ export default function Footer() {
           </div>
 
           <div className="text-sm">
-            <h3 className="text-xl font-semibold mb-4 text-gray-400">Follow us on social media</h3>
+            <h3 className="text-xl font-semibold mb-4 ">Follow us on social media</h3>
             <div className="flex gap-3 mt-6">
               <a
                 href="https://facebook.com"
@@ -101,11 +101,6 @@ export default function Footer() {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="mt-8 border-t border-gray-900 pt-8 text-xs text-gray-400">
-        justjoin.us &copy; {new Date().getFullYear()} - Wszystkie prawa zastrzeżone - Produkcja:{' '}
-        <span className="text-white">Michał Cieślar</span>
       </div>
     </footer>
   );
