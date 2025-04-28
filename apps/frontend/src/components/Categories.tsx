@@ -3,6 +3,7 @@ import CategoryFilterButton from './CategoryFilterButton';
 import { getCategories } from '../api/queries/getCategories';
 import { Category } from '../api/types/category';
 import { useSearchParams } from 'react-router-dom';
+import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md';
 
 export default function Categories() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -84,7 +85,7 @@ export default function Categories() {
 
       {isLeftButtonVisible && (
         <button
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-7 bg-gray-200 px-1.5 py-0.5 rounded-full shadow-md hover:bg-gray-300 cursor-pointer"
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-7 bg-gray-200 px-1 py-1 rounded-full shadow-md hover:bg-gray-300 cursor-pointer"
           onClick={() => {
             if (scrollContainerRef.current) {
               const container = scrollContainerRef.current;
@@ -93,13 +94,13 @@ export default function Categories() {
             }
           }}
         >
-          &lt;
+          <MdOutlineKeyboardArrowLeft className="size-5" />
         </button>
       )}
 
       {isRightButtonVisible && (
         <button
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-8 bg-gray-200 px-1.5 py-0.5 rounded-full shadow-md hover:bg-gray-300 cursor-pointer"
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-8 bg-gray-200 px-1 py-1 rounded-full shadow-md hover:bg-gray-300 cursor-pointer"
           onClick={() => {
             if (scrollContainerRef.current) {
               const container = scrollContainerRef.current;
@@ -108,7 +109,7 @@ export default function Categories() {
             }
           }}
         >
-          &gt;
+          <MdOutlineKeyboardArrowRight className="size-5" />
         </button>
       )}
     </div>
