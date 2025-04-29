@@ -2,11 +2,27 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from './ui/Button';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { UserRole } from '../api/types/userRole';
 
 const navItems = [
   { name: 'Job Offers', href: '/' },
   { name: 'About us', href: '/about' },
 ];
+
+const userProfiles: Record<UserRole, { url: string; label: string }> = {
+  student: {
+    url: '/candidates/:id',
+    label: 'Mój profil',
+  },
+  company: {
+    url: '/companies/:id',
+    label: 'Moja firma',
+  },
+  admin: {
+    url: '/profiles/admin',
+    label: 'Panel admina',
+  },
+};
 
 export default function Header() {
   const { userData } = useContext(AuthContext);
@@ -46,9 +62,9 @@ export default function Header() {
               <>
                 <Link
                   className="hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium mr-2"
-                  to={'/profiles/:id'}
+                  to={userProfiles[userData.role].url.replace(':id', userData.id)}
                 >
-                  My profile
+                  {userProfiles[userData.role].label}
                 </Link>
                 <Link
                   className="hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium"
