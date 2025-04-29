@@ -10,17 +10,17 @@ const navItems = [
 ];
 
 const userProfiles: Record<UserRole, { url: string; label: string }> = {
-  student: {
+  candidate: {
     url: '/candidates/:id',
-    label: 'Mój profil',
+    label: 'My profile',
   },
   company: {
     url: '/companies/:id',
-    label: 'Moja firma',
+    label: 'My company',
   },
   admin: {
     url: '/profiles/admin',
-    label: 'Panel admina',
+    label: 'Admin panel',
   },
 };
 

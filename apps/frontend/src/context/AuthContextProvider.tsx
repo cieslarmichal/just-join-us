@@ -24,7 +24,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     if (newAccessToken) {
       setCookie('just-join-us-access-token', newAccessToken, {
         expires: new Date(Date.now() + 12 * 60 * 60 * 1000),
-        httpOnly: true,
         sameSite: 'strict',
         secure: true,
         maxAge: 12 * 60 * 60,
@@ -40,7 +39,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     if (newRefreshToken) {
       setCookie('just-join-us-refresh-token', newRefreshToken, {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        httpOnly: true,
         sameSite: 'strict',
         secure: true,
         maxAge: 7 * 24 * 60 * 60,
@@ -50,6 +48,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // TODO: check double requests and My profile/Login jumping
   useEffect(() => {
     const fetchUserData = async () => {
       if (!userData && accessToken) {

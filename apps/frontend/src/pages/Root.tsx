@@ -10,7 +10,7 @@ export default function Root() {
       <Header />
       <div className="w-full flex-[1]">
         <Outlet />
-        <Toaster />
+        <Toaster richColors />
       </div>
       <Footer />
     </div>
