@@ -11,7 +11,6 @@ import { loginUser } from '../api/queries/loginUser';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { getMyUser } from '../api/queries/getMyUser';
 
 const formSchema = z.object({
   email: z.string().email().max(50),
@@ -21,7 +20,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function LoginForm() {
-  const { updateUserData, updateAccessToken, updateRefreshToken } = useContext(AuthContext);
+  const { updateAccessToken, updateRefreshToken } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -37,15 +36,11 @@ export default function LoginForm() {
   async function onSubmit(values: FormValues) {
     try {
       const tokens = await loginUser({ email: values.email, password: values.password });
-      const user = await getMyUser({ accessToken: tokens.accessToken });
 
       updateAccessToken(tokens.accessToken);
       updateRefreshToken(tokens.refreshToken);
-      updateUserData(user);
 
-      const redirectPath = '/';
-
-      navigate(redirectPath);
+      navigate('/');
     } catch {
       form.setError('root', {
         message: 'Invalid email or password',
