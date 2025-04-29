@@ -11,6 +11,7 @@ import { loginUser } from '../api/queries/loginUser';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
   email: z.string().email().max(50),
@@ -39,6 +40,8 @@ export default function LoginForm() {
 
       updateAccessToken(tokens.accessToken);
       updateRefreshToken(tokens.refreshToken);
+
+      toast.success('Login successful');
 
       navigate('/');
     } catch {

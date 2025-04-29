@@ -12,6 +12,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/T
 import { EyeIcon, EyeOffIcon, InfoIcon } from 'lucide-react';
 import { useState } from 'react';
 import { changePassword } from '../api/queries/changePassword';
+import { toast } from 'sonner';
 
 const formSchema = z
   .object({
@@ -55,9 +56,9 @@ export default function NewPasswordForm() {
         password: values.password,
       });
 
-      const redirectPath = '/login';
+      toast.success('Password changed successfully');
 
-      navigate(redirectPath);
+      navigate('/login');
     } catch (error) {
       console.error('Failed to reset password', error);
     }

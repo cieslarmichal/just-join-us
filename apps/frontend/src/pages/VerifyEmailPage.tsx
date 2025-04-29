@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { verifyEmail } from '../api/queries/verifyEmail';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function VerifyEmailPage() {
   const queryParams = new URLSearchParams(window.location.search);
@@ -12,7 +13,7 @@ export default function VerifyEmailPage() {
   async function verifyToken(token: string) {
     try {
       await verifyEmail({ token: token || '' });
-
+      toast.success('E-mail address verified successfully');
       setEmailVerified(true);
     } catch (error) {
       console.error('Failed to verify email password', error);

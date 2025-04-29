@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
 import ResetPasswordForm from '../components/ResetPasswordForm';
+import { toast } from 'sonner';
 
 export default function LoginPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -37,6 +38,7 @@ export default function LoginPage() {
   };
 
   const handleRegistrationSuccess = () => {
+    toast.success('Registration successful! Please check your email to activate your account.');
     setIsRegistered(true);
   };
 
