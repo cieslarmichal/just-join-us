@@ -33,9 +33,6 @@ export default function Categories() {
 
   const handleScroll = () => {
     if (scrollContainerRef.current) {
-      console.log({ left: scrollContainerRef.current.scrollLeft });
-      console.log({ width: scrollContainerRef.current.clientWidth });
-      console.log({ scrollWidth: scrollContainerRef.current.scrollWidth });
       const container = scrollContainerRef.current;
       setIsLeftButtonVisible(container.scrollLeft > 0);
       setIsRightButtonVisible(container.scrollLeft + container.clientWidth <= container.scrollWidth - 5);

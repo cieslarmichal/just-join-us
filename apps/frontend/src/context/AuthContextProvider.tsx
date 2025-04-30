@@ -10,8 +10,15 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
   const [userData, setUserData] = useState<User | null>(null);
 
-  const updateUserData = (data: User | null) => {
-    setUserData(data);
+  const [userDataInitialized, setUserDataInitialized] = useState<boolean>(false);
+
+  const clearUserData = () => {
+    setUserData(null);
+
+    setAccessToken(null);
+    setRefreshToken(null);
+    removeCookie('just-join-us-access-token');
+    removeCookie('just-join-us-refresh-token');
   };
 
   const [accessToken, setAccessToken] = useState(cookies['just-join-us-access-token'] || null);
@@ -48,17 +55,21 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // TODO: check double requests and My profile/Login jumping
   useEffect(() => {
     const fetchUserData = async () => {
       if (!userData && accessToken) {
         try {
           const user = await getMyUser({ accessToken });
+
           setUserData(user);
+          setUserDataInitialized(true);
         } catch (error) {
           console.error('Failed to fetch user data:', error);
           setUserData(null);
+          setUserDataInitialized(true);
         }
+      } else {
+        setUserDataInitialized(true);
       }
     };
 
@@ -67,7 +78,15 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ userData, updateUserData, accessToken, refreshToken, updateAccessToken, updateRefreshToken }}
+      value={{
+        userData,
+        userDataInitialized,
+        clearUserData,
+        accessToken,
+        refreshToken,
+        updateAccessToken,
+        updateRefreshToken,
+      }}
     >
       {children}
     </AuthContext.Provider>

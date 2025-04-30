@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router-dom';
 export default function LogoutPage() {
   const navigate = useNavigate();
 
-  const { updateUserData } = useContext(AuthContext);
+  const { clearUserData } = useContext(AuthContext);
 
   useEffect(() => {
-    updateUserData(null);
+    clearUserData();
 
     navigate('/');
-  }, [updateUserData, navigate]);
+  }, [clearUserData, navigate]);
 
   return <div>Logging out...</div>;
 }

@@ -25,9 +25,42 @@ const userProfiles: Record<UserRole, { url: string; label: string }> = {
 };
 
 export default function Header() {
-  const { userData } = useContext(AuthContext);
+  const { userData, userDataInitialized } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const renderedAuthSection = !userDataInitialized ? null : userData ? (
+    <>
+      <Link
+        className="hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium mr-2"
+        to={userProfiles[userData.role].url.replace(':id', userData.id)}
+      >
+        {userProfiles[userData.role].label}
+      </Link>
+      <Link
+        className="hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium"
+        to={'/logout'}
+      >
+        Logout
+      </Link>
+    </>
+  ) : (
+    <>
+      <Link
+        className="hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium mr-2"
+        to={'/login?tab=login'}
+      >
+        Sign in
+      </Link>
+
+      <Button
+        className="px-3 sm:px-6 rounded-lg whitespace-nowrap bg-pink-600 font-medium"
+        onClick={() => navigate('/login?tab=register')}
+      >
+        Sign up
+      </Button>
+    </>
+  );
 
   return (
     <header className="bg-background shadow-sm sticky top-0 z-50">
@@ -58,38 +91,13 @@ export default function Header() {
               ))}
             </nav>
             <div className="w-[2px] h-6 bg-pink-500/20 mx-2" />
-            {userData ? (
-              <>
-                <Link
-                  className="hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium mr-2"
-                  to={userProfiles[userData.role].url.replace(':id', userData.id)}
-                >
-                  {userProfiles[userData.role].label}
-                </Link>
-                <Link
-                  className="hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium"
-                  to={'/logout'}
-                >
-                  Logout
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link
-                  className="hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium mr-2"
-                  to={'/login?tab=login'}
-                >
-                  Sign in
-                </Link>
 
-                <Button
-                  className="px-3 sm:px-6 rounded-lg whitespace-nowrap bg-pink-600 font-medium"
-                  onClick={() => navigate('/login?tab=register')}
-                >
-                  Sign up
-                </Button>
-              </>
-            )}
+            <div
+              className="flex items-center"
+              style={{ width: '175px' }}
+            >
+              {renderedAuthSection}
+            </div>
           </div>
         </div>
       </div>

@@ -3,7 +3,8 @@ import { User } from '../api/types/user';
 
 export type AuthContextType = {
   userData: User | null;
-  updateUserData: (data: User | null) => void;
+  clearUserData: () => void;
+  userDataInitialized: boolean;
   accessToken: string | null;
   refreshToken: string | null;
   updateAccessToken: (newAccessToken: string | null) => void;
@@ -12,7 +13,8 @@ export type AuthContextType = {
 
 export const AuthContext = createContext<AuthContextType>({
   userData: null,
-  updateUserData: () => {},
+  clearUserData: () => {},
+  userDataInitialized: false,
   accessToken: null,
   refreshToken: null,
   updateAccessToken: () => {},

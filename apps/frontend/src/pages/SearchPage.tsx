@@ -45,8 +45,11 @@ export default function SearchPage() {
       </div>
 
       <div className="grid grid-cols-2 mt-1 gap-4 h-full">
-        <div className="flex flex-col">
-          <div className="flex justify-between items-center">
+        <div
+          className="flex flex-col max-h-dvh overflow-scroll"
+          style={{ scrollbarWidth: 'none' }}
+        >
+          <div className="flex justify-between items-center sticky top-0 bg-white z-10 px-4 py-2 border-b border-gray-200">
             <h2 className="text-gray-600 font-medium text-base">{`Work: All offers - ${jobOffers.length} offers`}</h2>
             <SortButton />
           </div>
