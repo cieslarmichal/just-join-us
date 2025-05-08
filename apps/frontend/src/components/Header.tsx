@@ -2,21 +2,18 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from './ui/Button';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { UserRole } from '../api/types/userRole';
+import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarTrigger } from './ui/Menubar';
+import { cn } from '../lib/utils';
 
 const navItems = [
   { name: 'Job Offers', href: '/' },
   { name: 'About us', href: '/about' },
 ];
 
-const userProfiles: Record<UserRole, { url: string; label: string }> = {
+const userProfiles: Record<string, { url: string; label: string }> = {
   candidate: {
     url: '/candidates/:id',
     label: 'My profile',
-  },
-  company: {
-    url: '/companies/:id',
-    label: 'My company',
   },
   admin: {
     url: '/profiles/admin',
@@ -29,14 +26,65 @@ export default function Header() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const linkClasses =
+    '[&.active]:font-extrabold hover:text-primary [&.active]:text-primary underline-offset-8 decoration-[3px] text-nowrap';
+
   const renderedAuthSection = !userDataInitialized ? null : userData ? (
     <>
-      <Link
-        className="hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium mr-2"
-        to={userProfiles[userData.role].url.replace(':id', userData.id)}
-      >
-        {userProfiles[userData.role].label}
-      </Link>
+      {userData.role === 'company' ? (
+        <Menubar className="rounded-none space-x-0 border-none data-[state=open]:!bg-none">
+          <MenubarMenu>
+            <MenubarTrigger
+              omitOpenBg
+              className={cn(linkClasses, 'text-gray-700')}
+            >
+              <Link
+                to={'/my-company'}
+                className={cn(
+                  linkClasses,
+                  location.pathname.includes('/my-company') ? 'text-orange-700' : 'text-gray-700',
+                )}
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+              >
+                Moja firma
+              </Link>
+            </MenubarTrigger>
+            <MenubarContent>
+              <MenubarItem
+                onClick={() => {
+                  navigate('/my-company/trainings');
+                }}
+                className="pt-2 hover:text-primary"
+              >
+                Szkolenia
+              </MenubarItem>
+              <MenubarSeparator />
+              <MenubarItem
+                onClick={() => {
+                  navigate('/my-company');
+                }}
+                className="pt-2 hover:text-primary"
+              >
+                Dane firmy
+              </MenubarItem>
+            </MenubarContent>
+          </MenubarMenu>
+        </Menubar>
+      ) : (
+        <>
+          <Link
+            className={cn(
+              'hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium',
+              location.pathname === userProfiles[userData.role].url ? 'text-pink-600' : 'text-gray-700',
+            )}
+            to={userProfiles[userData.role].url}
+          >
+            {userProfiles[userData.role].label}
+          </Link>
+        </>
+      )}
       <Link
         className="hover:bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium"
         to={'/logout'}

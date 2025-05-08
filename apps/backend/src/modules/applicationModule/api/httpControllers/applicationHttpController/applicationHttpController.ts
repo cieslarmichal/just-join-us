@@ -7,7 +7,6 @@ import type { HttpCreatedResponse, HttpOkResponse } from '../../../../../common/
 import { HttpRoute } from '../../../../../common/http/httpRoute.ts';
 import { httpStatusCodes } from '../../../../../common/http/httpStatusCode.ts';
 import type { LoggerService } from '../../../../../common/logger/loggerService.ts';
-import type { AccessControlService } from '../../../../authModule/application/services/accessControlService/accessControlService.ts';
 import type { DatabaseClient } from '../../../../databaseModule/types/databaseClient.ts';
 import type { UploadImageAction } from '../../../application/actions/uploadImageAction/uploadImageAction.ts';
 
@@ -19,16 +18,9 @@ export class ApplicationHttpController implements HttpController {
   private readonly databaseClient: DatabaseClient;
   private readonly logger: LoggerService;
   private readonly uploadImageAction: UploadImageAction;
-  private readonly accessControlService: AccessControlService;
 
-  public constructor(
-    uploadImageAction: UploadImageAction,
-    accessControlService: AccessControlService,
-    databaseClient: DatabaseClient,
-    logger: LoggerService,
-  ) {
+  public constructor(uploadImageAction: UploadImageAction, databaseClient: DatabaseClient, logger: LoggerService) {
     this.uploadImageAction = uploadImageAction;
-    this.accessControlService = accessControlService;
     this.databaseClient = databaseClient;
     this.logger = logger;
   }
@@ -53,10 +45,6 @@ export class ApplicationHttpController implements HttpController {
   }
 
   private async uploadImage(request: HttpRequest): Promise<HttpCreatedResponse<UploadImageResponseBody>> {
-    const { userId } = await this.accessControlService.verifyBearerToken({
-      requestHeaders: request.headers,
-    });
-
     const file = request.files?.[0];
 
     if (!file) {
@@ -66,7 +54,6 @@ export class ApplicationHttpController implements HttpController {
     }
 
     const { imageUrl } = await this.uploadImageAction.execute({
-      userId,
       filePath: file.filePath,
       contentType: file.contentType,
     });

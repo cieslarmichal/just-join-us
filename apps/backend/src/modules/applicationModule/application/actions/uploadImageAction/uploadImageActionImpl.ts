@@ -25,7 +25,7 @@ export class UploadImageActionImpl implements UploadImageAction {
   }
 
   public async execute(payload: UploadImageActionPayload): Promise<UploadImageActionResult> {
-    const { contentType, filePath, userId } = payload;
+    const { contentType, filePath } = payload;
 
     const { bucketName } = this.config.aws;
 
@@ -36,7 +36,6 @@ export class UploadImageActionImpl implements UploadImageAction {
       contentType,
       bucketName,
       imageId,
-      userId,
     });
 
     await this.s3Service.uploadBlob({

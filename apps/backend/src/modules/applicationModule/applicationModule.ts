@@ -12,8 +12,6 @@ import { type S3Config, S3ClientFactory } from '../../common/s3/s3ClientFactory.
 import { S3Service } from '../../common/s3/s3Service.ts';
 import { UuidService } from '../../common/uuid/uuidService.ts';
 import { createConfig, type Config } from '../../core/config.ts';
-import type { AccessControlService } from '../authModule/application/services/accessControlService/accessControlService.ts';
-import { authSymbols } from '../authModule/symbols.ts';
 import { databaseSymbols } from '../databaseModule/symbols.ts';
 import type { DatabaseClient } from '../databaseModule/types/databaseClient.ts';
 
@@ -69,7 +67,6 @@ export class ApplicationModule implements DependencyInjectionModule {
       () =>
         new ApplicationHttpController(
           container.get<UploadImageAction>(symbols.uploadImageAction),
-          container.get<AccessControlService>(authSymbols.accessControlService),
           container.get<DatabaseClient>(databaseSymbols.databaseClient),
           container.get<LoggerService>(symbols.loggerService),
         ),

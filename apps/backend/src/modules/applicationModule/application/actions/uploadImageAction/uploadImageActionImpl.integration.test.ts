@@ -57,7 +57,6 @@ describe('UploadImageActionImpl', () => {
     expect(existsBefore).toBe(false);
 
     const { imageUrl } = await action.execute({
-      userId: Generator.uuid(),
       filePath,
       contentType: 'image/jpg',
     });

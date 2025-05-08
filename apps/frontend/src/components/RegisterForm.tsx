@@ -361,6 +361,7 @@ export default function RegisterForm({ onSuccess }: Props) {
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute inset-y-0 right-3 flex items-center text-gray-500 cursor-pointer"
+                      tabIndex={-1}
                     >
                       {showPassword ? <EyeOffIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
                     </button>
@@ -387,6 +388,7 @@ export default function RegisterForm({ onSuccess }: Props) {
                       type="button"
                       onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
                       className="absolute inset-y-0 right-3 flex items-center text-gray-500 cursor-pointer"
+                      tabIndex={-1}
                     >
                       {showPasswordConfirmation ? <EyeOffIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
                     </button>
