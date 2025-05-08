@@ -2,7 +2,7 @@ import { config } from '../../config.ts';
 import { Category } from '../types/category.ts';
 
 export const getCategories = async (): Promise<Category[]> => {
-  const response = await fetch(`${config.backendUrl}/categories?pageSize=25`, {
+  const response = await fetch(`${config.backendUrl}/categories?pageSize=50`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

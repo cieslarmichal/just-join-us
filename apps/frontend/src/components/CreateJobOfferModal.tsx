@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { type ReactNode, useCallback, useContext, useEffect, useState } from 'react';
+import { type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { AuthContext } from '../context/AuthContext';
@@ -14,6 +14,9 @@ import { getCategories } from '../api/queries/getCategories';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { z } from 'zod';
+import { MultiSelect } from './ui/MultiSelect';
+import { Skill } from '../api/types/skill';
+import { getSkills } from '../api/queries/getSkills';
 
 const employmentTypes = ['Permanent', 'Contract', 'Internship'];
 
@@ -30,6 +33,7 @@ const formSchema = z.object({
   experienceLevel: z.string(),
   minSalary: z.number().min(1),
   maxSalary: z.number().min(1),
+  skills: z.array(z.string().min(1)).min(1).nonempty('Please select at least one skill.'),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -40,6 +44,7 @@ interface Props {
 
 export const CreateJobOfferModal = ({ onSuccess }: Props): ReactNode => {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [skills, setSkills] = useState<Skill[]>([]);
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -50,9 +55,22 @@ export const CreateJobOfferModal = ({ onSuccess }: Props): ReactNode => {
     }
   }, [setCategories]);
 
+  const fetchSkills = useCallback(async () => {
+    try {
+      const results = await getSkills();
+      setSkills(results);
+    } catch (error) {
+      console.error('Failed to fetch skills', error);
+    }
+  }, [setSkills]);
+
   useEffect(() => {
     fetchCategories();
   }, [fetchCategories]);
+
+  useEffect(() => {
+    fetchSkills();
+  }, [fetchSkills]);
 
   const { userData, accessToken } = useContext(AuthContext);
 
@@ -65,6 +83,12 @@ export const CreateJobOfferModal = ({ onSuccess }: Props): ReactNode => {
       name: '',
       description: '',
       categoryId: '',
+      employmentType: '',
+      workingTime: '',
+      experienceLevel: '',
+      minSalary: 0,
+      maxSalary: 0,
+      skills: [],
     },
     mode: 'onTouched',
   });
@@ -97,6 +121,13 @@ export const CreateJobOfferModal = ({ onSuccess }: Props): ReactNode => {
       throw error;
     }
   };
+
+  const skillList = useMemo(() => {
+    return skills.map((skill) => ({
+      value: skill.id,
+      label: skill.name,
+    }));
+  }, [skills]);
 
   return (
     <Dialog
@@ -193,6 +224,29 @@ export const CreateJobOfferModal = ({ onSuccess }: Props): ReactNode => {
                         ))}
                       </SelectContent>
                     </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="skills"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Skills</FormLabel>
+                    <FormControl>
+                      <MultiSelect
+                        options={skillList}
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        placeholder="Select options"
+                        animation={2}
+                        maxCount={3}
+                        modalPopover={true}
+                        className="z-20"
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

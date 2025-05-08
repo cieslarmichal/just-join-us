@@ -4,7 +4,6 @@ import { CheckIcon, XCircle, ChevronDown, XIcon, WandSparkles } from 'lucide-rea
 
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/Separator';
-import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover';
 import {
@@ -114,7 +113,6 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
       placeholder = 'Select options',
       animation = 0,
       maxCount = 3,
-      modalPopover = false,
       className,
       ...props
     },
@@ -149,6 +147,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
     };
 
     const handleTogglePopover = () => {
+      console.log('Popover toggled');
       setIsPopoverOpen((prev) => !prev);
     };
 
@@ -172,10 +171,10 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
       <Popover
         open={isPopoverOpen}
         onOpenChange={setIsPopoverOpen}
-        modal={modalPopover}
+        modal={false}
       >
         <PopoverTrigger asChild>
-          <Button
+          <button
             ref={ref}
             {...props}
             onClick={handleTogglePopover}
@@ -249,12 +248,13 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
                 <ChevronDown className="h-4 cursor-pointer text-muted-foreground mx-2" />
               </div>
             )}
-          </Button>
+          </button>
         </PopoverTrigger>
         <PopoverContent
           className="w-auto p-0"
           align="start"
           onEscapeKeyDown={() => setIsPopoverOpen(false)}
+          autoFocus
         >
           <Command>
             <CommandInput
@@ -297,7 +297,6 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
                       >
                         <CheckIcon className="h-4 w-4" />
                       </div>
-                      {option.icon && <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
                       <span>{option.label}</span>
                     </CommandItem>
                   );

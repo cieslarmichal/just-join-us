@@ -55,5 +55,5 @@ export const getJobOffers = async (options: GetJobOffersOptions): Promise<JobOff
 
   const jsonData = await response.json();
 
-  return jsonData.data;
+  return jsonData.data as JobOffer[];
 };
