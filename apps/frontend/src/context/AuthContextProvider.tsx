@@ -25,7 +25,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
   const [refreshToken, setRefreshToken] = useState(cookies['just-join-us-refresh-token'] || null);
 
-  const updateAccessToken = (newAccessToken: string | null) => {
+  const updateAccessToken = (newAccessToken: string) => {
     setAccessToken(newAccessToken);
 
     if (newAccessToken) {
@@ -40,7 +40,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const updateRefreshToken = (newRefreshToken: string | null) => {
+  const updateRefreshToken = (newRefreshToken: string) => {
     setRefreshToken(newRefreshToken);
 
     if (newRefreshToken) {

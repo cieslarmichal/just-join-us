@@ -7,8 +7,8 @@
     "accessKeyId": null,
     "secretAccessKey": null,
     "region": "eu-central-1",
-    "bucketName": "temp-techjump",
-    "cloudfrontUrl": "https://dqtcrbkctg7oe.cloudfront.net"
+    "bucketName": "just-join-us",
+    "cloudfrontUrl": "https://d3fusqe50g93ec.cloudfront.net"
   },
   "database": {
     "host": null,

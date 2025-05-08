@@ -24,7 +24,6 @@ const mostPopularCities = [
 ];
 
 export default function CityFilter() {
-  // TODO: modify slug to include province only if city is not unique
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParamsCity = searchParams.get('city');
   const [cityInput, setCityInput] = useState<string>(searchParamsCity || '');

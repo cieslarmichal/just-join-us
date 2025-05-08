@@ -7,8 +7,8 @@ export type AuthContextType = {
   userDataInitialized: boolean;
   accessToken: string | null;
   refreshToken: string | null;
-  updateAccessToken: (newAccessToken: string | null) => void;
-  updateRefreshToken: (newRefreshToken: string | null) => void;
+  updateAccessToken: (newAccessToken: string) => void;
+  updateRefreshToken: (newRefreshToken: string) => void;
 };
 
 export const AuthContext = createContext<AuthContextType>({
