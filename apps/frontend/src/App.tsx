@@ -13,6 +13,9 @@ import { detailsLoader } from './pages/detailsLoader';
 import NewPasswordPage from './pages/NewPasswordPage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
 import AboutPage from './pages/AboutPage';
+import CandidatePage from './components/CandidatePage';
+import CompanyPage from './pages/CompanyPage';
+import CompanyJobOffersPage from './pages/CompanyJobOffersPage';
 
 const router = createBrowserRouter([
   {
@@ -51,6 +54,18 @@ const router = createBrowserRouter([
             <LogoutPage />
           </PrivateRoute>
         ),
+      },
+      {
+        path: '/my-profile',
+        element: <CandidatePage />,
+      },
+      {
+        path: '/my-company',
+        element: <CompanyPage />,
+      },
+      {
+        path: '/my-company/job-offers',
+        element: <CompanyJobOffersPage />,
       },
     ],
   },

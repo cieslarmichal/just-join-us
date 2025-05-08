@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { verifyEmail } from '../api/queries/verifyEmail';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 export default function VerifyEmailPage() {
@@ -21,7 +21,15 @@ export default function VerifyEmailPage() {
     }
   }
 
-  verifyToken(token || '');
+  useEffect(() => {
+    if (!token) {
+      toast.error('No token in url.');
+      navigate('/login');
+      return;
+    }
+
+    verifyToken(token);
+  }, [token, navigate]);
 
   return (
     <div className="flex justify-between min-h-screen bg-gray-100">

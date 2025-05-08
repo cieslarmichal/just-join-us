@@ -21,7 +21,7 @@ export default function Footer() {
                   to="/"
                   className="hover:underline text-gray-400"
                 >
-                  Job Offers
+                  Job offers
                 </Link>
               </li>
             </ul>
@@ -43,21 +43,21 @@ export default function Footer() {
                   to="/privacy"
                   className="hover:underline text-gray-400"
                 >
-                  Privacy Policy
+                  Privacy policy
                 </Link>
               </li>
             </ul>
           </div>
 
           <div className="text-sm">
-            <h3 className="text-xl font-semibold mb-4">About Us</h3>
+            <h3 className="text-xl font-semibold mb-4">About us</h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   to="/about"
                   className="hover:underline text-gray-400"
                 >
-                  About Us
+                  About us
                 </Link>
               </li>
               <li>

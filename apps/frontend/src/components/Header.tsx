@@ -6,7 +6,7 @@ import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, Me
 import { cn } from '../lib/utils';
 
 const navItems = [
-  { name: 'Job Offers', href: '/' },
+  { name: 'Job offers', href: '/' },
   { name: 'About us', href: '/about' },
 ];
 
@@ -48,17 +48,17 @@ export default function Header() {
                   e.preventDefault();
                 }}
               >
-                Moja firma
+                My company
               </Link>
             </MenubarTrigger>
             <MenubarContent>
               <MenubarItem
                 onClick={() => {
-                  navigate('/my-company/trainings');
+                  navigate('/my-company/job-offers');
                 }}
                 className="pt-2 hover:text-primary"
               >
-                Szkolenia
+                Job offers
               </MenubarItem>
               <MenubarSeparator />
               <MenubarItem
@@ -67,7 +67,7 @@ export default function Header() {
                 }}
                 className="pt-2 hover:text-primary"
               >
-                Dane firmy
+                Company details
               </MenubarItem>
             </MenubarContent>
           </MenubarMenu>
