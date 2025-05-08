@@ -124,6 +124,7 @@ export class UserModule implements DependencyInjectionModule {
       symbols.registerCompanyAction,
       () =>
         new RegisterCompanyActionImpl(
+          container.get<UserRepository>(symbols.userRepository),
           container.get<CompanyRepository>(symbols.companyRepository),
           container.get<HashService>(symbols.hashService),
           container.get<LoggerService>(applicationSymbols.loggerService),
@@ -136,6 +137,7 @@ export class UserModule implements DependencyInjectionModule {
       symbols.registerCandidateAction,
       () =>
         new RegisterCandidateActionImpl(
+          container.get<UserRepository>(symbols.userRepository),
           container.get<CandidateRepository>(symbols.candidateRepository),
           container.get<HashService>(symbols.hashService),
           container.get<LoggerService>(applicationSymbols.loggerService),

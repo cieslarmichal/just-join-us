@@ -38,7 +38,7 @@ export default function LoginPage() {
   };
 
   const handleRegistrationSuccess = () => {
-    toast.success('Registration successful! Please check your email to activate your account.');
+    toast.success('Account created.');
     setIsRegistered(true);
   };
 

@@ -4,7 +4,7 @@ import type { HttpRouteSchema } from '../../../../../../common/http/httpRoute.ts
 import { httpStatusCodes } from '../../../../../../common/http/httpStatusCode.ts';
 
 export const uploadImageResponseBodySchema = Type.Object({
-  imageUrl: Type.String(),
+  url: Type.String(),
 });
 
 export type UploadImageResponseBody = Static<typeof uploadImageResponseBodySchema>;

@@ -60,7 +60,7 @@ export class ApplicationHttpController implements HttpController {
 
     return {
       statusCode: httpStatusCodes.created,
-      body: { imageUrl },
+      body: { url: imageUrl },
     };
   }
 

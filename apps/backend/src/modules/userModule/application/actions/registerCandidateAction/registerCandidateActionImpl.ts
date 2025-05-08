@@ -2,6 +2,7 @@ import { ResourceAlreadyExistsError } from '../../../../../common/errors/resourc
 import { type LoggerService } from '../../../../../common/logger/loggerService.ts';
 import { userRoles } from '../../../../../common/types/userRole.ts';
 import { type CandidateRepository } from '../../../domain/repositories/candidateRepository/candidateRepository.ts';
+import type { UserRepository } from '../../../domain/repositories/userRepository/userRepository.ts';
 import { type HashService } from '../../services/hashService/hashService.ts';
 import { type PasswordValidationService } from '../../services/passwordValidationService/passwordValidationService.ts';
 import { type SendVerificationEmailAction } from '../sendVerificationEmailAction/sendVerificationEmailAction.ts';
@@ -13,6 +14,7 @@ import {
 } from './registerCandidateAction.ts';
 
 export class RegisterCandidateActionImpl implements RegisterCandidateAction {
+  private readonly userRepository: UserRepository;
   private readonly candidateRepository: CandidateRepository;
   private readonly hashService: HashService;
   private readonly loggerService: LoggerService;
@@ -20,12 +22,14 @@ export class RegisterCandidateActionImpl implements RegisterCandidateAction {
   private readonly sendVerificationEmailAction: SendVerificationEmailAction;
 
   public constructor(
+    userRepository: UserRepository,
     candidateRepository: CandidateRepository,
     hashService: HashService,
     loggerService: LoggerService,
     passwordValidationService: PasswordValidationService,
     sendVerificationEmailAction: SendVerificationEmailAction,
   ) {
+    this.userRepository = userRepository;
     this.candidateRepository = candidateRepository;
     this.hashService = hashService;
     this.loggerService = loggerService;
@@ -48,11 +52,11 @@ export class RegisterCandidateActionImpl implements RegisterCandidateAction {
       linkedinUrl,
     });
 
-    const existingCandidate = await this.candidateRepository.findCandidate({ email });
+    const existingUser = await this.userRepository.findUser({ email });
 
-    if (existingCandidate) {
+    if (existingUser) {
       throw new ResourceAlreadyExistsError({
-        resource: 'Candidate',
+        resource: 'User',
         email,
       });
     }

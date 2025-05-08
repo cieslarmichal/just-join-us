@@ -13,7 +13,7 @@ export default function VerifyEmailPage() {
   async function verifyToken(token: string) {
     try {
       await verifyEmail({ token: token || '' });
-      toast.success('E-mail address verified successfully');
+      toast.success('Account verified.');
       setEmailVerified(true);
     } catch (error) {
       console.error('Failed to verify email password', error);

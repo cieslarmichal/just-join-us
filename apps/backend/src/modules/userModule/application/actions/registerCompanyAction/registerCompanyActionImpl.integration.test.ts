@@ -100,7 +100,7 @@ describe('RegisterCompanyAction', () => {
       expect(error).toBeInstanceOf(ResourceAlreadyExistsError);
 
       expect((error as ResourceAlreadyExistsError).context).toEqual({
-        resource: 'Company',
+        resource: 'User',
         email: existingCompany.email,
       });
 

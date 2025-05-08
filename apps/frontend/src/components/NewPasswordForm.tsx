@@ -56,7 +56,7 @@ export default function NewPasswordForm() {
         password: values.password,
       });
 
-      toast.success('Password changed successfully');
+      toast.success('Password changed.');
 
       navigate('/login');
     } catch (error) {

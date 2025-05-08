@@ -2,6 +2,7 @@ import { ResourceAlreadyExistsError } from '../../../../../common/errors/resourc
 import { type LoggerService } from '../../../../../common/logger/loggerService.ts';
 import { userRoles } from '../../../../../common/types/userRole.ts';
 import { type CompanyRepository } from '../../../domain/repositories/companyRepository/companyRepository.ts';
+import type { UserRepository } from '../../../domain/repositories/userRepository/userRepository.ts';
 import { type HashService } from '../../services/hashService/hashService.ts';
 import { type PasswordValidationService } from '../../services/passwordValidationService/passwordValidationService.ts';
 import { type SendVerificationEmailAction } from '../sendVerificationEmailAction/sendVerificationEmailAction.ts';
@@ -13,6 +14,7 @@ import {
 } from './registerCompanyAction.ts';
 
 export class RegisterCompanyActionImpl implements RegisterCompanyAction {
+  private readonly userRepository: UserRepository;
   private readonly companyRepository: CompanyRepository;
   private readonly hashService: HashService;
   private readonly loggerService: LoggerService;
@@ -20,12 +22,14 @@ export class RegisterCompanyActionImpl implements RegisterCompanyAction {
   private readonly sendVerificationEmailAction: SendVerificationEmailAction;
 
   public constructor(
+    userRepository: UserRepository,
     companyRepository: CompanyRepository,
     hashService: HashService,
     loggerService: LoggerService,
     passwordValidationService: PasswordValidationService,
     sendVerificationEmailAction: SendVerificationEmailAction,
   ) {
+    this.userRepository = userRepository;
     this.companyRepository = companyRepository;
     this.hashService = hashService;
     this.loggerService = loggerService;
@@ -47,11 +51,11 @@ export class RegisterCompanyActionImpl implements RegisterCompanyAction {
       logoUrl,
     });
 
-    const existingCompany = await this.companyRepository.findCompany({ email });
+    const existingUser = await this.userRepository.findUser({ email });
 
-    if (existingCompany) {
+    if (existingUser) {
       throw new ResourceAlreadyExistsError({
-        resource: 'Company',
+        resource: 'User',
         email,
       });
     }

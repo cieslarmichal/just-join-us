@@ -104,7 +104,7 @@ describe('RegisterCandidateAction', () => {
       expect(error).toBeInstanceOf(ResourceAlreadyExistsError);
 
       expect((error as ResourceAlreadyExistsError).context).toEqual({
-        resource: 'Candidate',
+        resource: 'User',
         email: existingCandidate.email,
       });
 
