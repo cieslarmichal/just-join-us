@@ -5,6 +5,7 @@ import { Breadcrumbs } from '../components/ui/Breadcrumbs.tsx';
 import { getCompanyLocations } from '../api/queries/getCompanyLocations.ts';
 import { CompanyLocation } from '../api/types/companyLocation.ts';
 import { CreateCompanyLocationModal } from '../components/CreateCompanyLocationModal.tsx';
+import CompanyLocationList from '../components/CompanyLocationList.tsx';
 
 export default function CompanyLocationsPage() {
   const { userData, accessToken } = useContext(AuthContext);
@@ -49,6 +50,8 @@ export default function CompanyLocationsPage() {
           />
         </div>
       </div>
+
+      <CompanyLocationList locations={locations} />
     </div>
   );
 }

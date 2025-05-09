@@ -12,7 +12,6 @@ export const findCompanyLocationsPathParamsSchema = Type.Object({
 export type FindCompanyLocationsPathParams = Static<typeof findCompanyLocationsPathParamsSchema>;
 
 export const findCompanyLocationsQueryParamsSchema = Type.Object({
-  companyId: Type.String({ minLength: 1 }),
   page: Type.Optional(Type.Integer({ minimum: 1 })),
   pageSize: Type.Optional(Type.Integer({ minimum: 1 })),
 });
