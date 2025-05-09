@@ -85,17 +85,11 @@ export class CompanyLocationHttpController implements HttpController {
 
     const { companyId } = request.pathParams;
 
-    const { name, isRemote } = request.body;
+    const { name } = request.body;
 
     let companyLocation: CompanyLocation;
 
-    if (isRemote) {
-      const result = await this.createRemoteLocationAction.execute({
-        name,
-        companyId,
-      });
-      companyLocation = result.companyLocation;
-    } else {
+    if ('cityId' in request.body) {
       const { address, cityId, latitude, longitude } = request.body;
 
       const result = await this.createLocationAction.execute({
@@ -105,6 +99,12 @@ export class CompanyLocationHttpController implements HttpController {
         cityId,
         latitude,
         longitude,
+      });
+      companyLocation = result.companyLocation;
+    } else {
+      const result = await this.createRemoteLocationAction.execute({
+        name,
+        companyId,
       });
       companyLocation = result.companyLocation;
     }

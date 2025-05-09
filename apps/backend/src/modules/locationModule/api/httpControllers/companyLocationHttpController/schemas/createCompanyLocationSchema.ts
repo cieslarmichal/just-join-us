@@ -11,7 +11,6 @@ import {
 
 const createCompanyLocationPathParamsSchema = Type.Object({
   companyId: Type.String({ format: 'uuid' }),
-  locationId: Type.String({ format: 'uuid' }),
 });
 
 export type CreateCompanyLocationPathParams = Static<typeof createCompanyLocationPathParamsSchema>;
@@ -19,11 +18,9 @@ export type CreateCompanyLocationPathParams = Static<typeof createCompanyLocatio
 const createCompanyLocationRequestBodySchema = Type.Union([
   Type.Object({
     name: companyLocationNameSchema,
-    isRemote: Type.Literal(true),
   }),
   Type.Object({
     name: companyLocationNameSchema,
-    isRemote: Type.Literal(false),
     cityId: Type.String({ format: 'uuid' }),
     address: companyLocationAddressSchema,
     latitude: Type.Number(),

@@ -16,6 +16,7 @@ import AboutPage from './pages/AboutPage';
 import CandidatePage from './components/CandidatePage';
 import CompanyPage from './pages/CompanyPage';
 import CompanyJobOffersPage from './pages/CompanyJobOffersPage';
+import CompanyLocationsPage from './pages/CompanyLocationsPage';
 
 const router = createBrowserRouter([
   {
@@ -66,6 +67,14 @@ const router = createBrowserRouter([
       {
         path: '/my-company/job-offers',
         element: <CompanyJobOffersPage />,
+      },
+      {
+        path: '/my-company/job-offers/:id',
+        element: <DetailsPage />,
+      },
+      {
+        path: '/my-company/locations',
+        element: <CompanyLocationsPage />,
       },
     ],
   },

@@ -9,9 +9,9 @@ interface Props {
   setLongitude?: (longitude: number) => void;
   latitude: number;
   longitude: number;
-  readOnly: boolean;
+  readOnly?: boolean;
   className?: string;
-  zoom: number;
+  zoom?: number;
 }
 
 export default function MapPicker({
@@ -19,13 +19,13 @@ export default function MapPicker({
   setLongitude,
   latitude,
   longitude,
-  readOnly,
+  readOnly = false,
   className,
-  zoom,
+  zoom = 13,
 }: Props) {
   const [position, setPosition] = useState<LatLngLiteral>({
-    lat: 52.231641,
-    lng: 21.00618,
+    lat: latitude || 51.75202,
+    lng: longitude || 19.45356,
   });
 
   useEffect(() => {

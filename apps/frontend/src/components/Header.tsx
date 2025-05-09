@@ -42,7 +42,7 @@ export default function Header() {
                 to={'/my-company'}
                 className={cn(
                   linkClasses,
-                  location.pathname.includes('/my-company') ? 'text-orange-700' : 'text-gray-700',
+                  location.pathname.includes('/my-company') ? 'text-pink-600' : 'text-gray-700',
                 )}
                 onClick={(e) => {
                   e.preventDefault();
@@ -68,6 +68,15 @@ export default function Header() {
                 className="pt-2 hover:text-primary"
               >
                 Company details
+              </MenubarItem>
+              <MenubarSeparator />
+              <MenubarItem
+                onClick={() => {
+                  navigate('/my-company/locations');
+                }}
+                className="pt-2 hover:text-primary"
+              >
+                Company locations
               </MenubarItem>
             </MenubarContent>
           </MenubarMenu>

@@ -349,7 +349,7 @@ export const CreateJobOfferModal = ({ onSuccess }: Props): ReactNode => {
                 <Button
                   type="submit"
                   disabled={!form.formState.isValid}
-                  className="bg-orange-700 w-full disabled:bg-gray-400 text-black enabled:text-white py-5"
+                  className="bg-pink-600 w-full disabled:bg-gray-400 text-black enabled:text-white py-5"
                 >
                   Create
                 </Button>
