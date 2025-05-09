@@ -20,6 +20,8 @@ import type { FindCitiesAction } from './application/actions/findCitiesAction/fi
 import { FindCitiesActionImpl } from './application/actions/findCitiesAction/findCitiesActionImpl.ts';
 import type { FindCityAction } from './application/actions/findCityAction/findCityAction.ts';
 import { FindCityActionImpl } from './application/actions/findCityAction/findCityActionImpl.ts';
+import type { FindCompanyLocationsAction } from './application/actions/findCompanyLocationsAction/findCompanyLocationsAction.ts';
+import { FindCompanyLocationsActionImpl } from './application/actions/findCompanyLocationsAction/findCompanyLocationsActionImpl.ts';
 import type { UpdateCompanyLocationAction } from './application/actions/updateCompanyLocationAction/updateCompanyLocationAction.ts';
 import { UpdateCompanyLocationActionImpl } from './application/actions/updateCompanyLocationAction/updateCompanyLocationActionImpl.ts';
 import type { CityRepository } from './domain/repositories/cityRepository/cityRepository.ts';
@@ -96,6 +98,12 @@ export class LocationModule implements DependencyInjectionModule {
         ),
     );
 
+    container.bind<FindCompanyLocationsAction>(
+      symbols.findCompanyLocationsAction,
+      () =>
+        new FindCompanyLocationsActionImpl(container.get<CompanyLocationRepository>(symbols.companyLocationRepository)),
+    );
+
     container.bind<CompanyLocationHttpController>(
       symbols.companyLocationHttpController,
       () =>
@@ -103,6 +111,7 @@ export class LocationModule implements DependencyInjectionModule {
           container.get<CreateCompanyLocationAction>(symbols.createCompanyLocationAction),
           container.get<CreateRemoteCompanyLocationAction>(symbols.createRemoteCompanyLocationAction),
           container.get<UpdateCompanyLocationAction>(symbols.updateCompanyLocationAction),
+          container.get<FindCompanyLocationsAction>(symbols.findCompanyLocationsAction),
           container.get<AccessControlService>(authSymbols.accessControlService),
         ),
     );

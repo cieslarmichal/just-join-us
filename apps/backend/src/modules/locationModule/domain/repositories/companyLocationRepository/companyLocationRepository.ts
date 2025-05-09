@@ -16,7 +16,14 @@ export interface FindCompanyLocationPayload {
 
 export interface FindCompanyLocationsPayload {
   readonly ids?: string[] | undefined;
-  readonly name?: string | undefined;
+  readonly companyId?: string | undefined;
+  readonly isRemote?: boolean | undefined;
+  readonly page: number;
+  readonly pageSize: number;
+}
+
+export interface CountCompanyLocationsPayload {
+  readonly ids?: string[] | undefined;
   readonly companyId?: string | undefined;
   readonly isRemote?: boolean | undefined;
 }
@@ -26,4 +33,5 @@ export interface CompanyLocationRepository {
   updateCompanyLocation(payload: UpdateCompanyLocationPayload): Promise<CompanyLocation>;
   findCompanyLocation(payload: FindCompanyLocationPayload): Promise<CompanyLocation | null>;
   findCompanyLocations(payload: FindCompanyLocationsPayload): Promise<CompanyLocation[]>;
+  countCompanyLocations(payload: CountCompanyLocationsPayload): Promise<number>;
 }

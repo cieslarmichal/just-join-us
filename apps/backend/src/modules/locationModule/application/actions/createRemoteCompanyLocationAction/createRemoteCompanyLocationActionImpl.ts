@@ -48,6 +48,8 @@ export class CreateRemoteCompanyLocationActionImpl implements CreateRemoteCompan
     const existingRemoteLocations = await this.companyLocationRepository.findCompanyLocations({
       companyId,
       isRemote: true,
+      page: 1,
+      pageSize: 10,
     });
 
     if (existingRemoteLocations.length > 0) {

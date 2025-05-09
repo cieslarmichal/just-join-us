@@ -10,6 +10,7 @@ import {
   type CreateCompanyLocationPayload,
   type CompanyLocationRepository,
   type UpdateCompanyLocationPayload,
+  type CountCompanyLocationsPayload,
 } from '../../../domain/repositories/companyLocationRepository/companyLocationRepository.ts';
 
 import type { CompanyLocationMapper } from './companyLocationMapper/companyLocationMapper.ts';
@@ -147,7 +148,7 @@ export class CompanyLocationRepositoryImpl implements CompanyLocationRepository 
   }
 
   public async findCompanyLocations(payload: FindCompanyLocationsPayload): Promise<CompanyLocation[]> {
-    const { name, companyId, isRemote, ids } = payload;
+    const { companyId, isRemote, ids, page, pageSize } = payload;
 
     let rawEntities: CompanyLocationRawEntity[];
 
@@ -163,9 +164,38 @@ export class CompanyLocationRepositoryImpl implements CompanyLocationRepository 
         this.databaseClient.raw('ST_Y(geolocation) as longitude'),
       ]);
 
-      if (name) {
-        query.whereRaw(`${companiesLocationsTable.columns.name} ILIKE ?`, `%${name}%`);
+      if (ids?.length) {
+        query.whereIn(companiesLocationsTable.columns.id, ids);
       }
+
+      if (companyId) {
+        query.where(companiesLocationsTable.columns.company_id, companyId);
+      }
+
+      if (isRemote !== undefined) {
+        query.where(companiesLocationsTable.columns.is_remote, isRemote);
+      }
+
+      rawEntities = await query
+        .orderBy(companiesLocationsTable.columns.id, 'desc')
+        .limit(pageSize)
+        .offset((page - 1) * pageSize);
+    } catch (error) {
+      throw new RepositoryError({
+        entity: 'CompanyLocation',
+        operation: 'find',
+        originalError: error,
+      });
+    }
+
+    return rawEntities.map((rawEntity) => this.companyLocationMapper.mapToDomain(rawEntity));
+  }
+
+  public async countCompanyLocations(payload: CountCompanyLocationsPayload): Promise<number> {
+    const { companyId, ids, isRemote } = payload;
+
+    try {
+      const query = this.databaseClient<CompanyLocationRawEntity>(companiesLocationsTable.name);
 
       if (ids?.length) {
         query.whereIn(companiesLocationsTable.columns.id, ids);
@@ -179,15 +209,29 @@ export class CompanyLocationRepositoryImpl implements CompanyLocationRepository 
         query.where(companiesLocationsTable.columns.is_remote, isRemote);
       }
 
-      rawEntities = await query.orderBy(companiesLocationsTable.columns.id, 'desc');
+      const countResult = await query.count().first();
+
+      const count = countResult?.['count'];
+
+      if (count === undefined) {
+        throw new RepositoryError({
+          entity: 'CompanyLocation',
+          operation: 'count',
+          countResult,
+        });
+      }
+
+      if (typeof count === 'string') {
+        return parseInt(count, 10);
+      }
+
+      return count;
     } catch (error) {
       throw new RepositoryError({
         entity: 'CompanyLocation',
-        operation: 'find',
+        operation: 'count',
         originalError: error,
       });
     }
-
-    return rawEntities.map((rawEntity) => this.companyLocationMapper.mapToDomain(rawEntity));
   }
 }

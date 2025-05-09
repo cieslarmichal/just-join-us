@@ -7,6 +7,7 @@ import { httpStatusCodes } from '../../../../../common/http/httpStatusCode.ts';
 import { type AccessControlService } from '../../../../authModule/application/services/accessControlService/accessControlService.ts';
 import type { CreateCompanyLocationAction } from '../../../application/actions/createCompanyLocationAction/createCompanyLocationAction.ts';
 import type { CreateRemoteCompanyLocationAction } from '../../../application/actions/createRemoteCompanyLocationAction/createRemoteCompanyLocationAction.ts';
+import type { FindCompanyLocationsAction } from '../../../application/actions/findCompanyLocationsAction/findCompanyLocationsAction.ts';
 import type { UpdateCompanyLocationAction } from '../../../application/actions/updateCompanyLocationAction/updateCompanyLocationAction.ts';
 import type { CompanyLocation } from '../../../domain/entities/companyLocation/companyLocation.ts';
 
@@ -16,6 +17,11 @@ import {
   type CreateCompanyLocationRequestBody,
   type CreateCompanyLocationResponseBody,
 } from './schemas/createCompanyLocationSchema.ts';
+import {
+  findCompanyLocationsSchema,
+  type FindCompanyLocationsQueryParams,
+  type FindCompanyLocationsResponseBody,
+} from './schemas/findCompanyLocationsSchema.ts';
 import {
   updateCompanyLocationSchema,
   type UpdateCompanyLocationRequestBody,
@@ -28,18 +34,21 @@ export class CompanyLocationHttpController implements HttpController {
   private readonly createLocationAction: CreateCompanyLocationAction;
   private readonly createRemoteLocationAction: CreateRemoteCompanyLocationAction;
   private readonly updateLocationAction: UpdateCompanyLocationAction;
+  private readonly findCompanyLocationsAction: FindCompanyLocationsAction;
   private readonly accessControlService: AccessControlService;
 
   public constructor(
     createLocationAction: CreateCompanyLocationAction,
     createRemoteLocationAction: CreateRemoteCompanyLocationAction,
     updateLocationAction: UpdateCompanyLocationAction,
+    findCompanyLocationsAction: FindCompanyLocationsAction,
     accessControlService: AccessControlService,
   ) {
     this.createLocationAction = createLocationAction;
     this.createRemoteLocationAction = createRemoteLocationAction;
     this.updateLocationAction = updateLocationAction;
     this.updateLocationAction = updateLocationAction;
+    this.findCompanyLocationsAction = findCompanyLocationsAction;
     this.accessControlService = accessControlService;
   }
 
@@ -51,6 +60,13 @@ export class CompanyLocationHttpController implements HttpController {
         handler: this.createLocation.bind(this),
         schema: createCompanyLocationSchema,
         description: 'Create Location',
+      }),
+      new HttpRoute({
+        method: httpMethodNames.get,
+        path: '/companies/:companyId/locations',
+        handler: this.findLocations.bind(this),
+        schema: findCompanyLocationsSchema,
+        description: 'Find Locations',
       }),
       new HttpRoute({
         method: httpMethodNames.patch,
@@ -120,6 +136,34 @@ export class CompanyLocationHttpController implements HttpController {
     return {
       statusCode: httpStatusCodes.ok,
       body: this.mapLocationToDto(companyLocation),
+    };
+  }
+
+  private async findLocations(
+    request: HttpRequest<undefined, FindCompanyLocationsQueryParams>,
+  ): Promise<HttpOkResponse<FindCompanyLocationsResponseBody>> {
+    await this.accessControlService.verifyBearerToken({ requestHeaders: request.headers });
+
+    const { companyId } = request.pathParams;
+
+    const { page = 1, pageSize = 10 } = request.queryParams;
+
+    const { data, total } = await this.findCompanyLocationsAction.execute({
+      companyId,
+      page,
+      pageSize,
+    });
+
+    return {
+      statusCode: httpStatusCodes.ok,
+      body: {
+        data: data.map((location) => this.mapLocationToDto(location)),
+        metadata: {
+          page,
+          pageSize,
+          total,
+        },
+      },
     };
   }
 

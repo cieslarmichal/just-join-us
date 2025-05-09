@@ -231,6 +231,8 @@ describe('CompanyLocationRepositoryImpl', () => {
 
       const locations = await repository.findCompanyLocations({
         companyId: company1.id,
+        page: 1,
+        pageSize: 10,
       });
 
       expect(locations).toHaveLength(3);

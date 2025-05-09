@@ -9,6 +9,7 @@ export const symbols = {
   createCompanyLocationAction: Symbol('createCompanyLocationAction'),
   createRemoteCompanyLocationAction: Symbol('createRemoteCompanyLocationAction'),
   updateCompanyLocationAction: Symbol('updateCompanyLocationAction'),
+  findCompanyLocationsAction: Symbol('findCompanyLocationsAction'),
 
   companyLocationHttpController: Symbol('companyLocationHttpController'),
   cityHttpController: Symbol('cityHttpController'),

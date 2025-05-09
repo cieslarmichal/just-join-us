@@ -96,7 +96,11 @@ export class CreateJobOfferActionImpl implements CreateJobOfferAction {
       });
     }
 
-    const locations = await this.companyLocationRepository.findCompanyLocations({ ids: locationIds });
+    const locations = await this.companyLocationRepository.findCompanyLocations({
+      ids: locationIds,
+      page: 1,
+      pageSize: locationIds.length,
+    });
 
     if (locationIds.length !== locations.length) {
       throw new OperationNotValidError({

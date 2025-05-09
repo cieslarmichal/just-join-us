@@ -125,7 +125,11 @@ export class UpdateJobOfferActionImpl implements UpdateJobOfferAction {
     }
 
     if (locationIds) {
-      const locations = await this.companyLocationRepository.findCompanyLocations({ ids: locationIds });
+      const locations = await this.companyLocationRepository.findCompanyLocations({
+        ids: locationIds,
+        page: 1,
+        pageSize: locationIds.length,
+      });
 
       if (locations.length !== locationIds.length) {
         throw new OperationNotValidError({
