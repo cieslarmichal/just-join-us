@@ -168,7 +168,7 @@ export class CompanyLocationHttpController implements HttpController {
   }
 
   private mapLocationToDto(companyLocation: CompanyLocation): CompanyLocationDto {
-    const { name, companyId, isRemote, address, cityId, latitude, longitude } = companyLocation.getState();
+    const { name, companyId, isRemote, address, cityId, cityName, latitude, longitude } = companyLocation.getState();
 
     const companyLocationDto: CompanyLocationDto = {
       id: companyLocation.getId(),
@@ -183,6 +183,10 @@ export class CompanyLocationHttpController implements HttpController {
 
     if (cityId) {
       companyLocationDto.cityId = cityId;
+    }
+
+    if (cityName) {
+      companyLocationDto.cityName = cityName;
     }
 
     if (latitude !== undefined) {

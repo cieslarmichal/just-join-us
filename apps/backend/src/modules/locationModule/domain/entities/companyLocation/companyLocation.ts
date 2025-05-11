@@ -4,6 +4,7 @@ export interface CompanyLocationDraft {
   readonly companyId: string;
   readonly isRemote: boolean;
   readonly cityId?: string | undefined;
+  readonly cityName?: string | undefined;
   readonly address?: string | undefined;
   readonly latitude?: number | undefined;
   readonly longitude?: number | undefined;
@@ -14,6 +15,7 @@ export interface CompanyLocationState {
   readonly companyId: string;
   readonly isRemote: boolean;
   cityId?: string;
+  cityName?: string;
   address?: string;
   latitude?: number;
   longitude?: number;
@@ -44,7 +46,7 @@ export class CompanyLocation {
   private state: CompanyLocationState;
 
   public constructor(draft: CompanyLocationDraft) {
-    const { id, name, companyId, isRemote, address, cityId, latitude, longitude } = draft;
+    const { id, name, companyId, isRemote, address, cityId, cityName, latitude, longitude } = draft;
 
     this.id = id;
 
@@ -60,6 +62,10 @@ export class CompanyLocation {
 
     if (cityId) {
       locationState = { ...locationState, cityId };
+    }
+
+    if (cityName) {
+      locationState = { ...locationState, cityName };
     }
 
     if (latitude) {
@@ -87,6 +93,10 @@ export class CompanyLocation {
 
   public getCityId(): string | undefined {
     return this.state.cityId;
+  }
+
+  public getCityName(): string | undefined {
+    return this.state.cityName;
   }
 
   public getLatitude(): number | undefined {

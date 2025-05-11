@@ -17,6 +17,7 @@ export const companyLocationSchema = Type.Object({
   isRemote: Type.Boolean(),
   address: Type.Optional(companyLocationAddressSchema),
   cityId: Type.Optional(Type.String({ format: 'uuid' })),
+  cityName: Type.Optional(Type.String()),
   latitude: Type.Optional(Type.Number()),
   longitude: Type.Optional(Type.Number()),
 });

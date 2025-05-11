@@ -5,6 +5,7 @@ export interface CompanyLocation {
   readonly isRemote: boolean;
   readonly address?: string;
   readonly cityId?: string;
+  readonly cityName?: string;
   readonly latitude?: number;
   readonly longitude?: number;
 }

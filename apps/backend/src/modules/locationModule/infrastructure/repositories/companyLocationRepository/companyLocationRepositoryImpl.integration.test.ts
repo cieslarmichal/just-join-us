@@ -193,6 +193,7 @@ describe('CompanyLocationRepositoryImpl', () => {
         isRemote: location.is_remote,
         address: location.address,
         cityId: location.city_id,
+        cityName: city.name,
         latitude: location.latitude,
         longitude: location.longitude,
       });
@@ -249,6 +250,7 @@ describe('CompanyLocationRepositoryImpl', () => {
         companyId: location2.company_id,
         address: location2.address,
         cityId: location2.city_id,
+        cityName: city.name,
         latitude: location2.latitude,
         longitude: location2.longitude,
       });
@@ -259,6 +261,7 @@ describe('CompanyLocationRepositoryImpl', () => {
         companyId: location1.company_id,
         address: location1.address,
         cityId: location1.city_id,
+        cityName: city.name,
         latitude: location1.latitude,
         longitude: location1.longitude,
       });

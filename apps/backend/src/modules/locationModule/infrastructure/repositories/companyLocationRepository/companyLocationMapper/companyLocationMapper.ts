@@ -1,4 +1,7 @@
-import type { CompanyLocationRawEntity } from '../../../../../databaseModule/infrastructure/tables/companiesLocationsTable/companyLocationRawEntity.ts';
+import type {
+  CompanyLocationRawEntity,
+  CompanyLocationRawEntityExtended,
+} from '../../../../../databaseModule/infrastructure/tables/companiesLocationsTable/companyLocationRawEntity.ts';
 import { CompanyLocation } from '../../../../domain/entities/companyLocation/companyLocation.ts';
 
 export class CompanyLocationMapper {
@@ -12,6 +15,22 @@ export class CompanyLocationMapper {
       isRemote: is_remote,
       address,
       cityId: city_id,
+      latitude,
+      longitude,
+    });
+  }
+
+  public mapExtendedToDomain(entity: CompanyLocationRawEntityExtended): CompanyLocation {
+    const { id, name, company_id, is_remote, address, city_id, city_name, latitude, longitude } = entity;
+
+    return new CompanyLocation({
+      id,
+      name,
+      companyId: company_id,
+      isRemote: is_remote,
+      address,
+      cityId: city_id,
+      cityName: city_name,
       latitude,
       longitude,
     });

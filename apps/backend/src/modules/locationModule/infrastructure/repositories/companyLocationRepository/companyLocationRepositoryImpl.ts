@@ -1,7 +1,11 @@
 import { RepositoryError } from '../../../../../common/errors/repositoryError.ts';
 import { type UuidService } from '../../../../../common/uuid/uuidService.ts';
+import { citiesTable } from '../../../../databaseModule/infrastructure/tables/citiesTable/citiesTable.ts';
 import { companiesLocationsTable } from '../../../../databaseModule/infrastructure/tables/companiesLocationsTable/companiesLocationsTable.ts';
-import type { CompanyLocationRawEntity } from '../../../../databaseModule/infrastructure/tables/companiesLocationsTable/companyLocationRawEntity.ts';
+import type {
+  CompanyLocationRawEntity,
+  CompanyLocationRawEntityExtended,
+} from '../../../../databaseModule/infrastructure/tables/companiesLocationsTable/companyLocationRawEntity.ts';
 import type { DatabaseClient } from '../../../../databaseModule/types/databaseClient.ts';
 import { type CompanyLocation } from '../../../domain/entities/companyLocation/companyLocation.ts';
 import {
@@ -105,19 +109,22 @@ export class CompanyLocationRepositoryImpl implements CompanyLocationRepository 
   public async findCompanyLocation(payload: FindCompanyLocationPayload): Promise<CompanyLocation | null> {
     const { id, name, companyId } = payload;
 
-    let rawEntity: CompanyLocationRawEntity | undefined;
+    let rawEntity: CompanyLocationRawEntityExtended | undefined;
 
     try {
-      const query = this.databaseClient(companiesLocationsTable.name).select([
-        companiesLocationsTable.columns.id,
-        companiesLocationsTable.columns.city_id,
-        companiesLocationsTable.columns.company_id,
-        companiesLocationsTable.columns.is_remote,
-        companiesLocationsTable.columns.address,
-        companiesLocationsTable.columns.name,
-        this.databaseClient.raw('ST_X(geolocation) as latitude'),
-        this.databaseClient.raw('ST_Y(geolocation) as longitude'),
-      ]);
+      const query = this.databaseClient(companiesLocationsTable.name)
+        .select([
+          companiesLocationsTable.columns.id,
+          companiesLocationsTable.columns.city_id,
+          companiesLocationsTable.columns.company_id,
+          companiesLocationsTable.columns.is_remote,
+          companiesLocationsTable.columns.address,
+          companiesLocationsTable.columns.name,
+          this.databaseClient.raw('ST_X(geolocation) as latitude'),
+          this.databaseClient.raw('ST_Y(geolocation) as longitude'),
+          `${citiesTable.columns.name} as city_name`,
+        ])
+        .leftJoin(citiesTable.name, companiesLocationsTable.columns.city_id as string, '=', citiesTable.columns.id);
 
       if (id) {
         query.where(companiesLocationsTable.columns.id, id);
@@ -144,25 +151,28 @@ export class CompanyLocationRepositoryImpl implements CompanyLocationRepository 
       return null;
     }
 
-    return this.companyLocationMapper.mapToDomain(rawEntity);
+    return this.companyLocationMapper.mapExtendedToDomain(rawEntity);
   }
 
   public async findCompanyLocations(payload: FindCompanyLocationsPayload): Promise<CompanyLocation[]> {
     const { companyId, isRemote, ids, page, pageSize } = payload;
 
-    let rawEntities: CompanyLocationRawEntity[];
+    let rawEntities: CompanyLocationRawEntityExtended[];
 
     try {
-      const query = this.databaseClient(companiesLocationsTable.name).select([
-        companiesLocationsTable.columns.id,
-        companiesLocationsTable.columns.city_id,
-        companiesLocationsTable.columns.company_id,
-        companiesLocationsTable.columns.is_remote,
-        companiesLocationsTable.columns.address,
-        companiesLocationsTable.columns.name,
-        this.databaseClient.raw('ST_X(geolocation) as latitude'),
-        this.databaseClient.raw('ST_Y(geolocation) as longitude'),
-      ]);
+      const query = this.databaseClient<CompanyLocationRawEntityExtended>(companiesLocationsTable.name)
+        .select([
+          companiesLocationsTable.columns.id,
+          companiesLocationsTable.columns.city_id,
+          companiesLocationsTable.columns.company_id,
+          companiesLocationsTable.columns.is_remote,
+          companiesLocationsTable.columns.address,
+          companiesLocationsTable.columns.name,
+          this.databaseClient.raw('ST_X(geolocation) as latitude'),
+          this.databaseClient.raw('ST_Y(geolocation) as longitude'),
+          `${citiesTable.columns.name} as city_name`,
+        ])
+        .leftJoin(citiesTable.name, companiesLocationsTable.columns.city_id as string, '=', citiesTable.columns.id);
 
       if (ids?.length) {
         query.whereIn(companiesLocationsTable.columns.id, ids);
@@ -176,10 +186,12 @@ export class CompanyLocationRepositoryImpl implements CompanyLocationRepository 
         query.where(companiesLocationsTable.columns.is_remote, isRemote);
       }
 
-      rawEntities = await query
+      query
         .orderBy(companiesLocationsTable.columns.id, 'desc')
         .limit(pageSize)
         .offset((page - 1) * pageSize);
+
+      rawEntities = await query;
     } catch (error) {
       throw new RepositoryError({
         entity: 'CompanyLocation',
@@ -188,7 +200,7 @@ export class CompanyLocationRepositoryImpl implements CompanyLocationRepository 
       });
     }
 
-    return rawEntities.map((rawEntity) => this.companyLocationMapper.mapToDomain(rawEntity));
+    return rawEntities.map((rawEntity) => this.companyLocationMapper.mapExtendedToDomain(rawEntity));
   }
 
   public async countCompanyLocations(payload: CountCompanyLocationsPayload): Promise<number> {
