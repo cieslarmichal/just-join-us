@@ -151,7 +151,6 @@ export class JobOffer {
       employmentType,
       workingTime,
       experienceLevel,
-
       skills,
       isRemote,
     };

@@ -1,5 +1,5 @@
 import { CompanyLocation } from '../api/types/companyLocation';
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import { HiPencil, HiTrash } from 'react-icons/hi2';
 
 interface Props {
@@ -30,17 +30,15 @@ export default function CompanyLocationList({ locations }: Props) {
               </TableCell>
               <TableCell>
                 <div className="flex gap-2">
-                  {/* Edit button */}
                   <button
-                    onClick={() => onEdit(location.id)}
+                    // onClick={() => onEdit(location.id)}
                     className="text-blue-500 hover:text-blue-700 cursor-pointer"
                     title="Edit location"
                   >
                     <HiPencil className="w-5 h-5" />
                   </button>
-                  {/* Delete button */}
                   <button
-                    onClick={() => onDelete(location.id)}
+                    // onClick={() => onDelete(location.id)}
                     className="text-red-500 hover:text-red-700 cursor-pointer"
                     title="Delete location"
                   >

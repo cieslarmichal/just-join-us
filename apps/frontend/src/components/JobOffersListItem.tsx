@@ -23,7 +23,7 @@ export default function JobOffersListItem({ jobOffer }: Props) {
         <div className="flex flex-col gap-2 ml-6 flex-grow">
           <div className="flex items-center gap-2">
             <div className="text-sm font-semibold sm:text-lg whitespace-nowrap">{jobOffer.name}</div>
-            <div className="text-sm sm:text-base whitespace-nowrap ml-auto pr-4 text-green-600">
+            <div className="text-lg whitespace-nowrap ml-auto pr-4 text-green-600 font-medium">
               {jobOffer.minSalary} - {jobOffer.maxSalary} PLN/month
             </div>
           </div>
@@ -34,7 +34,7 @@ export default function JobOffersListItem({ jobOffer }: Props) {
             </div>
             <div className="flex items-center">
               <CiLocationOn className="mr-0.5" />
-              <div className="text-xs sm:text-sm whitespace-nowrap">{jobOffer.locations[0].city}</div>
+              <div className="text-xs sm:text-sm whitespace-nowrap">{jobOffer.location?.city}</div>
             </div>
           </div>
         </div>

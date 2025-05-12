@@ -23,7 +23,7 @@ export default function JobOfferDetails({ jobOffer }: Props) {
     maxSalary,
     minSalary,
     category,
-    locations,
+    location,
   } = jobOffer;
 
   const description = useMemo(() => DOMPurify.sanitize(rawDescription), [rawDescription]);
@@ -51,7 +51,7 @@ export default function JobOfferDetails({ jobOffer }: Props) {
                   Icon={HiOutlineBuildingOffice2}
                 />
                 <JobOfferDetailsSection
-                  sectionValue={locations[0].city || ''}
+                  sectionValue={location?.city || ''}
                   Icon={CiLocationOn}
                 />
                 <JobOfferDetailsSection
@@ -65,7 +65,9 @@ export default function JobOfferDetails({ jobOffer }: Props) {
                   <div>
                     {minSalary} - {maxSalary} PLN / month
                   </div>
-                  <div className="text-xs">Gross per month - {employmentType}</div>
+                  <div className="text-xs">
+                    {employmentType === 'B2B' ? 'Net' : 'Gross'} per month - {employmentType}
+                  </div>
                 </div>
               </div>
             </div>
@@ -92,9 +94,8 @@ export default function JobOfferDetails({ jobOffer }: Props) {
       <div className="flex flex-col md:flex-row items-start min-w-[40vw]">
         <div className="flex flex-col justify-center items-center w-full">
           <MapPicker
-            // TODO: add actual location
-            latitude={52.321641}
-            longitude={21.00618}
+            latitude={location?.latitude || 52.2297}
+            longitude={location?.longitude || 21.0122}
             readOnly
             className="w-full h-50 md:h-[600px]"
             zoom={14}

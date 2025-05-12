@@ -55,7 +55,7 @@ export default function SearchPage() {
           </div>
           <JobOffersList jobOffers={jobOffers} />
         </div>
-        <JobOffersMap />
+        <JobOffersMap locations={[]} />
       </div>
     </div>
   );

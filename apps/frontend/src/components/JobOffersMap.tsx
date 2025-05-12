@@ -1,11 +1,20 @@
 import MapPicker from './MapPicker';
 
-export default function JobOffersMap() {
+interface Props {
+  locations: {
+    latitude: number;
+    longitude: number;
+  }[];
+}
+
+export default function JobOffersMap({ locations }: Props) {
   return (
     <div className="flex-1/2">
       <MapPicker
-        latitude={52.544782}
-        longitude={18.970385}
+        pins={locations.map((location) => ({
+          lat: location.latitude,
+          lng: location.longitude,
+        }))}
         className="w-full h-dvh"
         readOnly
         zoom={7}

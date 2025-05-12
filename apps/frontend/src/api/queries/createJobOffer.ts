@@ -48,7 +48,7 @@ export const createJobOffer = async (request: CreateJobOfferRequest): Promise<Jo
       companyId,
       employmentType,
       experienceLevel,
-      locationIds: [locationId],
+      locationId,
       maxSalary,
       minSalary,
       skillIds,

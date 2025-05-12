@@ -7,11 +7,13 @@ import { config } from '../config';
 interface Props {
   setLatitude?: (latitude: number) => void;
   setLongitude?: (longitude: number) => void;
-  latitude: number;
-  longitude: number;
+  latitude?: number;
+  longitude?: number;
   readOnly?: boolean;
   className?: string;
   zoom?: number;
+  pins?: LatLngLiteral[];
+  onPinAdd?: (pin: LatLngLiteral) => void;
 }
 
 export default function MapPicker({
@@ -22,20 +24,16 @@ export default function MapPicker({
   readOnly = false,
   className,
   zoom = 13,
+  pins = [],
+  onPinAdd,
 }: Props) {
-  const [position, setPosition] = useState<LatLngLiteral>({
-    lat: latitude || 51.75202,
-    lng: longitude || 19.45356,
-  });
-
-  useEffect(() => {
-    if (latitude && longitude) {
-      setPosition({
-        lat: latitude,
-        lng: longitude,
-      });
-    }
-  }, [latitude, longitude]);
+  const [positions, setPositions] = useState<LatLngLiteral[]>(
+    pins.length > 0
+      ? pins
+      : latitude && longitude
+        ? [{ lat: latitude, lng: longitude }]
+        : [{ lat: 51.75202, lng: 19.45356 }],
+  );
 
   const MapEvents = () => {
     const map = useMap();
@@ -44,7 +42,7 @@ export default function MapPicker({
       if (latitude && longitude) {
         map.setView([latitude, longitude], zoom);
       }
-    }, [map]);
+    }, [map, latitude, longitude, zoom]);
 
     map.on(
       'click',
@@ -60,16 +58,18 @@ export default function MapPicker({
 
         const { lat, lng } = e.latlng;
 
-        setPosition({
-          lat,
-          lng,
-        });
+        const newPin = { lat, lng };
+        setPositions((prev) => [...prev, newPin]); // Add the new pin to the state
 
-        if (setLatitude !== undefined) {
+        if (onPinAdd) {
+          onPinAdd(newPin); // Trigger the callback for the new pin
+        }
+
+        if (setLatitude) {
           setLatitude(lat);
         }
 
-        if (setLongitude !== undefined) {
+        if (setLongitude) {
           setLongitude(lng);
         }
 
@@ -82,7 +82,7 @@ export default function MapPicker({
 
   return (
     <MapContainer
-      center={position}
+      center={positions[0]} // Center on the first pin
       zoom={zoom}
       scrollWheelZoom
       className={className}
@@ -91,7 +91,12 @@ export default function MapPicker({
         url={`https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${config.mapTiler.apiKey}`}
         attribution='&copy; <a href="https://www.maptiler.com/">MapTiler</a> contributors'
       />
-      <Marker position={position} />
+      {positions.map((position, index) => (
+        <Marker
+          key={index}
+          position={position}
+        />
+      ))}
       <MapEvents />
     </MapContainer>
   );

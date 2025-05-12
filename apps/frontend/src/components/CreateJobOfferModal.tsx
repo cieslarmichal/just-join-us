@@ -20,7 +20,7 @@ import { getSkills } from '../api/queries/getSkills';
 import { getCompanyLocations } from '../api/queries/getCompanyLocations';
 import { CompanyLocation } from '../api/types/companyLocation';
 
-const employmentTypes = ['Permanent', 'Contract', 'Internship'];
+const employmentTypes = ['Permanent', 'B2B'];
 
 const workingTimes = ['Full-time', 'Part-time'];
 
@@ -36,6 +36,7 @@ const formSchema = z.object({
   minSalary: z.number().min(1),
   maxSalary: z.number().min(1),
   companyLocation: z.string(),
+  isRemote: z.boolean(),
   skills: z.array(z.string().min(1)).min(1).nonempty('Please select at least one skill.'),
 });
 
@@ -111,6 +112,7 @@ export const CreateJobOfferModal = ({ onSuccess }: Props): ReactNode => {
       workingTime: '',
       experienceLevel: '',
       companyLocation: '',
+      isRemote: undefined,
       minSalary: 0,
       maxSalary: 0,
       skills: [],
@@ -128,6 +130,7 @@ export const CreateJobOfferModal = ({ onSuccess }: Props): ReactNode => {
       await createJobOffer({
         companyId: userData?.id as string,
         name: payload.name,
+        isRemote: payload.isRemote,
         description: payload.description,
         categoryId: payload.categoryId,
         employmentType: payload.employmentType,
@@ -407,6 +410,32 @@ export const CreateJobOfferModal = ({ onSuccess }: Props): ReactNode => {
                                 {location.name}
                               </SelectItem>
                             ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="isRemote"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Is remote work allowed</FormLabel>
+                        <Select
+                          onValueChange={(value) => {
+                            field.onChange(value === 'true');
+                          }}
+                          defaultValue={field.value ? 'true' : 'false'}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-full cursor-pointer">
+                              <SelectValue placeholder="Select option" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="true">Yes</SelectItem>
+                            <SelectItem value="false">No</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
