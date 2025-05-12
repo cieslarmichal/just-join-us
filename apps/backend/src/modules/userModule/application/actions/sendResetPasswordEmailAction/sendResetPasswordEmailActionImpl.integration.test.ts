@@ -2,13 +2,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { testSymbols } from '../../../../../../tests/symbols.ts';
 import { TestContainer } from '../../../../../../tests/testContainer.ts';
+import { userRoles } from '../../../../../common/types/userRole.ts';
 import { databaseSymbols } from '../../../../databaseModule/symbols.ts';
 import type { DatabaseClient } from '../../../../databaseModule/types/databaseClient.ts';
 import { EmailEventDraft } from '../../../domain/entities/emailEvent/emailEvent.ts';
 import { emailEventTypes } from '../../../domain/entities/emailEvent/types/emailEventType.ts';
 import { symbols } from '../../../symbols.ts';
 import { UserTestFactory } from '../../../tests/factories/userTestFactory/userTestFactory.ts';
-import { type UserTestUtils } from '../../../tests/utils/userTestUtils/userTestUtils.ts';
+import type { CandidateTestUtils } from '../../../tests/utils/candidateTestUtils/candidateTestUtils.ts';
 import { type EmailMessageBus } from '../../messageBuses/emailMessageBus/emailMessageBus.ts';
 
 import { type SendResetPasswordEmailAction } from './sendResetPasswordEmailAction.ts';
@@ -20,7 +21,7 @@ describe('SendResetPasswordEmailAction', () => {
 
   let emailMessageBus: EmailMessageBus;
 
-  let userTestUtils: UserTestUtils;
+  let candidateTestUtils: CandidateTestUtils;
 
   const userTestFactory = new UserTestFactory();
 
@@ -31,15 +32,15 @@ describe('SendResetPasswordEmailAction', () => {
 
     databaseClient = container.get<DatabaseClient>(databaseSymbols.databaseClient);
 
-    userTestUtils = container.get<UserTestUtils>(testSymbols.userTestUtils);
+    candidateTestUtils = container.get<CandidateTestUtils>(testSymbols.candidateTestUtils);
 
     emailMessageBus = container.get<EmailMessageBus>(symbols.emailMessageBus);
 
-    await userTestUtils.truncate();
+    await candidateTestUtils.truncate();
   });
 
   afterEach(async () => {
-    await userTestUtils.truncate();
+    await candidateTestUtils.truncate();
 
     await databaseClient.destroy();
   });
@@ -47,20 +48,19 @@ describe('SendResetPasswordEmailAction', () => {
   it('sends ResetPasswordEmail', async () => {
     const user = userTestFactory.create();
 
-    await userTestUtils.createAndPersist({
-      input: {
+    const candidate = await candidateTestUtils.createAndPersist({
+      userInput: {
         email: user.getEmail(),
         id: user.getId(),
         is_email_verified: true,
         password: user.getPassword(),
+        role: userRoles.candidate,
       },
     });
 
     const sendEmailSpy = vi.spyOn(emailMessageBus, 'sendEvent');
 
-    await action.execute({
-      email: user.getEmail(),
-    });
+    await action.execute({ email: user.getEmail() });
 
     expect(sendEmailSpy).toHaveBeenCalledWith(
       new EmailEventDraft({
@@ -68,7 +68,7 @@ describe('SendResetPasswordEmailAction', () => {
         payload: {
           recipientEmail: user.getEmail(),
           resetPasswordLink: expect.any(String),
-          name: user.getEmail(),
+          name: `${candidate.first_name} ${candidate.last_name}`,
         },
       }),
     );

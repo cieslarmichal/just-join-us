@@ -39,9 +39,10 @@ export class UpdateJobOfferActionImpl implements UpdateJobOfferAction {
       description,
       categoryId,
       isHidden,
+      isRemote,
       employmentType,
       experienceLevel,
-      locationIds,
+      locationId,
       maxSalary,
       minSalary,
       skillIds,
@@ -55,13 +56,21 @@ export class UpdateJobOfferActionImpl implements UpdateJobOfferAction {
       description,
       categoryId,
       isHidden,
+      isRemote,
+      employmentType,
+      experienceLevel,
+      locationId,
+      maxSalary,
+      minSalary,
+      skillIds,
+      workingTime,
     });
 
     const jobOffer = await this.jobOfferRepository.findJobOffer({ id });
 
     if (!jobOffer) {
       throw new OperationNotValidError({
-        reason: 'JobOffer not found.',
+        reason: 'Job offer not found.',
         id,
       });
     }
@@ -111,6 +120,10 @@ export class UpdateJobOfferActionImpl implements UpdateJobOfferAction {
       jobOffer.setMaxSalary({ maxSalary });
     }
 
+    if (isRemote !== undefined) {
+      jobOffer.setIsRemote({ isRemote });
+    }
+
     if (skillIds) {
       const skills = await this.skillRepository.findSkills({ ids: skillIds, page: 1, pageSize: skillIds.length });
 
@@ -124,27 +137,25 @@ export class UpdateJobOfferActionImpl implements UpdateJobOfferAction {
       jobOffer.setSkills({ skills });
     }
 
-    if (locationIds) {
-      const locations = await this.companyLocationRepository.findCompanyLocations({
-        ids: locationIds,
-        page: 1,
-        pageSize: locationIds.length,
+    if (locationId) {
+      const location = await this.companyLocationRepository.findCompanyLocation({
+        id: locationId,
       });
 
-      if (locations.length !== locationIds.length) {
+      if (!location) {
         throw new OperationNotValidError({
-          reason: 'Some locations not found.',
-          ids: locationIds,
+          reason: 'Location not found.',
+          id: locationId,
         });
       }
 
-      jobOffer.setLocations({ locations });
+      jobOffer.setLocation({ location });
     }
 
-    await this.jobOfferRepository.updateJobOffer({ jobOffer });
+    const updatedJobOffer = await this.jobOfferRepository.updateJobOffer({ jobOffer });
 
-    this.loggerService.debug({ message: 'JobOffer updated.', id });
+    this.loggerService.debug({ message: 'Job offer updated.', id });
 
-    return { jobOffer };
+    return { jobOffer: updatedJobOffer };
   }
 }

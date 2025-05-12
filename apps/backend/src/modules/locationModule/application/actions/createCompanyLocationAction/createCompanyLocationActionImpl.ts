@@ -75,7 +75,6 @@ export class CreateCompanyLocationActionImpl implements CreateCompanyLocationAct
       data: {
         name,
         companyId,
-        isRemote: false,
         address,
         cityId,
         latitude,

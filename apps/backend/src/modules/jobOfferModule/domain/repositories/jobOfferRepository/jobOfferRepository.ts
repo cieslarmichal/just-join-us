@@ -23,6 +23,8 @@ export interface FindJobOffersPayload {
   readonly experienceLevel?: string | undefined;
   readonly minSalary?: number | undefined;
   readonly maxSalary?: number | undefined;
+  readonly locationId?: string | undefined;
+  readonly isRemote?: boolean | undefined;
   readonly page: number;
   readonly pageSize: number;
 }
@@ -36,6 +38,8 @@ export interface CountJobOffersPayload {
   readonly experienceLevel?: string | undefined;
   readonly minSalary?: number | undefined;
   readonly maxSalary?: number | undefined;
+  readonly locationId?: string | undefined;
+  readonly isRemote?: boolean | undefined;
 }
 
 export interface JobOfferRepository {

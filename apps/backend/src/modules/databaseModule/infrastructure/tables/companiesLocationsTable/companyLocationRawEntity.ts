@@ -2,23 +2,21 @@ export interface CompanyLocationRawEntity {
   readonly id: string;
   readonly name: string;
   readonly company_id: string;
-  readonly is_remote: boolean;
-  readonly city_id?: string | undefined;
-  readonly address?: string | undefined;
+  readonly city_id: string;
+  readonly address: string;
   readonly geolocation?: string | undefined;
-  readonly latitude?: number | undefined;
-  readonly longitude?: number | undefined;
+  readonly latitude: number;
+  readonly longitude: number;
 }
 
 export interface CompanyLocationRawEntityExtended {
   readonly id: string;
   readonly name: string;
   readonly company_id: string;
-  readonly is_remote: boolean;
-  readonly city_id?: string | undefined;
-  readonly city_name?: string | undefined;
-  readonly address?: string | undefined;
+  readonly city_id: string;
+  readonly city_name: string;
+  readonly address: string;
   readonly geolocation?: string | undefined;
-  readonly latitude?: number | undefined;
-  readonly longitude?: number | undefined;
+  readonly latitude: number;
+  readonly longitude: number;
 }

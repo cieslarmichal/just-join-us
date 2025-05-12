@@ -1,5 +1,4 @@
 import { OperationNotValidError } from '../../../../../common/errors/operationNotValidError.ts';
-import { ResourceAlreadyExistsError } from '../../../../../common/errors/resourceAlreadyExistsError.ts';
 import { type LoggerService } from '../../../../../common/logger/loggerService.ts';
 import type { CompanyLocationRepository } from '../../../../locationModule/domain/repositories/companyLocationRepository/companyLocationRepository.ts';
 import type { CompanyRepository } from '../../../../userModule/domain/repositories/companyRepository/companyRepository.ts';
@@ -48,7 +47,8 @@ export class CreateJobOfferActionImpl implements CreateJobOfferAction {
       workingTime,
       minSalary,
       maxSalary,
-      locationIds,
+      locationId,
+      isRemote,
       skillIds,
     } = payload;
 
@@ -63,20 +63,10 @@ export class CreateJobOfferActionImpl implements CreateJobOfferAction {
       workingTime,
       minSalary,
       maxSalary,
-      locationIds,
+      locationId,
+      isRemote,
       skillIds,
     });
-
-    const existingJobOffer = await this.jobOfferRepository.findJobOffer({ name, companyId });
-
-    if (existingJobOffer) {
-      throw new ResourceAlreadyExistsError({
-        resource: 'JobOffer',
-        id: existingJobOffer.getId(),
-        name,
-        companyId,
-      });
-    }
 
     const company = await this.companyRepository.findCompany({ id: companyId });
 
@@ -96,17 +86,15 @@ export class CreateJobOfferActionImpl implements CreateJobOfferAction {
       });
     }
 
-    const locations = await this.companyLocationRepository.findCompanyLocations({
-      ids: locationIds,
-      page: 1,
-      pageSize: locationIds.length,
-    });
+    if (locationId) {
+      const location = await this.companyLocationRepository.findCompanyLocation({ id: locationId });
 
-    if (locationIds.length !== locations.length) {
-      throw new OperationNotValidError({
-        reason: 'Some locations not found.',
-        id: locationIds,
-      });
+      if (!location) {
+        throw new OperationNotValidError({
+          reason: 'Location not found.',
+          id: locationId,
+        });
+      }
     }
 
     const skills = await this.skillRepository.findSkills({ ids: skillIds, page: 1, pageSize: skillIds.length });
@@ -123,6 +111,7 @@ export class CreateJobOfferActionImpl implements CreateJobOfferAction {
         name,
         description,
         isHidden: false,
+        isRemote,
         categoryId,
         companyId,
         employmentType,
@@ -130,14 +119,10 @@ export class CreateJobOfferActionImpl implements CreateJobOfferAction {
         workingTime,
         minSalary,
         maxSalary,
+        locationId: locationId || undefined,
         skills: skills.map((skill) => ({
           id: skill.getId(),
           name: skill.getName(),
-        })),
-        locations: locations.map((location) => ({
-          id: location.getId(),
-          isRemote: location.getIsRemote(),
-          city: location.getCityId(),
         })),
       },
     });

@@ -17,7 +17,6 @@ export interface FindCompanyLocationPayload {
 export interface FindCompanyLocationsPayload {
   readonly ids?: string[] | undefined;
   readonly companyId?: string | undefined;
-  readonly isRemote?: boolean | undefined;
   readonly page: number;
   readonly pageSize: number;
 }
@@ -25,7 +24,6 @@ export interface FindCompanyLocationsPayload {
 export interface CountCompanyLocationsPayload {
   readonly ids?: string[] | undefined;
   readonly companyId?: string | undefined;
-  readonly isRemote?: boolean | undefined;
 }
 
 export interface CompanyLocationRepository {

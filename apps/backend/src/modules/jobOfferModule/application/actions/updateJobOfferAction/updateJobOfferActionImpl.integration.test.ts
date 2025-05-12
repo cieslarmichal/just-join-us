@@ -63,15 +63,17 @@ describe('UpdateJobOfferActionImpl', () => {
   });
 
   it('updates JobOffer data', async () => {
+    const city1 = await cityTestUtils.createAndPersist();
     const category = await categoryTestUtils.createAndPersist();
     const company = await companyTestUtils.createAndPersist();
     const skill = await skillTestUtils.createAndPersist();
-    const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
+    const location = await companyLocationTestUtils.createAndPersist({
+      input: { company_id: company.id, city_id: city1.id },
+    });
     const jobOfferRawEntity = await jobOfferTestUtils.createAndPersist({
       input: {
-        jobOffer: { category_id: category.id, company_id: company.id },
+        jobOffer: { category_id: category.id, company_id: company.id, location_id: location.id },
         skillIds: [skill.id],
-        locationIds: [location.id],
       },
     });
 
@@ -82,18 +84,17 @@ describe('UpdateJobOfferActionImpl', () => {
       categoryId: jobOfferRawEntity.category_id,
       companyId: jobOfferRawEntity.company_id,
       isHidden: jobOfferRawEntity.is_hidden,
+      isRemote: jobOfferRawEntity.is_remote,
       createdAt: jobOfferRawEntity.created_at,
       employmentType: jobOfferRawEntity.employment_type,
       workingTime: jobOfferRawEntity.working_time,
       experienceLevel: jobOfferRawEntity.experience_level,
       minSalary: jobOfferRawEntity.min_salary,
       maxSalary: jobOfferRawEntity.max_salary,
-      locations: [
-        {
-          id: location.id,
-          isRemote: location.is_remote,
-        },
-      ],
+      locationId: jobOfferRawEntity.location_id,
+      location: {
+        city: city1.name,
+      },
       skills: [
         {
           id: skill.id,
@@ -103,13 +104,14 @@ describe('UpdateJobOfferActionImpl', () => {
     });
 
     const updatedIsHidden = Generator.boolean();
+    const updatedIsRemote = Generator.boolean();
     const updatedName = Generator.jobOfferName();
     const updatedDescription = Generator.jobOfferDescription();
     const updatedCategory = await categoryTestUtils.createAndPersist();
     const updatedSkill = await skillTestUtils.createAndPersist();
-    const city = await cityTestUtils.createAndPersist();
+    const city2 = await cityTestUtils.createAndPersist();
     const updatedLocation = await companyLocationTestUtils.createAndPersist({
-      input: { company_id: company.id, city_id: city.id },
+      input: { company_id: company.id, city_id: city2.id },
     });
     const updatedEmploymentType = Generator.employmentType();
     const updatedWorkingTime = Generator.workingTime();
@@ -122,6 +124,7 @@ describe('UpdateJobOfferActionImpl', () => {
       name: updatedName,
       description: updatedDescription,
       isHidden: updatedIsHidden,
+      isRemote: updatedIsRemote,
       categoryId: updatedCategory.id,
       employmentType: updatedEmploymentType,
       workingTime: updatedWorkingTime,
@@ -129,7 +132,7 @@ describe('UpdateJobOfferActionImpl', () => {
       minSalary: updatedMinSalary,
       maxSalary: updatedMaxSalary,
       skillIds: [updatedSkill.id],
-      locationIds: [updatedLocation.id],
+      locationId: updatedLocation.id,
     });
 
     const foundJobOffer = await jobOfferTestUtils.findById({ id: jobOffer.getId() });
@@ -138,6 +141,7 @@ describe('UpdateJobOfferActionImpl', () => {
       name: updatedName,
       description: updatedDescription,
       isHidden: updatedIsHidden,
+      isRemote: updatedIsRemote,
       categoryId: updatedCategory.id,
       category: { name: updatedCategory.name },
       companyId: jobOfferRawEntity.company_id,
@@ -154,13 +158,10 @@ describe('UpdateJobOfferActionImpl', () => {
           name: updatedSkill.name,
         },
       ],
-      locations: [
-        {
-          id: updatedLocation.id,
-          isRemote: updatedLocation.is_remote,
-          city: updatedLocation.city_id,
-        },
-      ],
+      locationId: updatedLocation.id,
+      location: {
+        city: city2.name,
+      },
     });
 
     expect(foundJobOffer).toEqual({
@@ -168,8 +169,10 @@ describe('UpdateJobOfferActionImpl', () => {
       name: updatedName,
       description: updatedDescription,
       is_hidden: updatedIsHidden,
+      is_remote: updatedIsRemote,
       category_id: updatedCategory.id,
       company_id: jobOfferRawEntity.company_id,
+      location_id: updatedLocation.id,
       created_at: jobOfferRawEntity.created_at,
       employment_type: updatedEmploymentType,
       experience_level: updatedExperienceLevel,
@@ -193,7 +196,7 @@ describe('UpdateJobOfferActionImpl', () => {
       expect(error).toBeInstanceOf(OperationNotValidError);
 
       expect((error as OperationNotValidError).context).toMatchObject({
-        reason: 'JobOffer not found.',
+        reason: 'Job offer not found.',
         id: jobOfferId,
       });
 
@@ -207,12 +210,10 @@ describe('UpdateJobOfferActionImpl', () => {
     const category = await categoryTestUtils.createAndPersist();
     const company = await companyTestUtils.createAndPersist();
     const skill = await skillTestUtils.createAndPersist();
-    const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
     const jobOfferRawEntity = await jobOfferTestUtils.createAndPersist({
       input: {
         jobOffer: { category_id: category.id, company_id: company.id },
         skillIds: [skill.id],
-        locationIds: [location.id],
       },
     });
 
@@ -241,12 +242,10 @@ describe('UpdateJobOfferActionImpl', () => {
     const category = await categoryTestUtils.createAndPersist();
     const company = await companyTestUtils.createAndPersist();
     const skill = await skillTestUtils.createAndPersist();
-    const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
     const jobOfferRawEntity = await jobOfferTestUtils.createAndPersist({
       input: {
         jobOffer: { category_id: category.id, company_id: company.id },
         skillIds: [skill.id],
-        locationIds: [location.id],
       },
     });
 
@@ -275,12 +274,10 @@ describe('UpdateJobOfferActionImpl', () => {
     const category = await categoryTestUtils.createAndPersist();
     const company = await companyTestUtils.createAndPersist();
     const skill = await skillTestUtils.createAndPersist();
-    const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
     const jobOfferRawEntity = await jobOfferTestUtils.createAndPersist({
       input: {
         jobOffer: { category_id: category.id, company_id: company.id },
         skillIds: [skill.id],
-        locationIds: [location.id],
       },
     });
 
@@ -289,14 +286,14 @@ describe('UpdateJobOfferActionImpl', () => {
     try {
       await action.execute({
         id: jobOfferRawEntity.id,
-        locationIds: [locationId],
+        locationId,
       });
     } catch (error) {
       expect(error).toBeInstanceOf(OperationNotValidError);
 
       expect((error as OperationNotValidError).context).toMatchObject({
-        reason: 'Some locations not found.',
-        ids: [locationId],
+        reason: 'Location not found.',
+        id: locationId,
       });
 
       return;

@@ -14,7 +14,6 @@ export const companiesLocationsTable: DatabaseTable<CompanyLocationRawEntity, ty
     name: `${tableName}.name`,
     latitude: `${tableName}.latitude`,
     longitude: `${tableName}.longitude`,
-    is_remote: `${tableName}.is_remote`,
     address: `${tableName}.address`,
     geolocation: `${tableName}.geolocation`,
   },

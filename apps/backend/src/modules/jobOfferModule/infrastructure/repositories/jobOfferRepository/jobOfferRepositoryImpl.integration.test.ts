@@ -3,9 +3,9 @@ import { beforeEach, afterEach, expect, describe, it } from 'vitest';
 import { Generator } from '../../../../../../tests/generator.ts';
 import { testSymbols } from '../../../../../../tests/symbols.ts';
 import { TestContainer } from '../../../../../../tests/testContainer.ts';
-import { RepositoryError } from '../../../../../common/errors/repositoryError.ts';
 import { databaseSymbols } from '../../../../databaseModule/symbols.ts';
 import type { DatabaseClient } from '../../../../databaseModule/types/databaseClient.ts';
+import type { CityTestUtils } from '../../../../locationModule/tests/utils/cityTestUtils/cityTestUtils.ts';
 import type { CompanyLocationTestUtils } from '../../../../locationModule/tests/utils/companyLocationTestUtils/companyLocationTestUtils.ts';
 import type { CompanyTestUtils } from '../../../../userModule/tests/utils/companyTestUtils/companyTestUtils.ts';
 import { Category } from '../../../domain/entities/category/category.ts';
@@ -21,6 +21,7 @@ describe('JobOfferRepositoryImpl', () => {
 
   let databaseClient: DatabaseClient;
 
+  let cityTestUtils: CityTestUtils;
   let categoryTestUtils: CategoryTestUtils;
   let companyTestUtils: CompanyTestUtils;
   let companyLocationTestUtils: CompanyLocationTestUtils;
@@ -36,12 +37,14 @@ describe('JobOfferRepositoryImpl', () => {
 
     databaseClient = container.get<DatabaseClient>(databaseSymbols.databaseClient);
 
+    cityTestUtils = container.get<CityTestUtils>(testSymbols.cityTestUtils);
     categoryTestUtils = container.get<CategoryTestUtils>(testSymbols.categoryTestUtils);
     companyTestUtils = container.get<CompanyTestUtils>(testSymbols.companyTestUtils);
     companyLocationTestUtils = container.get<CompanyLocationTestUtils>(testSymbols.companyLocationTestUtils);
     skillTestUtils = container.get<SkillTestUtils>(testSymbols.skillTestUtils);
     jobOfferTestUtils = container.get<JobOfferTestUtils>(testSymbols.jobOfferTestUtils);
 
+    await cityTestUtils.truncate();
     await categoryTestUtils.truncate();
     await companyTestUtils.truncate();
     await companyLocationTestUtils.truncate();
@@ -50,6 +53,7 @@ describe('JobOfferRepositoryImpl', () => {
   });
 
   afterEach(async () => {
+    await cityTestUtils.truncate();
     await categoryTestUtils.truncate();
     await companyTestUtils.truncate();
     await companyLocationTestUtils.truncate();
@@ -61,13 +65,25 @@ describe('JobOfferRepositoryImpl', () => {
 
   describe('Create', () => {
     it('creates a JobOffer', async () => {
+      const city = await cityTestUtils.createAndPersist();
       const category = await categoryTestUtils.createAndPersist();
       const company = await companyTestUtils.createAndPersist();
       const skill = await skillTestUtils.createAndPersist();
-      const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
+      const location = await companyLocationTestUtils.createAndPersist({
+        input: { company_id: company.id, city_id: city.id },
+      });
 
-      const { name, description, isHidden, employmentType, experienceLevel, minSalary, maxSalary, workingTime } =
-        jobOfferTestFactory.create().getState();
+      const {
+        name,
+        description,
+        isHidden,
+        isRemote,
+        employmentType,
+        experienceLevel,
+        minSalary,
+        maxSalary,
+        workingTime,
+      } = jobOfferTestFactory.create().getState();
 
       const jobOffer = await jobOfferRepository.createJobOffer({
         data: {
@@ -81,7 +97,8 @@ describe('JobOfferRepositoryImpl', () => {
           minSalary,
           maxSalary,
           workingTime,
-          locations: [{ id: location.id, isRemote: true }],
+          isRemote,
+          locationId: location.id,
           skills: [{ id: skill.id, name: skill.name }],
         },
       });
@@ -93,6 +110,8 @@ describe('JobOfferRepositoryImpl', () => {
         name,
         description,
         is_hidden: isHidden,
+        is_remote: isRemote,
+        location_id: location.id,
         category_id: category.id,
         company_id: company.id,
         employment_type: employmentType,
@@ -107,6 +126,7 @@ describe('JobOfferRepositoryImpl', () => {
         name,
         description,
         isHidden,
+        isRemote,
         categoryId: category.id,
         companyId: company.id,
         employmentType,
@@ -114,7 +134,8 @@ describe('JobOfferRepositoryImpl', () => {
         minSalary,
         maxSalary,
         workingTime,
-        locations: [{ id: location.id, isRemote: true }],
+        locationId: location.id,
+        location: { city: city.name },
         skills: [{ id: skill.id, name: skill.name }],
         category: { name: category.name },
         company: { name: company.name, logoUrl: company.logo_url },
@@ -122,47 +143,10 @@ describe('JobOfferRepositoryImpl', () => {
       });
     });
 
-    it('throws an error when a JobOffer with the same name and company already exists', async () => {
-      const category = await categoryTestUtils.createAndPersist();
-      const company = await companyTestUtils.createAndPersist();
-      const skill = await skillTestUtils.createAndPersist();
-      const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
-
-      const existingJobOffer = await jobOfferTestUtils.createAndPersist({
-        input: { jobOffer: { category_id: category.id, company_id: company.id } },
-      });
-
-      try {
-        await jobOfferRepository.createJobOffer({
-          data: {
-            name: existingJobOffer.name,
-            description: existingJobOffer.description,
-            isHidden: existingJobOffer.is_hidden,
-            categoryId: existingJobOffer.category_id,
-            companyId: existingJobOffer.company_id,
-            employmentType: existingJobOffer.employment_type,
-            experienceLevel: existingJobOffer.experience_level,
-            minSalary: existingJobOffer.min_salary,
-            maxSalary: existingJobOffer.max_salary,
-            workingTime: existingJobOffer.working_time,
-            locations: [{ id: location.id, isRemote: true }],
-            skills: [{ id: skill.id, name: skill.name }],
-          },
-        });
-      } catch (error) {
-        expect(error).toBeInstanceOf(RepositoryError);
-
-        return;
-      }
-
-      expect.fail();
-    });
-
     it(`updates JobOffer's data`, async () => {
       const category = await categoryTestUtils.createAndPersist();
       const company = await companyTestUtils.createAndPersist();
       const skill = await skillTestUtils.createAndPersist();
-      const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
 
       const existingJobOffer = await jobOfferTestUtils.createAndPersist({
         input: { jobOffer: { category_id: category.id, company_id: company.id } },
@@ -180,7 +164,6 @@ describe('JobOfferRepositoryImpl', () => {
         minSalary: existingJobOffer.min_salary,
         maxSalary: existingJobOffer.max_salary,
         workingTime: existingJobOffer.working_time,
-        locations: [{ id: location.id, isRemote: true }],
         skills: [{ id: skill.id, name: skill.name }],
       });
 
@@ -188,12 +171,14 @@ describe('JobOfferRepositoryImpl', () => {
       const updatedName = Generator.jobOfferName();
       const updatedDescription = Generator.jobOfferDescription();
       const updatedIsHidden = Generator.boolean();
+      const updatedIsRemote = Generator.boolean();
       jobOffer.setCategory({
         category: new Category({ id: category2.id, name: category2.name, slug: category2.slug }),
       });
       jobOffer.setName({ name: updatedName });
       jobOffer.setDescription({ description: updatedDescription });
       jobOffer.setIsHidden({ isHidden: updatedIsHidden });
+      jobOffer.setIsRemote({ isRemote: updatedIsRemote });
 
       const updatedJobOffer = await jobOfferRepository.updateJobOffer({ jobOffer });
 
@@ -203,6 +188,7 @@ describe('JobOfferRepositoryImpl', () => {
         name: updatedName,
         description: updatedDescription,
         isHidden: updatedIsHidden,
+        isRemote: updatedIsRemote,
         categoryId: category2.id,
         companyId: existingJobOffer.company_id,
         createdAt: existingJobOffer.created_at,
@@ -211,7 +197,6 @@ describe('JobOfferRepositoryImpl', () => {
         minSalary: existingJobOffer.min_salary,
         maxSalary: existingJobOffer.max_salary,
         workingTime: existingJobOffer.working_time,
-        locations: [{ id: location.id, isRemote: true }],
         skills: [{ id: skill.id, name: skill.name }],
         category: { name: category2.name },
         company: {
@@ -225,6 +210,8 @@ describe('JobOfferRepositoryImpl', () => {
         name: updatedName,
         description: updatedDescription,
         is_hidden: updatedIsHidden,
+        is_remote: updatedIsRemote,
+        location_id: null,
         category_id: category2.id,
         company_id: existingJobOffer.company_id,
         created_at: existingJobOffer.created_at,
@@ -242,12 +229,10 @@ describe('JobOfferRepositoryImpl', () => {
       const category = await categoryTestUtils.createAndPersist();
       const company = await companyTestUtils.createAndPersist();
       const skill = await skillTestUtils.createAndPersist();
-      const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
       const jobOffer = await jobOfferTestUtils.createAndPersist({
         input: {
           jobOffer: { category_id: category.id, company_id: company.id },
           skillIds: [skill.id],
-          locationIds: [location.id],
         },
       });
 
@@ -257,6 +242,7 @@ describe('JobOfferRepositoryImpl', () => {
         name: jobOffer.name,
         description: jobOffer.description,
         isHidden: jobOffer.is_hidden,
+        isRemote: jobOffer.is_remote,
         categoryId: jobOffer.category_id,
         category: { name: category.name },
         companyId: jobOffer.company_id,
@@ -271,12 +257,6 @@ describe('JobOfferRepositoryImpl', () => {
           {
             id: skill.id,
             name: skill.name,
-          },
-        ],
-        locations: [
-          {
-            id: location.id,
-            isRemote: location.is_remote,
           },
         ],
       });
@@ -294,13 +274,11 @@ describe('JobOfferRepositoryImpl', () => {
       const category = await categoryTestUtils.createAndPersist();
       const company = await companyTestUtils.createAndPersist();
       const skill = await skillTestUtils.createAndPersist();
-      const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
 
       const jobOffer1 = await jobOfferTestUtils.createAndPersist({
         input: {
           jobOffer: { category_id: category.id, company_id: company.id },
           skillIds: [skill.id],
-          locationIds: [location.id],
         },
       });
 
@@ -308,7 +286,6 @@ describe('JobOfferRepositoryImpl', () => {
         input: {
           jobOffer: { category_id: category.id, company_id: company.id },
           skillIds: [skill.id],
-          locationIds: [location.id],
         },
       });
 
@@ -319,6 +296,7 @@ describe('JobOfferRepositoryImpl', () => {
         name: jobOffer2.name,
         description: jobOffer2.description,
         isHidden: jobOffer2.is_hidden,
+        isRemote: jobOffer2.is_remote,
         categoryId: jobOffer2.category_id,
         category: { name: category.name },
         companyId: jobOffer2.company_id,
@@ -335,17 +313,12 @@ describe('JobOfferRepositoryImpl', () => {
             name: skill.name,
           },
         ],
-        locations: [
-          {
-            id: location.id,
-            isRemote: location.is_remote,
-          },
-        ],
       });
       expect(foundJobOffers[1]?.getState()).toEqual({
         name: jobOffer1.name,
         description: jobOffer1.description,
         isHidden: jobOffer1.is_hidden,
+        isRemote: jobOffer1.is_remote,
         categoryId: jobOffer1.category_id,
         category: { name: category.name },
         companyId: jobOffer1.company_id,
@@ -362,12 +335,6 @@ describe('JobOfferRepositoryImpl', () => {
             name: skill.name,
           },
         ],
-        locations: [
-          {
-            id: location.id,
-            isRemote: location.is_remote,
-          },
-        ],
       });
     });
 
@@ -375,13 +342,11 @@ describe('JobOfferRepositoryImpl', () => {
       const category = await categoryTestUtils.createAndPersist();
       const company = await companyTestUtils.createAndPersist();
       const skill = await skillTestUtils.createAndPersist();
-      const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
 
       const jobOffer1 = await jobOfferTestUtils.createAndPersist({
         input: {
           jobOffer: { category_id: category.id, company_id: company.id },
           skillIds: [skill.id],
-          locationIds: [location.id],
         },
       });
 
@@ -389,7 +354,6 @@ describe('JobOfferRepositoryImpl', () => {
         input: {
           jobOffer: { category_id: category.id, company_id: company.id },
           skillIds: [skill.id],
-          locationIds: [location.id],
         },
       });
 
@@ -401,6 +365,7 @@ describe('JobOfferRepositoryImpl', () => {
         description: jobOffer2.description,
         isHidden: jobOffer2.is_hidden,
         categoryId: jobOffer2.category_id,
+        isRemote: jobOffer2.is_remote,
         category: { name: category.name },
         companyId: jobOffer2.company_id,
         company: { name: company.name, logoUrl: company.logo_url },
@@ -416,17 +381,12 @@ describe('JobOfferRepositoryImpl', () => {
             name: skill.name,
           },
         ],
-        locations: [
-          {
-            id: location.id,
-            isRemote: location.is_remote,
-          },
-        ],
       });
       expect(foundJobOffers[1]?.getState()).toEqual({
         name: jobOffer1.name,
         description: jobOffer1.description,
         isHidden: jobOffer1.is_hidden,
+        isRemote: jobOffer1.is_remote,
         categoryId: jobOffer1.category_id,
         category: { name: category.name },
         companyId: jobOffer1.company_id,
@@ -443,12 +403,6 @@ describe('JobOfferRepositoryImpl', () => {
             name: skill.name,
           },
         ],
-        locations: [
-          {
-            id: location.id,
-            isRemote: location.is_remote,
-          },
-        ],
       });
     });
   });
@@ -458,13 +412,11 @@ describe('JobOfferRepositoryImpl', () => {
       const category = await categoryTestUtils.createAndPersist();
       const company = await companyTestUtils.createAndPersist();
       const skill = await skillTestUtils.createAndPersist();
-      const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
 
       await jobOfferTestUtils.createAndPersist({
         input: {
           jobOffer: { category_id: category.id, company_id: company.id },
           skillIds: [skill.id],
-          locationIds: [location.id],
         },
       });
 
@@ -472,7 +424,6 @@ describe('JobOfferRepositoryImpl', () => {
         input: {
           jobOffer: { category_id: category.id, company_id: company.id },
           skillIds: [skill.id],
-          locationIds: [location.id],
         },
       });
 
@@ -485,13 +436,11 @@ describe('JobOfferRepositoryImpl', () => {
       const category = await categoryTestUtils.createAndPersist();
       const company = await companyTestUtils.createAndPersist();
       const skill = await skillTestUtils.createAndPersist();
-      const location = await companyLocationTestUtils.createAndPersist({ input: { company_id: company.id } });
 
       await jobOfferTestUtils.createAndPersist({
         input: {
           jobOffer: { category_id: category.id, company_id: company.id },
           skillIds: [skill.id],
-          locationIds: [location.id],
         },
       });
 
@@ -499,7 +448,6 @@ describe('JobOfferRepositoryImpl', () => {
         input: {
           jobOffer: { category_id: category.id, company_id: company.id },
           skillIds: [skill.id],
-          locationIds: [location.id],
         },
       });
 

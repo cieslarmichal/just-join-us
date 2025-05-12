@@ -6,7 +6,6 @@ import { HttpRoute } from '../../../../../common/http/httpRoute.ts';
 import { httpStatusCodes } from '../../../../../common/http/httpStatusCode.ts';
 import { type AccessControlService } from '../../../../authModule/application/services/accessControlService/accessControlService.ts';
 import type { CreateCompanyLocationAction } from '../../../application/actions/createCompanyLocationAction/createCompanyLocationAction.ts';
-import type { CreateRemoteCompanyLocationAction } from '../../../application/actions/createRemoteCompanyLocationAction/createRemoteCompanyLocationAction.ts';
 import type { FindCompanyLocationsAction } from '../../../application/actions/findCompanyLocationsAction/findCompanyLocationsAction.ts';
 import type { UpdateCompanyLocationAction } from '../../../application/actions/updateCompanyLocationAction/updateCompanyLocationAction.ts';
 import type { CompanyLocation } from '../../../domain/entities/companyLocation/companyLocation.ts';
@@ -32,20 +31,17 @@ import {
 export class CompanyLocationHttpController implements HttpController {
   public readonly tags = ['CompanyLocation'];
   private readonly createLocationAction: CreateCompanyLocationAction;
-  private readonly createRemoteLocationAction: CreateRemoteCompanyLocationAction;
   private readonly updateLocationAction: UpdateCompanyLocationAction;
   private readonly findCompanyLocationsAction: FindCompanyLocationsAction;
   private readonly accessControlService: AccessControlService;
 
   public constructor(
     createLocationAction: CreateCompanyLocationAction,
-    createRemoteLocationAction: CreateRemoteCompanyLocationAction,
     updateLocationAction: UpdateCompanyLocationAction,
     findCompanyLocationsAction: FindCompanyLocationsAction,
     accessControlService: AccessControlService,
   ) {
     this.createLocationAction = createLocationAction;
-    this.createRemoteLocationAction = createRemoteLocationAction;
     this.updateLocationAction = updateLocationAction;
     this.updateLocationAction = updateLocationAction;
     this.findCompanyLocationsAction = findCompanyLocationsAction;
@@ -87,27 +83,16 @@ export class CompanyLocationHttpController implements HttpController {
 
     const { name } = request.body;
 
-    let companyLocation: CompanyLocation;
+    const { address, cityId, latitude, longitude } = request.body;
 
-    if ('cityId' in request.body) {
-      const { address, cityId, latitude, longitude } = request.body;
-
-      const result = await this.createLocationAction.execute({
-        name,
-        companyId,
-        address,
-        cityId,
-        latitude,
-        longitude,
-      });
-      companyLocation = result.companyLocation;
-    } else {
-      const result = await this.createRemoteLocationAction.execute({
-        name,
-        companyId,
-      });
-      companyLocation = result.companyLocation;
-    }
+    const { companyLocation } = await this.createLocationAction.execute({
+      name,
+      companyId,
+      address,
+      cityId,
+      latitude,
+      longitude,
+    });
 
     return {
       statusCode: httpStatusCodes.created,
@@ -168,33 +153,20 @@ export class CompanyLocationHttpController implements HttpController {
   }
 
   private mapLocationToDto(companyLocation: CompanyLocation): CompanyLocationDto {
-    const { name, companyId, isRemote, address, cityId, cityName, latitude, longitude } = companyLocation.getState();
+    const { name, companyId, address, cityId, cityName, latitude, longitude } = companyLocation.getState();
 
     const companyLocationDto: CompanyLocationDto = {
       id: companyLocation.getId(),
       name,
       companyId,
-      isRemote,
+      address,
+      cityId,
+      latitude,
+      longitude,
     };
-
-    if (address) {
-      companyLocationDto.address = address;
-    }
-
-    if (cityId) {
-      companyLocationDto.cityId = cityId;
-    }
 
     if (cityName) {
       companyLocationDto.cityName = cityName;
-    }
-
-    if (latitude !== undefined) {
-      companyLocationDto.latitude = latitude;
-    }
-
-    if (longitude !== undefined) {
-      companyLocationDto.longitude = longitude;
     }
 
     return companyLocationDto;

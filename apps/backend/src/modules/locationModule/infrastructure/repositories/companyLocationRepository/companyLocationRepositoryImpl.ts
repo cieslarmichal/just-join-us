@@ -36,33 +36,23 @@ export class CompanyLocationRepositoryImpl implements CompanyLocationRepository 
 
   public async createCompanyLocation(payload: CreateCompanyLocationPayload): Promise<CompanyLocation> {
     const {
-      data: { cityId, address, latitude, longitude, isRemote, companyId, name },
+      data: { cityId, address, latitude, longitude, companyId, name },
     } = payload;
 
     const id = this.uuidService.generateUuid();
 
     try {
-      if (cityId) {
-        await this.databaseClient<CompanyLocationRawEntity>(companiesLocationsTable.name).insert({
-          id,
-          company_id: companyId,
-          name,
-          is_remote: isRemote,
-          city_id: cityId,
-          address,
-          geolocation: this.databaseClient.raw(`ST_GeomFromText('POINT(' || ? || ' ' || ? || ')', 4326)`, [
-            latitude,
-            longitude,
-          ]),
-        });
-      } else {
-        await this.databaseClient<CompanyLocationRawEntity>(companiesLocationsTable.name).insert({
-          id,
-          company_id: companyId,
-          name,
-          is_remote: isRemote,
-        });
-      }
+      await this.databaseClient<CompanyLocationRawEntity>(companiesLocationsTable.name).insert({
+        id,
+        company_id: companyId,
+        name,
+        city_id: cityId,
+        address,
+        geolocation: this.databaseClient.raw(`ST_GeomFromText('POINT(' || ? || ' ' || ? || ')', 4326)`, [
+          latitude,
+          longitude,
+        ]),
+      });
     } catch (error) {
       throw new RepositoryError({
         entity: 'CompanyLocation',
@@ -117,7 +107,6 @@ export class CompanyLocationRepositoryImpl implements CompanyLocationRepository 
           companiesLocationsTable.columns.id,
           companiesLocationsTable.columns.city_id,
           companiesLocationsTable.columns.company_id,
-          companiesLocationsTable.columns.is_remote,
           companiesLocationsTable.columns.address,
           companiesLocationsTable.columns.name,
           this.databaseClient.raw('ST_X(geolocation) as latitude'),
@@ -155,7 +144,7 @@ export class CompanyLocationRepositoryImpl implements CompanyLocationRepository 
   }
 
   public async findCompanyLocations(payload: FindCompanyLocationsPayload): Promise<CompanyLocation[]> {
-    const { companyId, isRemote, ids, page, pageSize } = payload;
+    const { companyId, ids, page, pageSize } = payload;
 
     let rawEntities: CompanyLocationRawEntityExtended[];
 
@@ -165,7 +154,6 @@ export class CompanyLocationRepositoryImpl implements CompanyLocationRepository 
           companiesLocationsTable.columns.id,
           companiesLocationsTable.columns.city_id,
           companiesLocationsTable.columns.company_id,
-          companiesLocationsTable.columns.is_remote,
           companiesLocationsTable.columns.address,
           companiesLocationsTable.columns.name,
           this.databaseClient.raw('ST_X(geolocation) as latitude'),
@@ -180,10 +168,6 @@ export class CompanyLocationRepositoryImpl implements CompanyLocationRepository 
 
       if (companyId) {
         query.where(companiesLocationsTable.columns.company_id, companyId);
-      }
-
-      if (isRemote !== undefined) {
-        query.where(companiesLocationsTable.columns.is_remote, isRemote);
       }
 
       query
@@ -204,7 +188,7 @@ export class CompanyLocationRepositoryImpl implements CompanyLocationRepository 
   }
 
   public async countCompanyLocations(payload: CountCompanyLocationsPayload): Promise<number> {
-    const { companyId, ids, isRemote } = payload;
+    const { companyId, ids } = payload;
 
     try {
       const query = this.databaseClient<CompanyLocationRawEntity>(companiesLocationsTable.name);
@@ -215,10 +199,6 @@ export class CompanyLocationRepositoryImpl implements CompanyLocationRepository 
 
       if (companyId) {
         query.where(companiesLocationsTable.columns.company_id, companyId);
-      }
-
-      if (isRemote !== undefined) {
-        query.where(companiesLocationsTable.columns.is_remote, isRemote);
       }
 
       const countResult = await query.count().first();

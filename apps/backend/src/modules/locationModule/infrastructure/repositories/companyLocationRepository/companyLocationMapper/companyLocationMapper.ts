@@ -6,13 +6,12 @@ import { CompanyLocation } from '../../../../domain/entities/companyLocation/com
 
 export class CompanyLocationMapper {
   public mapToDomain(entity: CompanyLocationRawEntity): CompanyLocation {
-    const { id, name, company_id, is_remote, address, city_id, latitude, longitude } = entity;
+    const { id, name, company_id, address, city_id, latitude, longitude } = entity;
 
     return new CompanyLocation({
       id,
       name,
       companyId: company_id,
-      isRemote: is_remote,
       address,
       cityId: city_id,
       latitude,
@@ -21,13 +20,12 @@ export class CompanyLocationMapper {
   }
 
   public mapExtendedToDomain(entity: CompanyLocationRawEntityExtended): CompanyLocation {
-    const { id, name, company_id, is_remote, address, city_id, city_name, latitude, longitude } = entity;
+    const { id, name, company_id, address, city_id, city_name, latitude, longitude } = entity;
 
     return new CompanyLocation({
       id,
       name,
       companyId: company_id,
-      isRemote: is_remote,
       address,
       cityId: city_id,
       cityName: city_name,

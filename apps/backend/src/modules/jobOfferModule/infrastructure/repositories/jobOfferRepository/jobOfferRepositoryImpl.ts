@@ -5,8 +5,6 @@ import { categoriesTable } from '../../../../databaseModule/infrastructure/table
 import { citiesTable } from '../../../../databaseModule/infrastructure/tables/citiesTable/citiesTable.ts';
 import { companiesLocationsTable } from '../../../../databaseModule/infrastructure/tables/companiesLocationsTable/companiesLocationsTable.ts';
 import { companiesTable } from '../../../../databaseModule/infrastructure/tables/companiesTable/companiesTable.ts';
-import { type JobOfferLocationRawEntity } from '../../../../databaseModule/infrastructure/tables/jobOfferLocationsTable/jobOfferLocationRawEntity.ts';
-import { jobOfferLocationsTable } from '../../../../databaseModule/infrastructure/tables/jobOfferLocationsTable/jobOfferLocationsTable.ts';
 import { type JobOfferSkillRawEntity } from '../../../../databaseModule/infrastructure/tables/jobOfferSkillsTable/jobOfferSkillRawEntity.ts';
 import { jobOfferSkillsTable } from '../../../../databaseModule/infrastructure/tables/jobOfferSkillsTable/jobOfferSkillsTable.ts';
 import type {
@@ -52,7 +50,8 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
         minSalary,
         maxSalary,
         workingTime,
-        locations,
+        locationId,
+        isRemote,
         skills,
       },
     } = payload;
@@ -73,6 +72,8 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           experience_level: experienceLevel,
           min_salary: minSalary,
           max_salary: maxSalary,
+          is_remote: isRemote,
+          location_id: locationId,
         });
 
         if (skills?.length) {
@@ -82,17 +83,6 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
               id: this.uuidService.generateUuid(),
               job_offer_id: jobOfferId,
               skill_id: skill.id,
-            })),
-          );
-        }
-
-        if (locations?.length) {
-          await transaction.batchInsert<JobOfferLocationRawEntity>(
-            jobOfferLocationsTable.name,
-            locations.map((location) => ({
-              id: this.uuidService.generateUuid(),
-              job_offer_id: jobOfferId,
-              company_location_id: location.id,
             })),
           );
         }
@@ -126,6 +116,7 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
       name,
       description,
       isHidden,
+      isRemote,
       categoryId,
       employmentType,
       experienceLevel,
@@ -133,7 +124,7 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
       maxSalary,
       workingTime,
       skills: updatedSkills,
-      locations: updatedLocations,
+      locationId,
     } = jobOffer.getState();
 
     try {
@@ -143,12 +134,14 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
             name,
             description,
             is_hidden: isHidden,
+            is_remote: isRemote,
             category_id: categoryId,
             employment_type: employmentType,
             working_time: workingTime,
             experience_level: experienceLevel,
             min_salary: minSalary,
             max_salary: maxSalary,
+            location_id: locationId,
           })
           .where({ id: jobOffer.getId() });
 
@@ -182,37 +175,6 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
             )
             .andWhere({ job_offer_id: jobOffer.getId() });
         }
-
-        const existingLocations = existingJobOffer.getLocations();
-
-        const addedLocations = updatedLocations?.filter(
-          (location) => !existingLocations?.some((existingLocation) => existingLocation.id === location.id),
-        );
-
-        const removedLocations = existingLocations?.filter(
-          (location) => !updatedLocations?.some((updatedLocation) => updatedLocation.id === location.id),
-        );
-
-        if (addedLocations && addedLocations.length > 0) {
-          await transaction.batchInsert<JobOfferLocationRawEntity>(
-            jobOfferLocationsTable.name,
-            addedLocations.map((location) => ({
-              id: this.uuidService.generateUuid(),
-              job_offer_id: jobOffer.getId(),
-              company_location_id: location.id,
-            })),
-          );
-        }
-
-        if (removedLocations && removedLocations.length > 0) {
-          await transaction<JobOfferLocationRawEntity>(jobOfferLocationsTable.name)
-            .delete()
-            .whereIn(
-              'company_location_id',
-              removedLocations.map((location) => location.id),
-            )
-            .andWhere({ job_offer_id: jobOffer.getId() });
-        }
       });
     } catch (error) {
       throw new RepositoryError({
@@ -238,6 +200,7 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           jobOffersTable.columns.id,
           jobOffersTable.columns.name,
           jobOffersTable.columns.description,
+          jobOffersTable.columns.is_remote,
           jobOffersTable.columns.is_hidden,
           jobOffersTable.columns.created_at,
           jobOffersTable.columns.category_id,
@@ -247,28 +210,21 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           jobOffersTable.columns.experience_level,
           jobOffersTable.columns.min_salary,
           jobOffersTable.columns.max_salary,
+          jobOffersTable.columns.location_id,
+          `${citiesTable.columns.name} as city_name`,
           `${categoriesTable.columns.name} as category_name`,
           `${companiesTable.columns.name} as company_name`,
           `${companiesTable.columns.logo_url} as company_logo_url`,
           this.databaseClient.raw(`array_agg(DISTINCT "skills"."id") as "skill_ids"`),
           this.databaseClient.raw(`array_agg(DISTINCT "skills"."name") as "skill_names"`),
-          this.databaseClient.raw(`array_agg(DISTINCT "companies_locations"."id") as "location_ids"`),
-          this.databaseClient.raw(`array_agg(DISTINCT "companies_locations"."is_remote") as "location_is_remote"`),
-          this.databaseClient.raw(`array_agg(DISTINCT "cities"."name") as "location_cities"`),
         ])
         .join(categoriesTable.name, jobOffersTable.columns.category_id, '=', categoriesTable.columns.id)
         .join(companiesTable.name, jobOffersTable.columns.company_id, '=', companiesTable.columns.id)
         .leftJoin(jobOfferSkillsTable.name, jobOffersTable.columns.id, '=', jobOfferSkillsTable.columns.job_offer_id)
         .leftJoin(skillsTable.name, jobOfferSkillsTable.columns.skill_id, '=', skillsTable.columns.id)
         .leftJoin(
-          jobOfferLocationsTable.name,
-          jobOffersTable.columns.id,
-          '=',
-          jobOfferLocationsTable.columns.job_offer_id,
-        )
-        .leftJoin(
           companiesLocationsTable.name,
-          jobOfferLocationsTable.columns.company_location_id,
+          jobOffersTable.columns.location_id as string,
           '=',
           companiesLocationsTable.columns.id,
         )
@@ -278,6 +234,7 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           categoriesTable.columns.name,
           companiesTable.columns.name,
           companiesTable.columns.logo_url,
+          citiesTable.columns.name,
         );
 
       if (id) {
@@ -318,6 +275,8 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
       minSalary,
       maxSalary,
       workingTime,
+      isRemote,
+      locationId,
       page,
       pageSize,
     } = payload;
@@ -331,6 +290,7 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           jobOffersTable.columns.name,
           jobOffersTable.columns.description,
           jobOffersTable.columns.is_hidden,
+          jobOffersTable.columns.is_remote,
           jobOffersTable.columns.created_at,
           jobOffersTable.columns.category_id,
           jobOffersTable.columns.company_id,
@@ -339,28 +299,21 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           jobOffersTable.columns.experience_level,
           jobOffersTable.columns.min_salary,
           jobOffersTable.columns.max_salary,
+          jobOffersTable.columns.location_id,
+          `${citiesTable.columns.name} as city_name`,
           `${categoriesTable.columns.name} as category_name`,
           `${companiesTable.columns.name} as company_name`,
           `${companiesTable.columns.logo_url} as company_logo_url`,
           this.databaseClient.raw(`array_agg(DISTINCT "skills"."id") as "skill_ids"`),
           this.databaseClient.raw(`array_agg(DISTINCT "skills"."name") as "skill_names"`),
-          this.databaseClient.raw(`array_agg(DISTINCT "companies_locations"."id") as "location_ids"`),
-          this.databaseClient.raw(`array_agg(DISTINCT "companies_locations"."is_remote") as "location_is_remote"`),
-          this.databaseClient.raw(`array_agg(DISTINCT "cities"."name") as "location_cities"`),
         ])
         .join(categoriesTable.name, jobOffersTable.columns.category_id, '=', categoriesTable.columns.id)
         .join(companiesTable.name, jobOffersTable.columns.company_id, '=', companiesTable.columns.id)
         .leftJoin(jobOfferSkillsTable.name, jobOffersTable.columns.id, '=', jobOfferSkillsTable.columns.job_offer_id)
         .leftJoin(skillsTable.name, jobOfferSkillsTable.columns.skill_id, '=', skillsTable.columns.id)
         .leftJoin(
-          jobOfferLocationsTable.name,
-          jobOffersTable.columns.id,
-          '=',
-          jobOfferLocationsTable.columns.job_offer_id,
-        )
-        .leftJoin(
           companiesLocationsTable.name,
-          jobOfferLocationsTable.columns.company_location_id,
+          jobOffersTable.columns.location_id as string,
           '=',
           companiesLocationsTable.columns.id,
         )
@@ -370,6 +323,7 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           categoriesTable.columns.name,
           companiesTable.columns.name,
           companiesTable.columns.logo_url,
+          citiesTable.columns.name,
         );
 
       if (name) {
@@ -404,6 +358,14 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
         query.where(jobOffersTable.columns.working_time, '=', workingTime);
       }
 
+      if (isRemote) {
+        query.where(jobOffersTable.columns.is_remote, '=', isRemote);
+      }
+
+      if (locationId) {
+        query.where(jobOffersTable.columns.location_id, '=', locationId);
+      }
+
       rawEntities = await query
         .orderBy(jobOffersTable.columns.id, 'desc')
         .limit(pageSize)
@@ -420,7 +382,18 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
   }
 
   public async countJobOffers(payload: CountJobOffersPayload): Promise<number> {
-    const { name, companyId, category, employmentType, experienceLevel, maxSalary, minSalary, workingTime } = payload;
+    const {
+      name,
+      isRemote,
+      locationId,
+      companyId,
+      category,
+      employmentType,
+      experienceLevel,
+      maxSalary,
+      minSalary,
+      workingTime,
+    } = payload;
 
     try {
       const query = this.databaseClient<JobOfferRawEntity>(jobOffersTable.name);
@@ -457,6 +430,14 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
 
       if (workingTime) {
         query.where(jobOffersTable.columns.working_time, '=', workingTime);
+      }
+
+      if (isRemote) {
+        query.where(jobOffersTable.columns.is_remote, '=', isRemote);
+      }
+
+      if (locationId) {
+        query.where(jobOffersTable.columns.location_id, '=', locationId);
       }
 
       const countResult = await query.count().first();

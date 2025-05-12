@@ -12,7 +12,8 @@ export interface CreateJobOfferActionPayload {
   readonly minSalary: number;
   readonly maxSalary: number;
   readonly skillIds: string[];
-  readonly locationIds: string[];
+  readonly locationId?: string | undefined;
+  readonly isRemote: boolean;
 }
 
 export interface CreateJobOfferActionResult {

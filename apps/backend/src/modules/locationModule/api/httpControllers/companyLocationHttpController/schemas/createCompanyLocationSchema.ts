@@ -15,18 +15,13 @@ const createCompanyLocationPathParamsSchema = Type.Object({
 
 export type CreateCompanyLocationPathParams = Static<typeof createCompanyLocationPathParamsSchema>;
 
-const createCompanyLocationRequestBodySchema = Type.Union([
-  Type.Object({
-    name: companyLocationNameSchema,
-  }),
-  Type.Object({
-    name: companyLocationNameSchema,
-    cityId: Type.String({ format: 'uuid' }),
-    address: companyLocationAddressSchema,
-    latitude: Type.Number(),
-    longitude: Type.Number(),
-  }),
-]);
+const createCompanyLocationRequestBodySchema = Type.Object({
+  name: companyLocationNameSchema,
+  cityId: Type.String({ format: 'uuid' }),
+  address: companyLocationAddressSchema,
+  latitude: Type.Number(),
+  longitude: Type.Number(),
+});
 export type CreateCompanyLocationRequestBody = Static<typeof createCompanyLocationRequestBodySchema>;
 
 const createCompanyLocationResponseBodySchema = companyLocationSchema;

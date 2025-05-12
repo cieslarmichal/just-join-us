@@ -9,7 +9,6 @@ export class CompanyLocationTestFactory {
   public create(input: Partial<CompanyLocationDraft> = {}): CompanyLocation {
     return new CompanyLocation({
       id: Generator.uuid(),
-      isRemote: false,
       latitude: Generator.latitude(),
       longitude: Generator.longitude(),
       cityId: Generator.uuid(),
@@ -20,19 +19,9 @@ export class CompanyLocationTestFactory {
     });
   }
 
-  public createRemote(companyId: string): CompanyLocation {
-    return new CompanyLocation({
-      id: Generator.uuid(),
-      isRemote: true,
-      name: Generator.string(10),
-      companyId,
-    });
-  }
-
   public createRaw(input: Partial<CompanyLocationRawEntity> = {}): CompanyLocationRawEntity {
     return {
       id: Generator.uuid(),
-      is_remote: false,
       latitude: Generator.latitude(),
       longitude: Generator.longitude(),
       city_id: Generator.uuid(),
@@ -40,15 +29,6 @@ export class CompanyLocationTestFactory {
       name: Generator.string(10),
       company_id: Generator.uuid(),
       ...input,
-    };
-  }
-
-  public createRemoteRaw(companyId: string): CompanyLocationRawEntity {
-    return {
-      id: Generator.uuid(),
-      is_remote: true,
-      name: Generator.string(10),
-      company_id: companyId,
     };
   }
 }

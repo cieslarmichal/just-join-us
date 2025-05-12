@@ -1,7 +1,5 @@
 import { Generator } from '../../../../../../tests/generator.ts';
 import { TestUtils } from '../../../../../../tests/testUtils.ts';
-import type { JobOfferLocationRawEntity } from '../../../../databaseModule/infrastructure/tables/jobOfferLocationsTable/jobOfferLocationRawEntity.ts';
-import { jobOfferLocationsTable } from '../../../../databaseModule/infrastructure/tables/jobOfferLocationsTable/jobOfferLocationsTable.ts';
 import type { JobOfferSkillRawEntity } from '../../../../databaseModule/infrastructure/tables/jobOfferSkillsTable/jobOfferSkillRawEntity.ts';
 import { jobOfferSkillsTable } from '../../../../databaseModule/infrastructure/tables/jobOfferSkillsTable/jobOfferSkillsTable.ts';
 import type { JobOfferRawEntity } from '../../../../databaseModule/infrastructure/tables/jobOffersTable/jobOfferRawEntity.ts';
@@ -14,7 +12,6 @@ interface CreateAndPersistPayload {
   readonly input: {
     readonly jobOffer: Partial<JobOfferRawEntity> & Pick<JobOfferRawEntity, 'company_id' | 'category_id'>;
     readonly skillIds?: string[] | undefined;
-    readonly locationIds?: string[] | undefined;
   };
 }
 
@@ -51,17 +48,6 @@ export class JobOfferTestUtils extends TestUtils {
             id: Generator.uuid(),
             job_offer_id: jobOffer.id,
             skill_id: skillId,
-          })),
-        );
-      }
-
-      if (input.locationIds) {
-        await transaction.batchInsert<JobOfferLocationRawEntity>(
-          jobOfferLocationsTable.name,
-          input.locationIds.map((locationId) => ({
-            id: Generator.uuid(),
-            company_location_id: locationId,
-            job_offer_id: jobOffer.id,
           })),
         );
       }

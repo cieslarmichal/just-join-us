@@ -21,9 +21,9 @@ export class JobOfferMapper {
       max_salary: maxSalary,
       skill_ids: skillIds,
       skill_names: skillNames,
-      location_ids: locationIds,
-      location_is_remote: locationIsRemote,
-      location_cities: locationCities,
+      is_remote: isRemote,
+      location_id: locationId,
+      city_name: cityName,
     } = entity;
 
     return new JobOffer({
@@ -50,16 +50,13 @@ export class JobOfferMapper {
                 name: skillNames[index] as string,
               }))
           : [],
-      locations:
-        locationIds && locationIsRemote && locationCities
-          ? locationIds
-              .filter((id) => id !== null)
-              .map((id, index) => ({
-                id,
-                isRemote: locationIsRemote[index] as boolean,
-                city: locationCities[index] ?? undefined,
-              }))
-          : [],
+      isRemote,
+      locationId: locationId || undefined,
+      location: cityName
+        ? {
+            city: cityName,
+          }
+        : undefined,
     });
   }
 }

@@ -6,7 +6,7 @@ import type { DatabaseClient } from '../../../../databaseModule/types/databaseCl
 import { CompanyLocationTestFactory } from '../../factories/companyLocationTestFactory/companyLocationTestFactory.ts';
 
 interface CreateAndPersistPayload {
-  readonly input: Partial<CompanyLocationRawEntity> & Pick<CompanyLocationRawEntity, 'company_id'>;
+  readonly input: Partial<CompanyLocationRawEntity> & Pick<CompanyLocationRawEntity, 'company_id' | 'city_id'>;
 }
 
 interface FindByIdPayload {
@@ -30,32 +30,20 @@ export class CompanyLocationTestUtils extends TestUtils {
 
     const id = Generator.uuid();
 
-    if (input.city_id) {
-      const { latitude, longitude, name, address, company_id, is_remote, city_id } =
-        this.companyLocationTestFactory.createRaw(input);
+    const { latitude, longitude, name, address, company_id, city_id } =
+      this.companyLocationTestFactory.createRaw(input);
 
-      await this.databaseClient<CompanyLocationRawEntity>(companiesLocationsTable.name).insert({
-        id,
-        geolocation: this.databaseClient.raw(`ST_GeomFromText('POINT(' || ? || ' ' || ? || ')', 4326)`, [
-          latitude,
-          longitude,
-        ]),
-        name,
-        address,
-        company_id,
-        is_remote,
-        city_id,
-      });
-    } else {
-      const { name, is_remote, company_id } = this.companyLocationTestFactory.createRemoteRaw(input.company_id);
-
-      await this.databaseClient<CompanyLocationRawEntity>(companiesLocationsTable.name).insert({
-        id,
-        name,
-        is_remote,
-        company_id,
-      });
-    }
+    await this.databaseClient<CompanyLocationRawEntity>(companiesLocationsTable.name).insert({
+      id,
+      geolocation: this.databaseClient.raw(`ST_GeomFromText('POINT(' || ? || ' ' || ? || ')', 4326)`, [
+        latitude,
+        longitude,
+      ]),
+      name,
+      address,
+      company_id,
+      city_id,
+    });
 
     const rawEntity = await this.findById({ id });
 
@@ -70,7 +58,6 @@ export class CompanyLocationTestUtils extends TestUtils {
         companiesLocationsTable.columns.id,
         companiesLocationsTable.columns.city_id,
         companiesLocationsTable.columns.company_id,
-        companiesLocationsTable.columns.is_remote,
         companiesLocationsTable.columns.address,
         companiesLocationsTable.columns.name,
         this.databaseClient.raw('ST_X(geolocation) as latitude'),
@@ -94,7 +81,6 @@ export class CompanyLocationTestUtils extends TestUtils {
         companiesLocationsTable.columns.id,
         companiesLocationsTable.columns.city_id,
         companiesLocationsTable.columns.company_id,
-        companiesLocationsTable.columns.is_remote,
         companiesLocationsTable.columns.address,
         companiesLocationsTable.columns.name,
         this.databaseClient.raw('ST_X(geolocation) as latitude'),

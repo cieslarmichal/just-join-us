@@ -56,17 +56,16 @@ describe('CompanyLocationRepositoryImpl', () => {
 
       const createdLocation = companyLocationTestFactory.create({ cityId: city.id, companyId: company.id });
 
-      const { name, isRemote, companyId, address, cityId, latitude, longitude } = createdLocation.getState();
+      const { name, companyId, address, cityId, latitude, longitude } = createdLocation.getState();
 
       const location = await repository.createCompanyLocation({
         data: {
           name,
-          isRemote,
           companyId,
-          address: address as string,
-          cityId: cityId as string,
-          latitude: latitude as number,
-          longitude: longitude as number,
+          address,
+          cityId,
+          latitude,
+          longitude,
         },
       });
 
@@ -78,7 +77,6 @@ describe('CompanyLocationRepositoryImpl', () => {
         address,
         city_id: cityId,
         company_id: companyId,
-        is_remote: isRemote,
         latitude,
         longitude,
       });
@@ -87,26 +85,31 @@ describe('CompanyLocationRepositoryImpl', () => {
         name,
         address,
         cityId,
+        cityName: city.name,
         companyId,
-        isRemote,
         latitude,
         longitude,
       });
     });
 
     it('throws an error when a Location with the same name and company already exists', async () => {
+      const city = await cityTestUtils.createAndPersist();
+
       const company = await companyTestUtils.createAndPersist();
 
       const existingLocation = await companyLocationTestUtils.createAndPersist({
-        input: { company_id: company.id },
+        input: { company_id: company.id, city_id: city.id },
       });
 
       try {
         await repository.createCompanyLocation({
           data: {
             name: existingLocation.name,
-            isRemote: true,
             companyId: existingLocation.company_id,
+            cityId: existingLocation.city_id,
+            address: existingLocation.address,
+            latitude: existingLocation.latitude,
+            longitude: existingLocation.longitude,
           },
         });
       } catch (error) {
@@ -133,7 +136,6 @@ describe('CompanyLocationRepositoryImpl', () => {
         name: companyLocationRawEntity.name,
         cityId: companyLocationRawEntity.city_id,
         address: companyLocationRawEntity.address,
-        isRemote: companyLocationRawEntity.is_remote,
         latitude: companyLocationRawEntity.latitude,
         longitude: companyLocationRawEntity.longitude,
       });
@@ -156,8 +158,8 @@ describe('CompanyLocationRepositoryImpl', () => {
         name: updatedName,
         address: updatedAddress,
         cityId: companyLocationRawEntity.city_id,
+        cityName: city.name,
         companyId: companyLocationRawEntity.company_id,
-        isRemote: companyLocationRawEntity.is_remote,
         latitude: updatedLatitude,
         longitude: updatedLongitude,
       });
@@ -168,7 +170,6 @@ describe('CompanyLocationRepositoryImpl', () => {
         address: updatedAddress,
         city_id: companyLocationRawEntity.city_id,
         company_id: companyLocationRawEntity.company_id,
-        is_remote: companyLocationRawEntity.is_remote,
         latitude: updatedLatitude,
         longitude: updatedLongitude,
       });
@@ -190,7 +191,6 @@ describe('CompanyLocationRepositoryImpl', () => {
       expect(foundLocation?.getState()).toEqual({
         name: location.name,
         companyId: location.company_id,
-        isRemote: location.is_remote,
         address: location.address,
         cityId: location.city_id,
         cityName: city.name,
@@ -222,10 +222,6 @@ describe('CompanyLocationRepositoryImpl', () => {
         input: { city_id: city.id, company_id: company1.id },
       });
 
-      const location3 = await companyLocationTestUtils.createAndPersist({
-        input: { is_remote: true, company_id: company1.id },
-      });
-
       await companyLocationTestUtils.createAndPersist({
         input: { city_id: city.id, company_id: company2.id },
       });
@@ -236,17 +232,10 @@ describe('CompanyLocationRepositoryImpl', () => {
         pageSize: 10,
       });
 
-      expect(locations).toHaveLength(3);
+      expect(locations).toHaveLength(2);
 
       expect(locations[0]?.getState()).toEqual({
-        name: location3.name,
-        isRemote: location3.is_remote,
-        companyId: location3.company_id,
-      });
-
-      expect(locations[1]?.getState()).toEqual({
         name: location2.name,
-        isRemote: location2.is_remote,
         companyId: location2.company_id,
         address: location2.address,
         cityId: location2.city_id,
@@ -255,9 +244,8 @@ describe('CompanyLocationRepositoryImpl', () => {
         longitude: location2.longitude,
       });
 
-      expect(locations[2]?.getState()).toEqual({
+      expect(locations[1]?.getState()).toEqual({
         name: location1.name,
-        isRemote: location1.is_remote,
         companyId: location1.company_id,
         address: location1.address,
         cityId: location1.city_id,

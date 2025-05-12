@@ -25,7 +25,7 @@ describe('UploadImageActionImpl', () => {
 
   const sampleFileName = 'sample_image.jpg';
 
-  const bucketName = 'justjoinus-images-dev';
+  const bucketName = 'just-join-us';
 
   const filePath = path.join(resourcesDirectory, sampleFileName);
 

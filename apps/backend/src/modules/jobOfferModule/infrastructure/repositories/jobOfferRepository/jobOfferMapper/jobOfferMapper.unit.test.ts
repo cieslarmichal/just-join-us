@@ -21,8 +21,6 @@ describe('JobOfferMapper', () => {
     const categoryName = Generator.categoryName();
     const skillId = Generator.uuid();
     const skillName = Generator.skillName();
-    const locationId = Generator.uuid();
-    const locationIsRemote = Generator.boolean();
     const locationCity = Generator.city();
 
     const jobOffer = mapper.mapExtendedToDomain({
@@ -30,9 +28,7 @@ describe('JobOfferMapper', () => {
       company_name: companyName,
       company_logo_url: companyLogo,
       category_name: categoryName,
-      location_ids: [locationId],
-      location_is_remote: [locationIsRemote],
-      location_cities: [locationCity],
+      city_name: locationCity,
       skill_ids: [skillId],
       skill_names: [skillName],
     });
@@ -43,7 +39,9 @@ describe('JobOfferMapper', () => {
       name: jobOfferEntity.name,
       description: jobOfferEntity.description,
       isHidden: jobOfferEntity.is_hidden,
+      isRemote: jobOfferEntity.is_remote,
       categoryId: jobOfferEntity.category_id,
+      locationId: jobOfferEntity.location_id,
       category: { name: categoryName },
       companyId: jobOfferEntity.company_id,
       company: { name: companyName, logoUrl: companyLogo },
@@ -59,13 +57,9 @@ describe('JobOfferMapper', () => {
           name: skillName,
         },
       ],
-      locations: [
-        {
-          id: locationId,
-          isRemote: locationIsRemote,
-          city: locationCity,
-        },
-      ],
+      location: {
+        city: locationCity,
+      },
     });
   });
 });

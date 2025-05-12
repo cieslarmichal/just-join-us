@@ -68,9 +68,9 @@ describe('CreateCompanyLocationAction', () => {
     expect(createdLocation.getState()).toEqual({
       name: locationName,
       companyId: company.id,
-      isRemote: false,
       address,
       cityId: city.id,
+      cityName: city.name,
       latitude,
       longitude,
     });
@@ -79,7 +79,6 @@ describe('CreateCompanyLocationAction', () => {
       id: createdLocation.getId(),
       name: locationName,
       company_id: company.id,
-      is_remote: false,
       address,
       city_id: city.id,
       latitude,
@@ -100,9 +99,9 @@ describe('CreateCompanyLocationAction', () => {
         cityId: city.id,
         name: existingLocation.name,
         companyId: existingLocation.company_id,
-        address: existingLocation.address as string,
-        latitude: existingLocation.latitude as number,
-        longitude: existingLocation.longitude as number,
+        address: existingLocation.address,
+        latitude: existingLocation.latitude,
+        longitude: existingLocation.longitude,
       });
     } catch (error) {
       expect(error).toBeInstanceOf(ResourceAlreadyExistsError);

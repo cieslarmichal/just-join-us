@@ -7,7 +7,6 @@ export const symbols = {
   companyLocationMapper: Symbol('companyLocationMapper'),
   companyLocationRepository: Symbol('companyLocationRepository'),
   createCompanyLocationAction: Symbol('createCompanyLocationAction'),
-  createRemoteCompanyLocationAction: Symbol('createRemoteCompanyLocationAction'),
   updateCompanyLocationAction: Symbol('updateCompanyLocationAction'),
   findCompanyLocationsAction: Symbol('findCompanyLocationsAction'),
 

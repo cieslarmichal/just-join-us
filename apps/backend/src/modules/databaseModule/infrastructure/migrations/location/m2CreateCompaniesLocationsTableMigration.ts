@@ -11,18 +11,11 @@ export class M2CreateCompaniesLocationsTableMigration implements Migration {
 
     await databaseClient.schema.createTable(this.tableName, (table) => {
       table.uuid('id').notNullable().primary();
-
       table.string('name', 64).notNullable();
-
-      table.boolean('is_remote').notNullable();
-
-      table.string('address', 64);
-
-      table.specificType('geolocation', 'geometry(point, 4326)');
-
-      table.uuid('city_id').references('id').inTable('cities').onDelete('CASCADE');
-
-      table.uuid('company_id').references('id').inTable('companies').onDelete('CASCADE');
+      table.string('address', 64).notNullable();
+      table.specificType('geolocation', 'geometry(point, 4326)').notNullable();
+      table.uuid('city_id').notNullable().references('id').inTable('cities').onDelete('CASCADE');
+      table.uuid('company_id').notNullable().references('id').inTable('companies').onDelete('CASCADE');
 
       table.unique(['company_id', 'name']);
     });

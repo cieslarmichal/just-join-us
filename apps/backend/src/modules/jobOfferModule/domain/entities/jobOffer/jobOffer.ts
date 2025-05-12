@@ -17,9 +17,7 @@ interface JobOfferSkillState {
 }
 
 interface JobOfferLocationState {
-  readonly id: string;
-  readonly isRemote: boolean;
-  readonly city?: string | undefined;
+  readonly city: string;
 }
 
 export interface JobOfferDraft {
@@ -27,6 +25,7 @@ export interface JobOfferDraft {
   readonly name: string;
   readonly description: string;
   readonly isHidden: boolean;
+  readonly isRemote: boolean;
   readonly categoryId: string;
   readonly category?: JobOfferCategoryState;
   readonly companyId: string;
@@ -38,13 +37,15 @@ export interface JobOfferDraft {
   readonly minSalary: number;
   readonly maxSalary: number;
   readonly skills?: JobOfferSkillState[] | undefined;
-  readonly locations?: JobOfferLocationState[] | undefined;
+  readonly locationId?: string | undefined;
+  readonly location?: JobOfferLocationState | undefined;
 }
 
 export interface JobOfferState {
   name: string;
   description: string;
   isHidden: boolean;
+  isRemote: boolean;
   categoryId: string;
   category?: JobOfferCategoryState;
   employmentType: string;
@@ -53,7 +54,8 @@ export interface JobOfferState {
   minSalary: number;
   maxSalary: number;
   skills?: JobOfferSkillState[] | undefined;
-  locations?: JobOfferLocationState[] | undefined;
+  locationId?: string | undefined;
+  location?: JobOfferLocationState | undefined;
   readonly companyId: string;
   readonly company?: JobOfferCompanyState;
   readonly createdAt: Date;
@@ -69,6 +71,10 @@ export interface SetDescriptionPayload {
 
 export interface SetIsHiddenPayload {
   readonly isHidden: boolean;
+}
+
+export interface SetIsRemotePayload {
+  readonly isRemote: boolean;
 }
 
 export interface SetCategoryPayload {
@@ -99,8 +105,8 @@ export interface SetSkillsPayload {
   readonly skills: Skill[];
 }
 
-export interface SetLocationsPayload {
-  readonly locations: CompanyLocation[];
+export interface SetLocationPayload {
+  readonly location: CompanyLocation;
 }
 
 export class JobOffer {
@@ -113,6 +119,7 @@ export class JobOffer {
       name,
       description,
       isHidden,
+      isRemote,
       categoryId,
       companyId,
       createdAt,
@@ -123,7 +130,8 @@ export class JobOffer {
       employmentType,
       experienceLevel,
       workingTime,
-      locations,
+      location,
+      locationId,
       skills,
     } = draft;
 
@@ -141,9 +149,18 @@ export class JobOffer {
       employmentType,
       workingTime,
       experienceLevel,
-      locations,
+
       skills,
+      isRemote,
     };
+
+    if (locationId) {
+      jobOfferState = { ...jobOfferState, locationId };
+    }
+
+    if (location) {
+      jobOfferState = { ...jobOfferState, location };
+    }
 
     if (category) {
       jobOfferState = { ...jobOfferState, category };
@@ -192,8 +209,8 @@ export class JobOffer {
     return this.state.skills;
   }
 
-  public getLocations(): JobOfferLocationState[] | undefined {
-    return this.state.locations;
+  public getLocation(): JobOfferLocationState | undefined {
+    return this.state.location;
   }
 
   public getEmploymentType(): string {
@@ -236,6 +253,10 @@ export class JobOffer {
     this.state.isHidden = payload.isHidden;
   }
 
+  public setIsRemote(payload: SetIsRemotePayload): void {
+    this.state.isRemote = payload.isRemote;
+  }
+
   public setCategory(payload: SetCategoryPayload): void {
     this.state.categoryId = payload.category.getId();
     this.state.category = { name: payload.category.getName() };
@@ -268,11 +289,7 @@ export class JobOffer {
     }));
   }
 
-  public setLocations(payload: SetLocationsPayload): void {
-    this.state.locations = payload.locations.map((location) => ({
-      id: location.getId(),
-      isRemote: location.getIsRemote(),
-      city: location.getCityId(),
-    }));
+  public setLocation(payload: SetLocationPayload): void {
+    this.state.locationId = payload.location.getId();
   }
 }

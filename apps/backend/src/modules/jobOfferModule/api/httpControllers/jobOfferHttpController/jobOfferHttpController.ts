@@ -101,7 +101,8 @@ export class JobOfferHttpController implements HttpController {
       companyId,
       employmentType,
       experienceLevel,
-      locationIds,
+      locationId,
+      isRemote,
       maxSalary,
       minSalary,
       skillIds,
@@ -115,7 +116,8 @@ export class JobOfferHttpController implements HttpController {
       companyId,
       employmentType,
       experienceLevel,
-      locationIds,
+      locationId,
+      isRemote,
       maxSalary,
       minSalary,
       skillIds,
@@ -195,9 +197,10 @@ export class JobOfferHttpController implements HttpController {
       description,
       categoryId,
       isHidden,
+      isRemote,
       employmentType,
       experienceLevel,
-      locationIds,
+      locationId,
       maxSalary,
       minSalary,
       skillIds,
@@ -212,7 +215,8 @@ export class JobOfferHttpController implements HttpController {
       isHidden,
       employmentType,
       experienceLevel,
-      locationIds,
+      isRemote,
+      locationId,
       maxSalary,
       minSalary,
       skillIds,
@@ -240,7 +244,9 @@ export class JobOfferHttpController implements HttpController {
       maxSalary,
       minSalary,
       workingTime,
-      locations,
+      locationId,
+      location,
+      isRemote,
       skills,
     } = jobOffer.getState();
 
@@ -249,6 +255,7 @@ export class JobOfferHttpController implements HttpController {
       name,
       description,
       isHidden,
+      isRemote,
       categoryId,
       companyId,
       createdAt: createdAt.toISOString(),
@@ -258,12 +265,6 @@ export class JobOfferHttpController implements HttpController {
       maxSalary,
       workingTime,
       skills: skills || [],
-      locations:
-        locations?.map((location) => ({
-          id: location.id,
-          isRemote: location.isRemote,
-          ...(location.city ? { city: location.city } : {}),
-        })) || [],
     };
 
     if (category) {
@@ -272,6 +273,14 @@ export class JobOfferHttpController implements HttpController {
 
     if (company) {
       jobOfferDto.company = { name: company.name, logoUrl: company.logoUrl };
+    }
+
+    if (location) {
+      jobOfferDto.location = { city: location.city };
+    }
+
+    if (locationId) {
+      jobOfferDto.locationId = locationId;
     }
 
     return jobOfferDto;

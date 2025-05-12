@@ -22,6 +22,7 @@ export const jobOfferSchema = Type.Object({
   name: jobOfferNameSchema,
   description: jobOfferDescriptionSchema,
   isHidden: Type.Boolean(),
+  isRemote: Type.Boolean(),
   categoryId: Type.String({ format: 'uuid' }),
   category: Type.Optional(
     Type.Object({
@@ -48,14 +49,11 @@ export const jobOfferSchema = Type.Object({
       }),
     ),
   ),
-  locations: Type.Optional(
-    Type.Array(
-      Type.Object({
-        id: Type.String({ format: 'uuid' }),
-        isRemote: Type.Boolean(),
-        city: Type.Optional(Type.String()),
-      }),
-    ),
+  locationId: Type.Optional(Type.String({ format: 'uuid' })),
+  location: Type.Optional(
+    Type.Object({
+      city: Type.String(),
+    }),
   ),
 });
 

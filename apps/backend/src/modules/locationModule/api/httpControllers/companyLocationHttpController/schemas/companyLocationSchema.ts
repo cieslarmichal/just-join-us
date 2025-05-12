@@ -14,12 +14,11 @@ export const companyLocationSchema = Type.Object({
   id: Type.String({ format: 'uuid' }),
   name: companyLocationNameSchema,
   companyId: Type.String({ format: 'uuid' }),
-  isRemote: Type.Boolean(),
-  address: Type.Optional(companyLocationAddressSchema),
-  cityId: Type.Optional(Type.String({ format: 'uuid' })),
+  address: companyLocationAddressSchema,
+  cityId: Type.String({ format: 'uuid' }),
   cityName: Type.Optional(Type.String()),
-  latitude: Type.Optional(Type.Number()),
-  longitude: Type.Optional(Type.Number()),
+  latitude: Type.Number(),
+  longitude: Type.Number(),
 });
 
 export type CompanyLocationDto = Static<typeof companyLocationSchema>;

@@ -14,8 +14,6 @@ import { CityHttpController } from './api/httpControllers/cityHttpController/cit
 import { CompanyLocationHttpController } from './api/httpControllers/companyLocationHttpController/companyLocationHttpController.ts';
 import type { CreateCompanyLocationAction } from './application/actions/createCompanyLocationAction/createCompanyLocationAction.ts';
 import { CreateCompanyLocationActionImpl } from './application/actions/createCompanyLocationAction/createCompanyLocationActionImpl.ts';
-import type { CreateRemoteCompanyLocationAction } from './application/actions/createRemoteCompanyLocationAction/createRemoteCompanyLocationAction.ts';
-import { CreateRemoteCompanyLocationActionImpl } from './application/actions/createRemoteCompanyLocationAction/createRemoteCompanyLocationActionImpl.ts';
 import type { FindCitiesAction } from './application/actions/findCitiesAction/findCitiesAction.ts';
 import { FindCitiesActionImpl } from './application/actions/findCitiesAction/findCitiesActionImpl.ts';
 import type { FindCityAction } from './application/actions/findCityAction/findCityAction.ts';
@@ -78,16 +76,6 @@ export class LocationModule implements DependencyInjectionModule {
         ),
     );
 
-    container.bind<CreateRemoteCompanyLocationAction>(
-      symbols.createRemoteCompanyLocationAction,
-      () =>
-        new CreateRemoteCompanyLocationActionImpl(
-          container.get<CompanyLocationRepository>(symbols.companyLocationRepository),
-          container.get<CompanyRepository>(userSymbols.companyRepository),
-          container.get<LoggerService>(applicationSymbols.loggerService),
-        ),
-    );
-
     container.bind<UpdateCompanyLocationAction>(
       symbols.updateCompanyLocationAction,
       () =>
@@ -109,7 +97,6 @@ export class LocationModule implements DependencyInjectionModule {
       () =>
         new CompanyLocationHttpController(
           container.get<CreateCompanyLocationAction>(symbols.createCompanyLocationAction),
-          container.get<CreateRemoteCompanyLocationAction>(symbols.createRemoteCompanyLocationAction),
           container.get<UpdateCompanyLocationAction>(symbols.updateCompanyLocationAction),
           container.get<FindCompanyLocationsAction>(symbols.findCompanyLocationsAction),
           container.get<AccessControlService>(authSymbols.accessControlService),

@@ -23,7 +23,6 @@ describe('CompanyLocationMapper', () => {
     expect(companyLocation.getState()).toEqual({
       name: companyLocationEntity.name,
       companyId: companyLocationEntity.company_id,
-      isRemote: companyLocationEntity.is_remote,
       address: companyLocationEntity.address,
       cityId: companyLocationEntity.city_id,
       latitude: companyLocationEntity.latitude,

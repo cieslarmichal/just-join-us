@@ -51,7 +51,7 @@ describe('UpdateCompanyLocationActionImpl', () => {
     const city = await cityTestUtils.createAndPersist();
     const company = await companyTestUtils.createAndPersist();
     const locationRawEntity = await companyLocationTestUtils.createAndPersist({
-      input: { city_id: city.id, company_id: company.id, is_remote: false },
+      input: { city_id: city.id, company_id: company.id },
     });
 
     const location = new CompanyLocation({
@@ -59,7 +59,6 @@ describe('UpdateCompanyLocationActionImpl', () => {
       name: locationRawEntity.name,
       cityId: locationRawEntity.city_id,
       companyId: locationRawEntity.company_id,
-      isRemote: locationRawEntity.is_remote,
       address: locationRawEntity.address,
       latitude: locationRawEntity.latitude,
       longitude: locationRawEntity.longitude,
@@ -86,8 +85,8 @@ describe('UpdateCompanyLocationActionImpl', () => {
       name: updatedName,
       address: updatedAddress,
       cityId: updatedCity.id,
+      cityName: updatedCity.name,
       companyId: location.getCompanyId(),
-      isRemote: false,
       latitude: updatedLatitude,
       longitude: updatedLongitude,
     });
@@ -98,7 +97,6 @@ describe('UpdateCompanyLocationActionImpl', () => {
       address: updatedAddress,
       city_id: updatedCity.id,
       company_id: locationRawEntity.company_id,
-      is_remote: false,
       latitude: updatedLatitude,
       longitude: updatedLongitude,
     });

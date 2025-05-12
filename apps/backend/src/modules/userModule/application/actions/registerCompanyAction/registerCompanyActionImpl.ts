@@ -1,7 +1,6 @@
 import { ResourceAlreadyExistsError } from '../../../../../common/errors/resourceAlreadyExistsError.ts';
 import { type LoggerService } from '../../../../../common/logger/loggerService.ts';
 import { userRoles } from '../../../../../common/types/userRole.ts';
-import type { CompanyLocationRepository } from '../../../../locationModule/domain/repositories/companyLocationRepository/companyLocationRepository.ts';
 import { type CompanyRepository } from '../../../domain/repositories/companyRepository/companyRepository.ts';
 import type { UserRepository } from '../../../domain/repositories/userRepository/userRepository.ts';
 import { type HashService } from '../../services/hashService/hashService.ts';
@@ -17,7 +16,6 @@ import {
 export class RegisterCompanyActionImpl implements RegisterCompanyAction {
   private readonly userRepository: UserRepository;
   private readonly companyRepository: CompanyRepository;
-  private readonly companyLocationRepository: CompanyLocationRepository;
   private readonly hashService: HashService;
   private readonly loggerService: LoggerService;
   private readonly passwordValidationService: PasswordValidationService;
@@ -26,7 +24,6 @@ export class RegisterCompanyActionImpl implements RegisterCompanyAction {
   public constructor(
     userRepository: UserRepository,
     companyRepository: CompanyRepository,
-    companyLocationRepository: CompanyLocationRepository,
     hashService: HashService,
     loggerService: LoggerService,
     passwordValidationService: PasswordValidationService,
@@ -34,7 +31,6 @@ export class RegisterCompanyActionImpl implements RegisterCompanyAction {
   ) {
     this.userRepository = userRepository;
     this.companyRepository = companyRepository;
-    this.companyLocationRepository = companyLocationRepository;
     this.hashService = hashService;
     this.loggerService = loggerService;
     this.passwordValidationService = passwordValidationService;
@@ -86,14 +82,6 @@ export class RegisterCompanyActionImpl implements RegisterCompanyAction {
       message: 'Company registered.',
       email,
       id: company.getId(),
-    });
-
-    await this.companyLocationRepository.createCompanyLocation({
-      data: {
-        name: 'Remote',
-        companyId: company.getId(),
-        isRemote: true,
-      },
     });
 
     await this.sendVerificationEmailAction.execute({ email });

@@ -16,7 +16,8 @@ const createJobOfferRequestBodySchema = Type.Object({
   minSalary: Type.Number({ minimum: 1 }),
   maxSalary: Type.Number({ minimum: 1 }),
   skillIds: Type.Array(Type.String({ format: 'uuid' })),
-  locationIds: Type.Array(Type.String({ format: 'uuid' })),
+  locationId: Type.Optional(Type.String({ format: 'uuid' })),
+  isRemote: Type.Boolean(),
 });
 
 export type CreateJobOfferRequestBody = Static<typeof createJobOfferRequestBodySchema>;

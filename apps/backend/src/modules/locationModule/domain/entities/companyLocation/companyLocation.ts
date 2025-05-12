@@ -2,23 +2,21 @@ export interface CompanyLocationDraft {
   readonly id: string;
   readonly name: string;
   readonly companyId: string;
-  readonly isRemote: boolean;
-  readonly cityId?: string | undefined;
+  readonly cityId: string;
   readonly cityName?: string | undefined;
-  readonly address?: string | undefined;
-  readonly latitude?: number | undefined;
-  readonly longitude?: number | undefined;
+  readonly address: string;
+  readonly latitude: number;
+  readonly longitude: number;
 }
 
 export interface CompanyLocationState {
   name: string;
   readonly companyId: string;
-  readonly isRemote: boolean;
-  cityId?: string;
+  cityId: string;
   cityName?: string;
-  address?: string;
-  latitude?: number;
-  longitude?: number;
+  address: string;
+  latitude: number;
+  longitude: number;
 }
 
 export interface SetNamePayload {
@@ -46,34 +44,21 @@ export class CompanyLocation {
   private state: CompanyLocationState;
 
   public constructor(draft: CompanyLocationDraft) {
-    const { id, name, companyId, isRemote, address, cityId, cityName, latitude, longitude } = draft;
+    const { id, name, companyId, address, cityId, cityName, latitude, longitude } = draft;
 
     this.id = id;
 
     let locationState: CompanyLocationState = {
       name,
       companyId,
-      isRemote,
+      cityId,
+      address,
+      latitude,
+      longitude,
     };
-
-    if (address) {
-      locationState = { ...locationState, address };
-    }
-
-    if (cityId) {
-      locationState = { ...locationState, cityId };
-    }
 
     if (cityName) {
       locationState = { ...locationState, cityName };
-    }
-
-    if (latitude) {
-      locationState = { ...locationState, latitude };
-    }
-
-    if (longitude) {
-      locationState = { ...locationState, longitude };
     }
 
     this.state = locationState;
@@ -105,10 +90,6 @@ export class CompanyLocation {
 
   public getLongitude(): number | undefined {
     return this.state.longitude;
-  }
-
-  public getIsRemote(): boolean {
-    return this.state.isRemote;
   }
 
   public getCompanyId(): string {

@@ -16,13 +16,14 @@ const updateJobOfferRequestBodySchema = Type.Object({
   description: Type.Optional(jobOfferDescriptionSchema),
   categoryId: Type.Optional(Type.String({ format: 'uuid' })),
   isHidden: Type.Optional(Type.Boolean()),
+  isRemote: Type.Optional(Type.Boolean()),
   employmentType: Type.Optional(Type.String()),
   workingTime: Type.Optional(Type.String()),
   experienceLevel: Type.Optional(Type.String()),
   minSalary: Type.Optional(Type.Number()),
   maxSalary: Type.Optional(Type.Number()),
   skillIds: Type.Optional(Type.Array(Type.String({ format: 'uuid' }))),
-  locationIds: Type.Optional(Type.Array(Type.String({ format: 'uuid' }))),
+  locationId: Type.Optional(Type.String({ format: 'uuid' })),
 });
 
 export type UpdateJobOfferRequestBody = Static<typeof updateJobOfferRequestBodySchema>;
