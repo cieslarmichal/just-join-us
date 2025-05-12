@@ -104,20 +104,16 @@ interface MultiSelectProps
 }
 
 export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
-  (
-    {
-      options,
-      onValueChange,
-      variant,
-      defaultValue = [],
-      placeholder = 'Select options',
-      animation = 0,
-      maxCount = 3,
-      className,
-      ...props
-    },
-    ref,
-  ) => {
+  ({
+    options,
+    onValueChange,
+    variant,
+    defaultValue = [],
+    placeholder = 'Select options',
+    animation = 0,
+    maxCount = 3,
+    className,
+  }) => {
     const [selectedValues, setSelectedValues] = React.useState<string[]>(defaultValue);
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
@@ -146,10 +142,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
       onValueChange([]);
     };
 
-    const handleTogglePopover = () => {
-      console.log('Popover toggled');
-      setIsPopoverOpen((prev) => !prev);
-    };
+    console.log(isPopoverOpen);
 
     const clearExtraOptions = () => {
       const newSelectedValues = selectedValues.slice(0, maxCount);
@@ -174,10 +167,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
         modal={false}
       >
         <PopoverTrigger asChild>
-          <button
-            ref={ref}
-            {...props}
-            onClick={handleTogglePopover}
+          <div
             className={cn(
               'flex w-full p-1 rounded-md border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit [&_svg]:pointer-events-auto',
               className,
@@ -248,7 +238,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
                 <ChevronDown className="h-4 cursor-pointer text-muted-foreground mx-2" />
               </div>
             )}
-          </button>
+          </div>
         </PopoverTrigger>
         <PopoverContent
           className="w-auto p-0"

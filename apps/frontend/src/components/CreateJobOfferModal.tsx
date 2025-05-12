@@ -130,6 +130,13 @@ export const CreateJobOfferModal = ({ onSuccess }: Props): ReactNode => {
         name: payload.name,
         description: payload.description,
         categoryId: payload.categoryId,
+        employmentType: payload.employmentType,
+        workingTime: payload.workingTime,
+        experienceLevel: payload.experienceLevel,
+        minSalary: payload.minSalary,
+        maxSalary: payload.maxSalary,
+        skillIds: payload.skills,
+        locationId: payload.companyLocation,
         accessToken,
       });
 
@@ -273,8 +280,6 @@ export const CreateJobOfferModal = ({ onSuccess }: Props): ReactNode => {
                             placeholder="Select options"
                             animation={2}
                             maxCount={3}
-                            modalPopover={true}
-                            className="z-20"
                           />
                         </FormControl>
                         <FormMessage />

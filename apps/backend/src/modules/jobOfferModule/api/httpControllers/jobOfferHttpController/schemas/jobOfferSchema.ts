@@ -14,7 +14,7 @@ export const jobOfferNameSchema = Type.String({
 
 export const jobOfferDescriptionSchema = Type.String({
   minLength: 3,
-  maxLength: 2000,
+  maxLength: 20000,
 });
 
 export const jobOfferSchema = Type.Object({

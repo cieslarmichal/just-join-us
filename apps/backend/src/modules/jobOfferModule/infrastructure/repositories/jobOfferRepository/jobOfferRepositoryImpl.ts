@@ -2,6 +2,7 @@ import { RepositoryError } from '../../../../../common/errors/repositoryError.ts
 import { ResourceNotFoundError } from '../../../../../common/errors/resourceNotFoundError.ts';
 import { type UuidService } from '../../../../../common/uuid/uuidService.ts';
 import { categoriesTable } from '../../../../databaseModule/infrastructure/tables/categoriesTable/categoriesTable.ts';
+import { citiesTable } from '../../../../databaseModule/infrastructure/tables/citiesTable/citiesTable.ts';
 import { companiesLocationsTable } from '../../../../databaseModule/infrastructure/tables/companiesLocationsTable/companiesLocationsTable.ts';
 import { companiesTable } from '../../../../databaseModule/infrastructure/tables/companiesTable/companiesTable.ts';
 import { type JobOfferLocationRawEntity } from '../../../../databaseModule/infrastructure/tables/jobOfferLocationsTable/jobOfferLocationRawEntity.ts';
@@ -253,7 +254,7 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           this.databaseClient.raw(`array_agg(DISTINCT "skills"."name") as "skill_names"`),
           this.databaseClient.raw(`array_agg(DISTINCT "companies_locations"."id") as "location_ids"`),
           this.databaseClient.raw(`array_agg(DISTINCT "companies_locations"."is_remote") as "location_is_remote"`),
-          this.databaseClient.raw(`array_agg(DISTINCT "companies_locations"."city_id") as "location_cities"`),
+          this.databaseClient.raw(`array_agg(DISTINCT "cities"."name") as "location_cities"`),
         ])
         .join(categoriesTable.name, jobOffersTable.columns.category_id, '=', categoriesTable.columns.id)
         .join(companiesTable.name, jobOffersTable.columns.company_id, '=', companiesTable.columns.id)
@@ -271,6 +272,7 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           '=',
           companiesLocationsTable.columns.id,
         )
+        .leftJoin(citiesTable.name, companiesLocationsTable.columns.city_id as string, '=', citiesTable.columns.id)
         .groupBy(
           jobOffersTable.columns.id,
           categoriesTable.columns.name,
@@ -344,7 +346,7 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           this.databaseClient.raw(`array_agg(DISTINCT "skills"."name") as "skill_names"`),
           this.databaseClient.raw(`array_agg(DISTINCT "companies_locations"."id") as "location_ids"`),
           this.databaseClient.raw(`array_agg(DISTINCT "companies_locations"."is_remote") as "location_is_remote"`),
-          this.databaseClient.raw(`array_agg(DISTINCT "companies_locations"."city_id") as "location_cities"`),
+          this.databaseClient.raw(`array_agg(DISTINCT "cities"."name") as "location_cities"`),
         ])
         .join(categoriesTable.name, jobOffersTable.columns.category_id, '=', categoriesTable.columns.id)
         .join(companiesTable.name, jobOffersTable.columns.company_id, '=', companiesTable.columns.id)
@@ -362,6 +364,7 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           '=',
           companiesLocationsTable.columns.id,
         )
+        .leftJoin(citiesTable.name, companiesLocationsTable.columns.city_id as string, '=', citiesTable.columns.id)
         .groupBy(
           jobOffersTable.columns.id,
           categoriesTable.columns.name,

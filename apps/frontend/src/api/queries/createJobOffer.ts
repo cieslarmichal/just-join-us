@@ -6,11 +6,31 @@ type CreateJobOfferRequest = {
   description: string;
   categoryId: string;
   companyId: string;
+  employmentType: string;
+  workingTime: string;
+  experienceLevel: string;
+  minSalary: number;
+  maxSalary: number;
+  skillIds: string[];
+  locationId: string;
   accessToken: string;
 };
 
 export const createJobOffer = async (request: CreateJobOfferRequest): Promise<JobOffer> => {
-  const { name, description, categoryId, companyId, accessToken } = request;
+  const {
+    name,
+    description,
+    categoryId,
+    companyId,
+    employmentType,
+    experienceLevel,
+    locationId,
+    maxSalary,
+    minSalary,
+    skillIds,
+    workingTime,
+    accessToken,
+  } = request;
 
   const response = await fetch(`${config.backendUrl}/job-offers`, {
     method: 'POST',
@@ -23,6 +43,13 @@ export const createJobOffer = async (request: CreateJobOfferRequest): Promise<Jo
       description,
       categoryId,
       companyId,
+      employmentType,
+      experienceLevel,
+      locationIds: [locationId],
+      maxSalary,
+      minSalary,
+      skillIds,
+      workingTime,
     }),
   });
 

@@ -2,6 +2,9 @@ export interface JobOffer {
   readonly id: string;
   readonly name: string;
   readonly description: string;
+  readonly category: {
+    readonly name: string;
+  };
   readonly categoryId: string;
   readonly isHidden: boolean;
   readonly employmentType: string;

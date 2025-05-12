@@ -10,6 +10,8 @@ import { type TokenService } from '../authModule/application/services/tokenServi
 import { authSymbols } from '../authModule/symbols.ts';
 import { databaseSymbols } from '../databaseModule/symbols.ts';
 import type { DatabaseClient } from '../databaseModule/types/databaseClient.ts';
+import type { CompanyLocationRepository } from '../locationModule/domain/repositories/companyLocationRepository/companyLocationRepository.ts';
+import { locationSymbols } from '../locationModule/symbols.ts';
 
 import { UserHttpController } from './api/httpControllers/userHttpController/userHttpController.ts';
 import { EmailQueueController } from './api/queueControllers/emailQueueController/emailQueueController.ts';
@@ -126,6 +128,7 @@ export class UserModule implements DependencyInjectionModule {
         new RegisterCompanyActionImpl(
           container.get<UserRepository>(symbols.userRepository),
           container.get<CompanyRepository>(symbols.companyRepository),
+          container.get<CompanyLocationRepository>(locationSymbols.companyLocationRepository),
           container.get<HashService>(symbols.hashService),
           container.get<LoggerService>(applicationSymbols.loggerService),
           container.get<PasswordValidationService>(symbols.passwordValidationService),

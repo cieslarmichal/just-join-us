@@ -67,7 +67,7 @@ export default function Header() {
                 }}
                 className="pt-2 hover:text-primary"
               >
-                Company details
+                Details
               </MenubarItem>
               <MenubarSeparator />
               <MenubarItem
@@ -76,7 +76,7 @@ export default function Header() {
                 }}
                 className="pt-2 hover:text-primary"
               >
-                Company locations
+                Locations
               </MenubarItem>
             </MenubarContent>
           </MenubarMenu>
