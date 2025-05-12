@@ -276,7 +276,7 @@ export default function RegisterForm({ onSuccess }: Props) {
                         <div className="flex items-center gap-4">
                           <label
                             htmlFor="logo"
-                            className="px-4 py-2 bg-pink-600 text-white text-sm font-medium rounded-lg cursor-pointer hover:bg-pink-700"
+                            className="px-4 py-2 bg-pink-600 text-white text-sm font-medium rounded-lg cursor-pointer hover:bg-pink-600"
                           >
                             Select a file
                           </label>

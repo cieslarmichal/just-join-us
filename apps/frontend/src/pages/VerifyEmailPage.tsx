@@ -29,7 +29,8 @@ export default function VerifyEmailPage() {
     }
 
     verifyToken(token);
-  }, [token, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex justify-between min-h-screen bg-gray-100">

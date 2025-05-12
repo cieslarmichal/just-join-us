@@ -13,8 +13,12 @@ export interface JobOffer {
   readonly minSalary: number;
   readonly maxSalary: number;
   readonly skills: { id: string; name: string }[];
-  // TODO: add main location
-  readonly locations: { id: string; isRemote: boolean; city?: string | undefined }[];
+  readonly locationId?: string | undefined;
+  readonly location?: {
+    readonly city: string;
+    readonly latitude: number;
+    readonly longitude: number;
+  };
   readonly companyId: string;
   readonly company?: { name: string; logoUrl: string };
   readonly createdAt: Date;

@@ -18,6 +18,8 @@ interface JobOfferSkillState {
 
 interface JobOfferLocationState {
   readonly city: string;
+  readonly latitude: number;
+  readonly longitude: number;
 }
 
 export interface JobOfferDraft {

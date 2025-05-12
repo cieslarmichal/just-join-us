@@ -34,6 +34,8 @@ export interface JobOfferRawEntityExtended {
   readonly company_logo_url: string;
   readonly location_id?: string | undefined;
   readonly city_name?: string | undefined;
+  readonly latitude?: number | undefined;
+  readonly longitude?: number | undefined;
 
   readonly skill_ids?: (string | null)[];
   readonly skill_names?: (string | null)[];

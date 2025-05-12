@@ -4,6 +4,7 @@ import { JobOffer } from '../types/jobOffer.ts';
 type CreateJobOfferRequest = {
   name: string;
   description: string;
+  isRemote: boolean;
   categoryId: string;
   companyId: string;
   employmentType: string;
@@ -20,6 +21,7 @@ export const createJobOffer = async (request: CreateJobOfferRequest): Promise<Jo
   const {
     name,
     description,
+    isRemote,
     categoryId,
     companyId,
     employmentType,
@@ -41,6 +43,7 @@ export const createJobOffer = async (request: CreateJobOfferRequest): Promise<Jo
     body: JSON.stringify({
       name,
       description,
+      isRemote,
       categoryId,
       companyId,
       employmentType,

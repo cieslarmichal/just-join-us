@@ -116,6 +116,8 @@ describe('FindJobOfferAction', () => {
       locationId: jobOffer.location_id,
       location: {
         city: city.name,
+        latitude: location.latitude,
+        longitude: location.longitude,
       },
     });
   });

@@ -119,6 +119,8 @@ describe('CreateJobOfferAction', () => {
       skills: expect.any(Array),
       location: {
         city: city.name,
+        latitude: location.latitude,
+        longitude: location.longitude,
       },
     });
     expect(createdJobOffer.getSkills()).toHaveLength(3);

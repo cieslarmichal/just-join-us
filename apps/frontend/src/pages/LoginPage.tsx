@@ -49,7 +49,7 @@ export default function LoginPage() {
           <div className="flex justify-center mb-6 mt-4">
             <button
               className={`px-6 py-3 text-lg font-medium cursor-pointer ${
-                activeTab === 'login' ? 'text-pink-700 border-b-2 border-pink-700' : 'text-gray-500'
+                activeTab === 'login' ? 'text-pink-600 border-b-2 border-pink-600' : 'text-gray-500'
               }`}
               onClick={() => handleTabChange('login')}
             >
@@ -57,7 +57,7 @@ export default function LoginPage() {
             </button>
             <button
               className={`px-6 py-3 text-lg font-medium cursor-pointer ${
-                activeTab === 'register' ? 'text-pink-700 border-b-2 border-pink-700' : 'text-gray-500'
+                activeTab === 'register' ? 'text-pink-600 border-b-2 border-pink-600' : 'text-gray-500'
               }`}
               onClick={() => handleTabChange('register')}
             >

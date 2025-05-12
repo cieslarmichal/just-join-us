@@ -211,6 +211,8 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           jobOffersTable.columns.min_salary,
           jobOffersTable.columns.max_salary,
           jobOffersTable.columns.location_id,
+          this.databaseClient.raw(`ST_X(${companiesLocationsTable.columns.geolocation}) as latitude`),
+          this.databaseClient.raw(`ST_Y(${companiesLocationsTable.columns.geolocation}) as longitude`),
           `${citiesTable.columns.name} as city_name`,
           `${categoriesTable.columns.name} as category_name`,
           `${companiesTable.columns.name} as company_name`,
@@ -224,17 +226,18 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
         .leftJoin(skillsTable.name, jobOfferSkillsTable.columns.skill_id, '=', skillsTable.columns.id)
         .leftJoin(
           companiesLocationsTable.name,
-          jobOffersTable.columns.location_id as string,
+          jobOffersTable.columns.location_id,
           '=',
           companiesLocationsTable.columns.id,
         )
-        .leftJoin(citiesTable.name, companiesLocationsTable.columns.city_id as string, '=', citiesTable.columns.id)
+        .leftJoin(citiesTable.name, companiesLocationsTable.columns.city_id, '=', citiesTable.columns.id)
         .groupBy(
           jobOffersTable.columns.id,
           categoriesTable.columns.name,
           companiesTable.columns.name,
           companiesTable.columns.logo_url,
           citiesTable.columns.name,
+          companiesLocationsTable.columns.geolocation,
         );
 
       if (id) {
@@ -300,6 +303,8 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           jobOffersTable.columns.min_salary,
           jobOffersTable.columns.max_salary,
           jobOffersTable.columns.location_id,
+          this.databaseClient.raw(`ST_X(${companiesLocationsTable.columns.geolocation}) as latitude`),
+          this.databaseClient.raw(`ST_Y(${companiesLocationsTable.columns.geolocation}) as longitude`),
           `${citiesTable.columns.name} as city_name`,
           `${categoriesTable.columns.name} as category_name`,
           `${companiesTable.columns.name} as company_name`,
@@ -313,17 +318,18 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
         .leftJoin(skillsTable.name, jobOfferSkillsTable.columns.skill_id, '=', skillsTable.columns.id)
         .leftJoin(
           companiesLocationsTable.name,
-          jobOffersTable.columns.location_id as string,
+          jobOffersTable.columns.location_id,
           '=',
           companiesLocationsTable.columns.id,
         )
-        .leftJoin(citiesTable.name, companiesLocationsTable.columns.city_id as string, '=', citiesTable.columns.id)
+        .leftJoin(citiesTable.name, companiesLocationsTable.columns.city_id, '=', citiesTable.columns.id)
         .groupBy(
           jobOffersTable.columns.id,
           categoriesTable.columns.name,
           companiesTable.columns.name,
           companiesTable.columns.logo_url,
           citiesTable.columns.name,
+          companiesLocationsTable.columns.geolocation,
         );
 
       if (name) {

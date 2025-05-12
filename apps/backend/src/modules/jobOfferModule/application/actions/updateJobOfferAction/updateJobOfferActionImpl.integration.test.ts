@@ -94,6 +94,8 @@ describe('UpdateJobOfferActionImpl', () => {
       locationId: jobOfferRawEntity.location_id,
       location: {
         city: city1.name,
+        latitude: location.latitude,
+        longitude: location.longitude,
       },
       skills: [
         {
@@ -161,6 +163,8 @@ describe('UpdateJobOfferActionImpl', () => {
       locationId: updatedLocation.id,
       location: {
         city: city2.name,
+        latitude: updatedLocation.latitude,
+        longitude: updatedLocation.longitude,
       },
     });
 

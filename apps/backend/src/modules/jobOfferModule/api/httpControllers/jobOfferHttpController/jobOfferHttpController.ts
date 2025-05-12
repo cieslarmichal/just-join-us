@@ -276,7 +276,7 @@ export class JobOfferHttpController implements HttpController {
     }
 
     if (location) {
-      jobOfferDto.location = { city: location.city };
+      jobOfferDto.location = { city: location.city, latitude: location.latitude, longitude: location.longitude };
     }
 
     if (locationId) {

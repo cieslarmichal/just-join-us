@@ -53,6 +53,8 @@ export const jobOfferSchema = Type.Object({
   location: Type.Optional(
     Type.Object({
       city: Type.String(),
+      latitude: Type.Number(),
+      longitude: Type.Number(),
     }),
   ),
 });

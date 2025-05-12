@@ -22,6 +22,8 @@ describe('JobOfferMapper', () => {
     const skillId = Generator.uuid();
     const skillName = Generator.skillName();
     const locationCity = Generator.city();
+    const latitude = Generator.latitude();
+    const longitude = Generator.longitude();
 
     const jobOffer = mapper.mapExtendedToDomain({
       ...jobOfferEntity,
@@ -31,6 +33,8 @@ describe('JobOfferMapper', () => {
       city_name: locationCity,
       skill_ids: [skillId],
       skill_names: [skillName],
+      latitude,
+      longitude,
     });
 
     expect(jobOffer.getId()).toEqual(jobOfferEntity.id);
@@ -59,6 +63,8 @@ describe('JobOfferMapper', () => {
       ],
       location: {
         city: locationCity,
+        latitude,
+        longitude,
       },
     });
   });

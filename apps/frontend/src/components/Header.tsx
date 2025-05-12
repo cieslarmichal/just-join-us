@@ -63,20 +63,20 @@ export default function Header() {
               <MenubarSeparator />
               <MenubarItem
                 onClick={() => {
-                  navigate('/my-company');
-                }}
-                className="pt-2 hover:text-primary"
-              >
-                Details
-              </MenubarItem>
-              <MenubarSeparator />
-              <MenubarItem
-                onClick={() => {
                   navigate('/my-company/locations');
                 }}
                 className="pt-2 hover:text-primary"
               >
                 Locations
+              </MenubarItem>
+              <MenubarSeparator />
+              <MenubarItem
+                onClick={() => {
+                  navigate('/my-company');
+                }}
+                className="pt-2 hover:text-primary"
+              >
+                Details
               </MenubarItem>
             </MenubarContent>
           </MenubarMenu>

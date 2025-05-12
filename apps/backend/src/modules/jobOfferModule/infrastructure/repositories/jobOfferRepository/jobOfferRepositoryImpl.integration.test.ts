@@ -135,7 +135,7 @@ describe('JobOfferRepositoryImpl', () => {
         maxSalary,
         workingTime,
         locationId: location.id,
-        location: { city: city.name },
+        location: { city: city.name, latitude: location.latitude, longitude: location.longitude },
         skills: [{ id: skill.id, name: skill.name }],
         category: { name: category.name },
         company: { name: company.name, logoUrl: company.logo_url },

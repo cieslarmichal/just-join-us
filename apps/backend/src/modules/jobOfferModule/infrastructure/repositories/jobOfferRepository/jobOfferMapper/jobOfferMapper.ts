@@ -24,6 +24,8 @@ export class JobOfferMapper {
       is_remote: isRemote,
       location_id: locationId,
       city_name: cityName,
+      latitude,
+      longitude,
     } = entity;
 
     return new JobOffer({
@@ -52,11 +54,14 @@ export class JobOfferMapper {
           : [],
       isRemote,
       locationId: locationId || undefined,
-      location: cityName
-        ? {
-            city: cityName,
-          }
-        : undefined,
+      location:
+        cityName && latitude && longitude
+          ? {
+              city: cityName,
+              latitude,
+              longitude,
+            }
+          : undefined,
     });
   }
 }
