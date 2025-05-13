@@ -1,6 +1,7 @@
 import { HiPencil, HiTrash } from 'react-icons/hi2';
 import { JobOffer } from '../api/types/jobOffer';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
+import { formatSalary } from '../common/formatSalary';
 
 interface Props {
   readonly jobOffers: JobOffer[];
@@ -29,9 +30,7 @@ export default function JobOfferList({ jobOffers }: Props) {
               <TableCell>{jobOffer.location?.city}</TableCell>
               <TableCell>{jobOffer.employmentType}</TableCell>
               <TableCell>{jobOffer.experienceLevel}</TableCell>
-              <TableCell>
-                {jobOffer.minSalary} - {jobOffer.maxSalary}
-              </TableCell>
+              <TableCell>{formatSalary(jobOffer.minSalary, jobOffer.maxSalary)}</TableCell>
               <TableCell>
                 <div className="flex gap-2">
                   <button

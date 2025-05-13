@@ -38,8 +38,8 @@ export default function SearchInput() {
         value={queryInput}
         onChange={(event) => {
           setQueryInput(event.target.value);
+          handleQueryApply(event);
         }}
-        onSubmit={handleQueryApply}
         className="pl-12 h-10 w-50 border border-gray-300 hover:border-gray-500 rounded-3xl"
       />
     </div>

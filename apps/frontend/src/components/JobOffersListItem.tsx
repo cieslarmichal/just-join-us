@@ -4,13 +4,14 @@ import { Link } from 'react-router-dom';
 
 import { JobOffer } from '../api/types/jobOffer';
 import { MdComputer } from 'react-icons/md';
+import { formatSalary } from '../common/formatSalary';
 
 interface Props {
   readonly jobOffer: JobOffer;
 }
 
 export default function JobOffersListItem({ jobOffer }: Props) {
-  const skillsTruncated = jobOffer.skills.map((skill) => skill.name).slice(0, 4);
+  const skillsTruncated = jobOffer.skills.map((skill) => skill.name).slice(0, 3);
 
   return (
     <Link
@@ -27,7 +28,7 @@ export default function JobOffersListItem({ jobOffer }: Props) {
           <div className="flex items-center gap-2">
             <div className="text-sm font-semibold sm:text-lg whitespace-nowrap">{jobOffer.name}</div>
             <div className="text-lg whitespace-nowrap ml-auto pr-4 text-green-600 font-medium">
-              {jobOffer.minSalary} - {jobOffer.maxSalary} PLN/month
+              {formatSalary(jobOffer.minSalary, jobOffer.maxSalary)}
             </div>
           </div>
           <div className="flex">
