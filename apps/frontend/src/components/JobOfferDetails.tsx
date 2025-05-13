@@ -10,6 +10,7 @@ import JobOfferDetailsSection from './JobOfferDetailsSection';
 import { MdComputer } from 'react-icons/md';
 import { CiWallet } from 'react-icons/ci';
 import { FaRegStar } from 'react-icons/fa';
+import { formatSalary } from '../common/formatSalary';
 
 interface Props {
   readonly jobOffer: JobOffer;
@@ -68,9 +69,7 @@ export default function JobOfferDetails({ jobOffer }: Props) {
               <div className="whitespace-nowrap font-medium flex items-center">
                 <CiWallet className="inline mr-4 text-3xl" />
                 <div className="flex flex-col gap-0.5">
-                  <div>
-                    {minSalary} - {maxSalary} PLN / month
-                  </div>
+                  <div>{formatSalary(minSalary, maxSalary)}</div>
                   <div className="text-xs">
                     {employmentType === 'B2B' ? 'Net' : 'Gross'} per month - {employmentType}
                   </div>
