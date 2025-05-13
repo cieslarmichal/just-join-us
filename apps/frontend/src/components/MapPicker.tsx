@@ -1,20 +1,17 @@
 import 'leaflet/dist/leaflet.css';
 import { type LatLngLiteral } from 'leaflet';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import { config } from '../config';
 
 interface Props {
   setLatitude?: (latitude: number) => void;
   setLongitude?: (longitude: number) => void;
-  latitude?: number;
-  longitude?: number;
-  readOnly?: boolean;
+  latitude: number;
+  longitude: number;
+  readOnly: boolean;
   className?: string;
-  style?: React.CSSProperties;
   zoom?: number;
-  pins?: LatLngLiteral[];
-  onPinAdd?: (pin: LatLngLiteral) => void;
 }
 
 export default function MapPicker({
@@ -22,13 +19,24 @@ export default function MapPicker({
   setLongitude,
   latitude,
   longitude,
-  readOnly = false,
+  readOnly,
   className,
-  style,
   zoom = 13,
-  pins = [],
-  onPinAdd,
 }: Props) {
+  const [position, setPosition] = useState<LatLngLiteral>({
+    lat: 52.231641,
+    lng: 21.00618,
+  });
+
+  useEffect(() => {
+    if (latitude && longitude) {
+      setPosition({
+        lat: latitude,
+        lng: longitude,
+      });
+    }
+  }, [latitude, longitude]);
+
   const MapEvents = () => {
     const map = useMap();
 
@@ -36,7 +44,7 @@ export default function MapPicker({
       if (latitude && longitude) {
         map.setView([latitude, longitude], zoom);
       }
-    }, [map, latitude, longitude, zoom]);
+    }, [map]);
 
     map.on(
       'click',
@@ -52,17 +60,16 @@ export default function MapPicker({
 
         const { lat, lng } = e.latlng;
 
-        const newPin = { lat, lng };
+        setPosition({
+          lat,
+          lng,
+        });
 
-        if (onPinAdd) {
-          onPinAdd(newPin); // Trigger the callback for the new pin
-        }
-
-        if (setLatitude) {
+        if (setLatitude !== undefined) {
           setLatitude(lat);
         }
 
-        if (setLongitude) {
+        if (setLongitude !== undefined) {
           setLongitude(lng);
         }
 
@@ -75,22 +82,16 @@ export default function MapPicker({
 
   return (
     <MapContainer
-      center={{ lat: latitude || 52.012373, lng: longitude || 19.038552 }}
+      center={position}
       zoom={zoom}
       scrollWheelZoom
       className={className}
-      style={style}
     >
       <TileLayer
         url={`https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${config.mapTiler.apiKey}`}
         attribution='&copy; <a href="https://www.maptiler.com/">MapTiler</a> contributors'
       />
-      {pins.map((position, index) => (
-        <Marker
-          key={index}
-          position={position}
-        />
-      ))}
+      <Marker position={position} />
       <MapEvents />
     </MapContainer>
   );

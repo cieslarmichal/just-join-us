@@ -267,6 +267,7 @@ export const CreateCompanyLocationModal = ({ companyId, onSuccess }: Props): Rea
                   latitude={form.watch('latitude')}
                   longitude={form.watch('longitude')}
                   className="w-full h-50 md:h-70"
+                  readOnly={false}
                 />
               </div>
 
