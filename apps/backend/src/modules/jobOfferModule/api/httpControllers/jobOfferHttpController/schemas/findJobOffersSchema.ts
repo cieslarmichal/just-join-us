@@ -9,6 +9,7 @@ export const findJobOffersQueryParamsSchema = Type.Object({
   name: Type.Optional(Type.String({ minLength: 1 })),
   companyId: Type.Optional(Type.String({ format: 'uuid' })),
   category: Type.Optional(Type.String({ minLength: 1 })),
+  city: Type.Optional(Type.String({ minLength: 1 })),
   employmentType: Type.Optional(Type.String({ minLength: 1 })),
   workingTime: Type.Optional(Type.String({ minLength: 1 })),
   experienceLevel: Type.Optional(Type.String({ minLength: 1 })),
@@ -16,6 +17,9 @@ export const findJobOffersQueryParamsSchema = Type.Object({
   maxSalary: Type.Optional(Type.Number({ minimum: 1 })),
   page: Type.Optional(Type.Integer({ minimum: 1 })),
   pageSize: Type.Optional(Type.Integer({ minimum: 1 })),
+  sort: Type.Optional(
+    Type.Union([Type.Literal('latest'), Type.Literal('lowestSalary'), Type.Literal('highestSalary')]),
+  ),
 });
 
 export type FindJobOffersQueryParams = Static<typeof findJobOffersQueryParamsSchema>;

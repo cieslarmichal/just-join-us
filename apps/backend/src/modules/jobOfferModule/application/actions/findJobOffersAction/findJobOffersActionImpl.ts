@@ -23,6 +23,8 @@ export class FindJobOffersActionImpl implements FindJobOffersAction {
       minSalary,
       workingTime,
       companyId,
+      city,
+      sort,
       page,
       pageSize,
     } = payload;
@@ -37,6 +39,8 @@ export class FindJobOffersActionImpl implements FindJobOffersAction {
         minSalary,
         workingTime,
         name,
+        city,
+        sort,
         page,
         pageSize,
       }),
@@ -49,6 +53,7 @@ export class FindJobOffersActionImpl implements FindJobOffersAction {
         workingTime,
         companyId,
         name,
+        city,
       }),
     ]);
 

@@ -8,7 +8,6 @@ type SortOption = {
 };
 
 const sortOptions: SortOption[] = [
-  { value: 'default', label: 'Default' },
   { value: 'latest', label: 'Latest' },
   { value: 'highestSalary', label: 'Highest salary' },
   { value: 'lowestSalary', label: 'Lowest salary' },
@@ -24,7 +23,7 @@ export default function SortButton() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleOptionClick = (option: SortOption) => {
-    if (option.value === 'default') {
+    if (option.value === 'latest') {
       searchParams.delete('sort');
     } else {
       searchParams.set('sort', option.value);

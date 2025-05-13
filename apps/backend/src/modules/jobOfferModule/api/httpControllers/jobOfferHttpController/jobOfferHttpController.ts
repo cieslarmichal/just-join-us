@@ -142,6 +142,8 @@ export class JobOfferHttpController implements HttpController {
       maxSalary,
       workingTime,
       companyId,
+      city,
+      sort,
       page = 1,
       pageSize = 10,
     } = request.queryParams;
@@ -155,6 +157,8 @@ export class JobOfferHttpController implements HttpController {
       maxSalary,
       workingTime,
       companyId,
+      city,
+      sort,
       page,
       pageSize,
     });

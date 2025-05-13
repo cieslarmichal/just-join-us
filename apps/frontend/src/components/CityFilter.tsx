@@ -15,12 +15,12 @@ interface SelectedCity {
 }
 
 const mostPopularCities = [
-  { name: 'Warszawa', slug: 'warszawa-mazowieckie' },
-  { name: 'Kraków', slug: 'krakow-malopolskie' },
-  { name: 'Wrocław', slug: 'wroclaw-dolnoslaskie' },
-  { name: 'Gdańsk', slug: 'gdansk-pomorskie' },
-  { name: 'Poznań', slug: 'poznan-wielkopolskie' },
-  { name: 'Łódź', slug: 'lodz-lodzkie' },
+  { name: 'Warszawa', slug: 'warszawa' },
+  { name: 'Kraków', slug: 'krakow' },
+  { name: 'Wrocław', slug: 'wroclaw' },
+  { name: 'Gdańsk', slug: 'gdansk' },
+  { name: 'Poznań', slug: 'poznan' },
+  { name: 'Łódź', slug: 'lodz' },
 ];
 
 export default function CityFilter() {
@@ -82,10 +82,18 @@ export default function CityFilter() {
   };
 
   const handleApplyClick = () => {
-    setSearchParams((currentSearchParams) => ({
-      ...currentSearchParams,
-      city: selectedCity?.slug,
-    }));
+    if (selectedCity) {
+      setSearchParams((currentSearchParams) => ({
+        ...currentSearchParams,
+        city: selectedCity?.slug,
+      }));
+    } else {
+      setSearchParams((currentSearchParams) => {
+        const newSearchParams = new URLSearchParams(currentSearchParams);
+        newSearchParams.delete('city');
+        return newSearchParams;
+      });
+    }
     setIsPopoverOpen(false);
   };
 

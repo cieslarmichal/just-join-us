@@ -279,7 +279,8 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
       maxSalary,
       workingTime,
       isRemote,
-      locationId,
+      city,
+      sort,
       page,
       pageSize,
     } = payload;
@@ -368,14 +369,21 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
         query.where(jobOffersTable.columns.is_remote, '=', isRemote);
       }
 
-      if (locationId) {
-        query.where(jobOffersTable.columns.location_id, '=', locationId);
+      if (city) {
+        query.where(citiesTable.columns.slug, '=', city);
       }
 
-      rawEntities = await query
-        .orderBy(jobOffersTable.columns.id, 'desc')
-        .limit(pageSize)
-        .offset((page - 1) * pageSize);
+      if (sort) {
+        if (sort === 'highestSalary') {
+          query.orderBy(jobOffersTable.columns.max_salary, 'desc');
+        } else if (sort === 'lowestSalary') {
+          query.orderBy(jobOffersTable.columns.min_salary, 'asc');
+        }
+      } else {
+        query.orderBy(jobOffersTable.columns.id, 'desc');
+      }
+
+      rawEntities = await query.limit(pageSize).offset((page - 1) * pageSize);
     } catch (error) {
       throw new RepositoryError({
         entity: 'JobOffer',
