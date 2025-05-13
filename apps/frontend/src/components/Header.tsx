@@ -140,7 +140,7 @@ export default function Header() {
                   key={item.href}
                   to={item.href}
                   className={`relative hover:bg-gray-100 px-3 py-2 rounded-lg text-sm font-medium ${
-                    location.pathname === item.href ? 'text-pink-600' : 'text-gray-700'
+                    location.pathname.includes(item.href) ? 'text-pink-600' : 'text-gray-700'
                   }`}
                 >
                   {item.name}
