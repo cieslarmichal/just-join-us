@@ -84,7 +84,7 @@ export default function JobOfferDetails({ jobOffer }: Props) {
             {jobOffer?.skills.map((skill) => (
               <div
                 key={skill.name}
-                className="px-4 py-1.5 bg-gray-100 rounded-full text-base font-medium"
+                className="px-4 py-0.5 border border-gray-300 rounded-full text-base"
               >
                 {skill.name}
               </div>

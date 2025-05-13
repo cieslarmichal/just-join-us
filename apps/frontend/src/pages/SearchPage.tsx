@@ -44,7 +44,10 @@ export default function SearchPage() {
         <div className="ml-auto"></div>
       </div>
 
-      <div className="grid grid-cols-2 mt-1 gap-4 h-full">
+      <div
+        className="grid grid-cols-2 mt-1 gap-4 h-full"
+        style={{ height: 'calc(100vh - 150px)' }}
+      >
         <div
           className="flex flex-col max-h-dvh overflow-scroll"
           style={{ scrollbarWidth: 'none' }}

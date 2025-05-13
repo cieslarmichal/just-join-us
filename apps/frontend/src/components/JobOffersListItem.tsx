@@ -18,7 +18,7 @@ export default function JobOffersListItem({ jobOffer }: Props) {
       to={`/job-offers/${jobOffer.id}`}
       className="block"
     >
-      <div className="bg-white border p-1 md:p-2 md:py-4 flex items-center rounded-2xl hover:shadow-lg transition-shadow duration-200 ease-in-out">
+      <div className="bg-white border px-4 py-2.5 flex items-center rounded-lg hover:shadow-lg transition-shadow duration-200 ease-in-out">
         <img
           src={jobOffer.company?.logoUrl}
           alt={jobOffer.name}
@@ -26,24 +26,24 @@ export default function JobOffersListItem({ jobOffer }: Props) {
         ></img>
         <div className="flex flex-col gap-2 ml-6 flex-grow">
           <div className="flex items-center gap-2">
-            <div className="text-sm font-semibold sm:text-lg whitespace-nowrap">{jobOffer.name}</div>
-            <div className="text-lg whitespace-nowrap ml-auto pr-4 text-green-600 font-medium">
+            <div className="font-semibold text-lg whitespace-nowrap">{jobOffer.name}</div>
+            <div className="text-lg whitespace-nowrap ml-auto text-green-600 font-medium">
               {formatSalary(jobOffer.minSalary, jobOffer.maxSalary)}
             </div>
           </div>
           <div className="flex">
             <div className="flex gap-4">
               <div className="items-center hidden md:flex">
-                <HiOutlineBuildingOffice2 className="mr-1" />
-                <div className="text-sm whitespace-nowrap">{jobOffer.company?.name}</div>
+                <HiOutlineBuildingOffice2 className="mr-1.5 text-gray-700" />
+                <div className="text-xs whitespace-nowrap text-gray-700">{jobOffer.company?.name}</div>
               </div>
               <div className="flex items-center">
-                <CiLocationOn className="mr-0.5" />
-                <div className="text-xs sm:text-sm whitespace-nowrap">{jobOffer.location?.city}</div>
+                <CiLocationOn className="mr-1 text-gray-700" />
+                <div className="text-xs whitespace-nowrap text-gray-700">{jobOffer.location?.city}</div>
               </div>
               <div className="flex items-center">
-                <MdComputer className="mr-1" />
-                <div className="text-xs sm:text-sm whitespace-nowrap">{jobOffer.category.name}</div>
+                <MdComputer className="mr-1.5 text-gray-700" />
+                <div className="text-xs whitespace-nowrap text-gray-700">{jobOffer.category.name}</div>
               </div>
             </div>
             <div className="flex ml-auto">
@@ -51,7 +51,7 @@ export default function JobOffersListItem({ jobOffer }: Props) {
                 {skillsTruncated.map((skill) => (
                   <div
                     key={skill}
-                    className="px-2 py-0.5 bg-gray-100 rounded-full text-sm font-medium"
+                    className="px-2 py-0.5 border border-gray-200 rounded-full text-xs font-medium"
                   >
                     {skill}
                   </div>

@@ -16,7 +16,7 @@ export default function JobOffersList({ jobOffers }: Props) {
   });
 
   return (
-    <div className="space-y-1 md:space-y-1.5 mt-1 md:mt-2 flex-1/2">
+    <div className="space-y-3 mt-1 md:mt-2 flex-1/2 mb-10">
       {renderedResults.length === 0 ? <div className="text-center">No offers</div> : renderedResults}
     </div>
   );
