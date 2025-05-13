@@ -55,7 +55,14 @@ export default function SearchPage() {
           </div>
           <JobOffersList jobOffers={jobOffers} />
         </div>
-        <JobOffersMap locations={[]} />
+        <JobOffersMap
+          pins={jobOffers.map((jobOffer) => {
+            return {
+              longitude: jobOffer.location?.longitude as number,
+              latitude: jobOffer.location?.latitude as number,
+            };
+          })}
+        />
       </div>
     </div>
   );

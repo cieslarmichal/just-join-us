@@ -1,6 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import { type LatLngLiteral } from 'leaflet';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import { config } from '../config';
 
@@ -11,6 +11,7 @@ interface Props {
   longitude?: number;
   readOnly?: boolean;
   className?: string;
+  style?: React.CSSProperties;
   zoom?: number;
   pins?: LatLngLiteral[];
   onPinAdd?: (pin: LatLngLiteral) => void;
@@ -23,18 +24,11 @@ export default function MapPicker({
   longitude,
   readOnly = false,
   className,
+  style,
   zoom = 13,
   pins = [],
   onPinAdd,
 }: Props) {
-  const [positions, setPositions] = useState<LatLngLiteral[]>(
-    pins.length > 0
-      ? pins
-      : latitude && longitude
-        ? [{ lat: latitude, lng: longitude }]
-        : [{ lat: 51.75202, lng: 19.45356 }],
-  );
-
   const MapEvents = () => {
     const map = useMap();
 
@@ -59,7 +53,6 @@ export default function MapPicker({
         const { lat, lng } = e.latlng;
 
         const newPin = { lat, lng };
-        setPositions((prev) => [...prev, newPin]); // Add the new pin to the state
 
         if (onPinAdd) {
           onPinAdd(newPin); // Trigger the callback for the new pin
@@ -82,16 +75,17 @@ export default function MapPicker({
 
   return (
     <MapContainer
-      center={positions[0]} // Center on the first pin
+      center={{ lat: latitude || 52.012373, lng: longitude || 19.038552 }}
       zoom={zoom}
       scrollWheelZoom
       className={className}
+      style={style}
     >
       <TileLayer
         url={`https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${config.mapTiler.apiKey}`}
         attribution='&copy; <a href="https://www.maptiler.com/">MapTiler</a> contributors'
       />
-      {positions.map((position, index) => (
+      {pins.map((position, index) => (
         <Marker
           key={index}
           position={position}

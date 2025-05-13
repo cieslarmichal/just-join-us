@@ -9,6 +9,7 @@ import { Button } from './ui/Button';
 import JobOfferDetailsSection from './JobOfferDetailsSection';
 import { MdComputer } from 'react-icons/md';
 import { CiWallet } from 'react-icons/ci';
+import { FaRegStar } from 'react-icons/fa';
 
 interface Props {
   readonly jobOffer: JobOffer;
@@ -24,6 +25,7 @@ export default function JobOfferDetails({ jobOffer }: Props) {
     minSalary,
     category,
     location,
+    experienceLevel,
   } = jobOffer;
 
   const description = useMemo(() => DOMPurify.sanitize(rawDescription), [rawDescription]);
@@ -58,6 +60,10 @@ export default function JobOfferDetails({ jobOffer }: Props) {
                   sectionValue={category.name}
                   Icon={MdComputer}
                 />
+                <JobOfferDetailsSection
+                  sectionValue={experienceLevel}
+                  Icon={FaRegStar}
+                />
               </div>
               <div className="whitespace-nowrap font-medium flex items-center">
                 <CiWallet className="inline mr-4 text-3xl" />
@@ -71,6 +77,19 @@ export default function JobOfferDetails({ jobOffer }: Props) {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div className="flex-1 space-y-4 w-full gap-8 mt-8 items-start">
+          <h2 className="text-2xl font-medium">Tech stack</h2>
+          <div className="flex flex-wrap gap-4">
+            {jobOffer?.skills.map((skill) => (
+              <div
+                key={skill.name}
+                className="px-4 py-2 bg-gray-100 rounded-full text-sm font-medium"
+              >
+                {skill.name}
+              </div>
+            ))}
           </div>
         </div>
         <div className="flex-1 space-y-4 w-full gap-8 mt-8 items-start">
@@ -97,7 +116,7 @@ export default function JobOfferDetails({ jobOffer }: Props) {
             latitude={location?.latitude || 52.2297}
             longitude={location?.longitude || 21.0122}
             readOnly
-            className="w-full h-50 md:h-[600px]"
+            className="w-full h-50 md:h-[500px]"
             zoom={14}
           />
         </div>

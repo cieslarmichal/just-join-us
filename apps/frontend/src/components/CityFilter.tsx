@@ -109,7 +109,7 @@ export default function CityFilter() {
           {isPopoverOpen ? <IoIosArrowUp className="w-4 h-4" /> : <IoIosArrowDown className="w-4 h-4" />}
         </div>
       </PopoverTrigger>
-      <PopoverContent className="border border-gray-300 rounded-lg px-10 py-6 bg-white shadow-md w-full mt-2 translate-x-[33%] z-[1]">
+      <PopoverContent className="border border-gray-300 rounded-lg px-10 py-6 bg-white shadow-md w-full mt-2 translate-x-[33%] z-20">
         <div className="flex flex-col relative w-full">
           <div className="text-xl font-semibold text-gray-500">Location</div>
           <div className="flex flex-col gap-y-4 mt-6">
@@ -166,7 +166,7 @@ export default function CityFilter() {
             </div>
 
             {suggestionsOpen && suggestedCities.length > 0 && (
-              <div className="absolute z-10 bg-white border border-gray-300 rounded-md mt-12 w-full max-h-60 overflow-y-auto shadow-lg">
+              <div className="absolute z-30 bg-white border border-gray-300 rounded-md mt-12 w-full max-h-60 overflow-y-auto shadow-lg">
                 {suggestedCities.map((city) => (
                   <div
                     key={city.id}

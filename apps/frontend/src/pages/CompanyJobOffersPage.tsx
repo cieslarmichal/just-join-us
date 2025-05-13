@@ -6,7 +6,7 @@ import { Breadcrumbs } from '../components/ui/Breadcrumbs';
 import { getJobOffers } from '../api/queries/getJobOffers';
 import { JobOffer } from '../api/types/jobOffer';
 import { CreateJobOfferModal } from '../components/CreateJobOfferModal';
-import JobOfferList from '../components/JobOfferList';
+import CompanyJobOfferList from '../components/CompanyJobOfferList';
 
 export default function CompanyJobOffersPage() {
   const { userData } = useContext(AuthContext);
@@ -51,7 +51,7 @@ export default function CompanyJobOffersPage() {
         </div>
       </div>
 
-      <JobOfferList jobOffers={jobOffers} />
+      <CompanyJobOfferList jobOffers={jobOffers} />
     </div>
   );
 }

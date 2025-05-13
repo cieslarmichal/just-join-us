@@ -3,6 +3,7 @@ import { CiLocationOn } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
 
 import { JobOffer } from '../api/types/jobOffer';
+import { MdComputer } from 'react-icons/md';
 
 interface Props {
   readonly jobOffer: JobOffer;
@@ -27,14 +28,32 @@ export default function JobOffersListItem({ jobOffer }: Props) {
               {jobOffer.minSalary} - {jobOffer.maxSalary} PLN/month
             </div>
           </div>
-          <div className="flex gap-4">
-            <div className="items-center hidden md:flex">
-              <HiOutlineBuildingOffice2 className="mr-1" />
-              <div className="text-sm whitespace-nowrap">{jobOffer.company?.name}</div>
+          <div className="flex">
+            <div className="flex gap-4">
+              <div className="items-center hidden md:flex">
+                <HiOutlineBuildingOffice2 className="mr-1" />
+                <div className="text-sm whitespace-nowrap">{jobOffer.company?.name}</div>
+              </div>
+              <div className="flex items-center">
+                <CiLocationOn className="mr-0.5" />
+                <div className="text-xs sm:text-sm whitespace-nowrap">{jobOffer.location?.city}</div>
+              </div>
+              <div className="flex items-center">
+                <MdComputer className="mr-1" />
+                <div className="text-xs sm:text-sm whitespace-nowrap">{jobOffer.category.name}</div>
+              </div>
             </div>
-            <div className="flex items-center">
-              <CiLocationOn className="mr-0.5" />
-              <div className="text-xs sm:text-sm whitespace-nowrap">{jobOffer.location?.city}</div>
+            <div className="flex ml-auto">
+              <div className="flex flex-wrap gap-2">
+                {jobOffer?.skills.map((skill) => (
+                  <div
+                    key={skill.name}
+                    className="px-3 py-0.5 bg-gray-100 rounded-full text-sm font-medium"
+                  >
+                    {skill.name}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
