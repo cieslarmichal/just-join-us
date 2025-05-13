@@ -264,8 +264,14 @@ export const CreateCompanyLocationModal = ({ companyId, onSuccess }: Props): Rea
               <div className="flex flex-col gap-2">
                 <FormLabel>Coordinates</FormLabel>
                 <MapPicker
-                  latitude={form.watch('latitude')}
-                  longitude={form.watch('longitude')}
+                  latitude={form.getValues('latitude')}
+                  setLatitude={(lat) => {
+                    form.setValue('latitude', lat, { shouldValidate: true });
+                  }}
+                  setLongitude={(lng) => {
+                    form.setValue('longitude', lng, { shouldValidate: true });
+                  }}
+                  longitude={form.getValues('longitude')}
                   className="w-full h-50 md:h-70"
                   readOnly={false}
                 />

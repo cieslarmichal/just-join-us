@@ -10,6 +10,8 @@ interface Props {
 }
 
 export default function JobOffersListItem({ jobOffer }: Props) {
+  const skillsTruncated = jobOffer.skills.map((skill) => skill.name).slice(0, 4);
+
   return (
     <Link
       to={`/job-offers/${jobOffer.id}`}
@@ -44,13 +46,13 @@ export default function JobOffersListItem({ jobOffer }: Props) {
               </div>
             </div>
             <div className="flex ml-auto">
-              <div className="flex flex-wrap gap-2">
-                {jobOffer?.skills.map((skill) => (
+              <div className="flex flex-wrap gap-1">
+                {skillsTruncated.map((skill) => (
                   <div
-                    key={skill.name}
-                    className="px-3 py-0.5 bg-gray-100 rounded-full text-sm font-medium"
+                    key={skill}
+                    className="px-2 py-0.5 bg-gray-100 rounded-full text-sm font-medium"
                   >
-                    {skill.name}
+                    {skill}
                   </div>
                 ))}
               </div>

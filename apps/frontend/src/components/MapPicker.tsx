@@ -1,6 +1,5 @@
 import 'leaflet/dist/leaflet.css';
-import { type LatLngLiteral } from 'leaflet';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import { config } from '../config';
 
@@ -23,20 +22,6 @@ export default function MapPicker({
   className,
   zoom = 13,
 }: Props) {
-  const [position, setPosition] = useState<LatLngLiteral>({
-    lat: 52.231641,
-    lng: 21.00618,
-  });
-
-  useEffect(() => {
-    if (latitude && longitude) {
-      setPosition({
-        lat: latitude,
-        lng: longitude,
-      });
-    }
-  }, [latitude, longitude]);
-
   const MapEvents = () => {
     const map = useMap();
 
@@ -60,11 +45,6 @@ export default function MapPicker({
 
         const { lat, lng } = e.latlng;
 
-        setPosition({
-          lat,
-          lng,
-        });
-
         if (setLatitude !== undefined) {
           setLatitude(lat);
         }
@@ -73,7 +53,7 @@ export default function MapPicker({
           setLongitude(lng);
         }
 
-        map.setView([lat, lng], map.getZoom());
+        map.setView([lat, lng], map.getZoom(), { animate: true, duration: 0.5 });
       },
     );
 
@@ -82,8 +62,8 @@ export default function MapPicker({
 
   return (
     <MapContainer
-      center={position}
-      zoom={zoom}
+      center={latitude && longitude ? { lat: latitude, lng: longitude } : { lat: 52.012373, lng: 19.038552 }}
+      zoom={latitude && longitude ? zoom : 5}
       scrollWheelZoom
       className={className}
     >
@@ -91,7 +71,7 @@ export default function MapPicker({
         url={`https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${config.mapTiler.apiKey}`}
         attribution='&copy; <a href="https://www.maptiler.com/">MapTiler</a> contributors'
       />
-      <Marker position={position} />
+      {latitude && longitude && <Marker position={{ lat: latitude, lng: longitude }} />}
       <MapEvents />
     </MapContainer>
   );

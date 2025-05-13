@@ -426,7 +426,6 @@ export const CreateJobOfferModal = ({ onSuccess }: Props): ReactNode => {
                           onValueChange={(value) => {
                             field.onChange(value === 'true');
                           }}
-                          defaultValue={field.value ? 'true' : 'false'}
                         >
                           <FormControl>
                             <SelectTrigger className="w-full cursor-pointer">
