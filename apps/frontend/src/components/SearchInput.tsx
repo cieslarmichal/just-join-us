@@ -1,18 +1,18 @@
 import { VscSearch } from 'react-icons/vsc';
 import { Input } from './ui/Input';
 import { useSearchParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDebounce } from '../hooks/useDebounce';
 
 export default function SearchInput() {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParamsQuery = searchParams.get('query');
   const [queryInput, setQueryInput] = useState<string>(searchParamsQuery || '');
 
-  const handleQueryApply = (event: React.FormEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    const query = event.currentTarget.value.trim();
+  const debouncedQueryInput = useDebounce(queryInput, 500);
 
-    if (query === '') {
+  useEffect(() => {
+    if (debouncedQueryInput === '') {
       setSearchParams((currentSearchParams) => {
         currentSearchParams.delete('query');
         return new URLSearchParams(currentSearchParams);
@@ -23,8 +23,14 @@ export default function SearchInput() {
 
     setSearchParams((currentSearchParams) => ({
       ...currentSearchParams,
-      query,
+      query: debouncedQueryInput,
     }));
+  }, [debouncedQueryInput, setSearchParams]);
+
+  const handleInputChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const query = event.currentTarget.value.trim();
+
+    setQueryInput(query);
   };
 
   return (
@@ -37,8 +43,7 @@ export default function SearchInput() {
         placeholder="Search"
         value={queryInput}
         onChange={(event) => {
-          setQueryInput(event.target.value);
-          handleQueryApply(event);
+          handleInputChange(event);
         }}
         className="pl-12 h-10 w-50 border border-gray-300 hover:border-gray-500 rounded-3xl"
       />
