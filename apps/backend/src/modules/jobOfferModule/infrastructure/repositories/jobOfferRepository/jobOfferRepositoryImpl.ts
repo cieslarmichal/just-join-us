@@ -13,6 +13,7 @@ import type {
 } from '../../../../databaseModule/infrastructure/tables/jobOffersTable/jobOfferRawEntity.ts';
 import { jobOffersTable } from '../../../../databaseModule/infrastructure/tables/jobOffersTable/jobOffersTable.ts';
 import { skillsTable } from '../../../../databaseModule/infrastructure/tables/skillsTable/skillsTable.ts';
+import { usersTable } from '../../../../databaseModule/infrastructure/tables/usersTable/usersTable.ts';
 import type { DatabaseClient } from '../../../../databaseModule/types/databaseClient.ts';
 import { type JobOffer } from '../../../domain/entities/jobOffer/jobOffer.ts';
 import {
@@ -217,8 +218,8 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           `${categoriesTable.columns.name} as category_name`,
           `${companiesTable.columns.name} as company_name`,
           `${companiesTable.columns.logo_url} as company_logo_url`,
-          this.databaseClient.raw(`array_agg(DISTINCT "skills"."id") as "skill_ids"`),
-          this.databaseClient.raw(`array_agg(DISTINCT "skills"."name") as "skill_names"`),
+          this.databaseClient.raw(`array_agg(DISTINCT ${skillsTable.columns.id}) as skill_ids`),
+          this.databaseClient.raw(`array_agg(DISTINCT ${skillsTable.columns.name}) as skill_names`),
         ])
         .join(categoriesTable.name, jobOffersTable.columns.category_id, '=', categoriesTable.columns.id)
         .join(companiesTable.name, jobOffersTable.columns.company_id, '=', companiesTable.columns.id)
@@ -310,11 +311,12 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           `${categoriesTable.columns.name} as category_name`,
           `${companiesTable.columns.name} as company_name`,
           `${companiesTable.columns.logo_url} as company_logo_url`,
-          this.databaseClient.raw(`array_agg(DISTINCT "skills"."id") as "skill_ids"`),
-          this.databaseClient.raw(`array_agg(DISTINCT "skills"."name") as "skill_names"`),
+          this.databaseClient.raw(`array_agg(DISTINCT ${skillsTable.columns.id}) as skill_ids`),
+          this.databaseClient.raw(`array_agg(DISTINCT ${skillsTable.columns.name}) as skill_names`),
         ])
-        .join(categoriesTable.name, jobOffersTable.columns.category_id, '=', categoriesTable.columns.id)
-        .join(companiesTable.name, jobOffersTable.columns.company_id, '=', companiesTable.columns.id)
+        .leftJoin(categoriesTable.name, jobOffersTable.columns.category_id, '=', categoriesTable.columns.id)
+        .leftJoin(companiesTable.name, jobOffersTable.columns.company_id, '=', companiesTable.columns.id)
+        .leftJoin(usersTable.name, companiesTable.columns.id, '=', usersTable.columns.id)
         .leftJoin(jobOfferSkillsTable.name, jobOffersTable.columns.id, '=', jobOfferSkillsTable.columns.job_offer_id)
         .leftJoin(skillsTable.name, jobOfferSkillsTable.columns.skill_id, '=', skillsTable.columns.id)
         .leftJoin(
@@ -331,7 +333,9 @@ export class JobOfferRepositoryImpl implements JobOfferRepository {
           companiesTable.columns.logo_url,
           citiesTable.columns.name,
           companiesLocationsTable.columns.geolocation,
-        );
+        )
+        .where(jobOffersTable.columns.is_hidden, '=', false)
+        .andWhere(usersTable.columns.is_deleted, '=', false);
 
       if (name) {
         query.whereRaw(`${jobOffersTable.columns.name} ILIKE ?`, `%${name}%`);
